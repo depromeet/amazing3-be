@@ -16,4 +16,13 @@ dependencies {
     testImplementation(project(":tests:api-docs"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
+
+    // security
+    implementation("org.springframework.boot:spring-boot-starter-security")
+
+    // security-test
+    testImplementation("org.springframework.security:spring-security-test")
+
+
+
 }
