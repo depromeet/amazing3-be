@@ -7,6 +7,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 
 @Configuration
 @EnableTransactionManagement
-@EntityScan(basePackages = ["io.raemian.storage.db.core"])
-@EnableJpaRepositories(basePackages = ["io.raemian.storage.db.core"])
+@EntityScan(basePackages = ["io.raemian.springboot.storage.db.core"])
+@EnableJpaRepositories(basePackages = ["io.raemian.springboot.storage.db.core"])
 internal class CoreJpaConfig
