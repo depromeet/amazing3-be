@@ -22,6 +22,6 @@ class AsyncConfig : AsyncConfigurer {
     }
 
     override fun getAsyncUncaughtExceptionHandler(): AsyncUncaughtExceptionHandler {
-        return io.raemian.core.api.config.AsyncExceptionHandler()
+        return AsyncExceptionHandler()
     }
 }
