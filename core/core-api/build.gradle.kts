@@ -19,7 +19,8 @@ dependencies {
 
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
-
+    // oauth-client
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     // security-test
     testImplementation("org.springframework.security:spring-security-test")
 
