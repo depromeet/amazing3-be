@@ -10,7 +10,7 @@
     </appender>
 
     <logger name="org.springframework" level="INFO"/>
-    <logger name="io.dodn.springboot" level="DEBUG"/>
+    <logger name="io.raemian" level="DEBUG"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
