@@ -1,11 +1,14 @@
 package io.raemian.core.auth.config
 
+import io.raemian.core.auth.domain.CurrentUser
+import io.raemian.core.auth.service.OAuth2UserService
 import io.raemian.core.auth.support.TokenProvider
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.MediaType
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
@@ -22,6 +25,7 @@ import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.web.filter.CorsFilter
+import java.nio.charset.StandardCharsets
 
 
 @Configuration
@@ -29,6 +33,7 @@ import org.springframework.web.filter.CorsFilter
 class WebSecurityConfig(
     private val corsFilter: CorsFilter,
     private val tokenProvider: TokenProvider,
+    private val oAuth2UserService: OAuth2UserService,
 ) {
 
     @Bean
@@ -51,7 +56,23 @@ class WebSecurityConfig(
             }
             .authorizeHttpRequests {
                 it.requestMatchers(AntPathRequestMatcher("/auth/**")).permitAll()
-                    .anyRequest().authenticated()
+                    .anyRequest().permitAll()
+            }
+            .oauth2Login {
+                it.userInfoEndpoint { endpoint -> endpoint.userService(oAuth2UserService) }
+                it.successHandler { request, response, authentication ->
+                    val user = authentication.principal as CurrentUser
+                    response.contentType = MediaType.APPLICATION_JSON_VALUE
+                    response.characterEncoding = StandardCharsets.UTF_8.name()
+
+                    val tokenDTO = tokenProvider.generateTokenDtoV2(user)
+                    response.addHeader("x-token", tokenDTO.accessToken)
+                }
+                it.failureHandler { request, response, exception ->
+                    println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" + exception)
+                    response.addHeader("x-token", "ccc")
+                }
+
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .apply(JwtSecurityConfig(tokenProvider))
@@ -66,6 +87,7 @@ class WebSecurityConfig(
             it
                 .ignoring()
                 .requestMatchers(PathRequest.toH2Console())
+                .requestMatchers(AntPathRequestMatcher("/favicon.ico"))
         }
     }
 

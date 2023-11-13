@@ -37,6 +37,36 @@ class TokenProvider() {
         key = Keys.hmacShaKeyFor(keyBytes)
     }
 
+    fun generateTokenDtoV2(currentUser: CurrentUser): TokenDTO {
+        val authorities: String = currentUser.authorities
+            .map { obj: GrantedAuthority -> obj.authority }
+            .joinToString(",")
+        val now: Long = Date().time
+
+        // Access Token 생성
+        val accessTokenExpiresIn = Date(now + ACCESS_TOKEN_EXPIRE_TIME)
+        val accessToken: String = Jwts.builder()
+            .setSubject(currentUser.email) // payload "sub": "name"
+            .claim(AUTHORITIES_KEY, authorities) // payload "auth": "ROLE_USER"
+            .claim(EMAIL_KEY, currentUser.email)
+            .claim(ID_KEY, currentUser.id)
+            .setExpiration(accessTokenExpiresIn) // payload "exp": 151621022 (ex)
+            .signWith(key, SignatureAlgorithm.HS512) // header "alg": "HS512"
+            .compact()
+
+        // Refresh Token 생성
+        val refreshToken: String = Jwts.builder()
+            .setExpiration(Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+            .signWith(key, SignatureAlgorithm.HS512)
+            .compact()
+        return TokenDTO(
+            grantType = BEARER_TYPE,
+            accessToken = accessToken,
+            refreshToken = refreshToken,
+            accessTokenExpiresIn = accessTokenExpiresIn.time,
+        )
+    }
+
     fun generateTokenDto(authentication: Authentication): TokenDTO {
         val currentUser = authentication.principal as CurrentUser
         // 권한들 가져오기

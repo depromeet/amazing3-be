@@ -1,13 +1,13 @@
 package io.raemian.core.api.controller.v1
 
+import io.mockk.every
+import io.mockk.mockk
 import io.raemian.core.api.controller.v1.request.ExampleRequestDto
 import io.raemian.core.api.domain.ExampleResult
 import io.raemian.core.api.domain.ExampleService
-import io.raemian.springboot.test.api.RestDocsTest
-import io.raemian.springboot.test.api.RestDocsUtils.requestPreprocessor
-import io.raemian.springboot.test.api.RestDocsUtils.responsePreprocessor
-import io.mockk.every
-import io.mockk.mockk
+import io.raemian.test.api.RestDocsTest
+import io.raemian.test.api.RestDocsUtils.requestPreprocessor
+import io.raemian.test.api.RestDocsUtils.responsePreprocessor
 import io.restassured.http.ContentType
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
