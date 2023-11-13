@@ -6,7 +6,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 
-@Entity(name = "USER_1")
+@Entity(name = "USERS")
 class User(
     @Column
     val email: String,
@@ -14,7 +14,7 @@ class User(
     val password: String,
 
     @Enumerated(EnumType.STRING)
-    val authority: Authority
+    val authority: Authority,
 ) : BaseEntity()
 
 

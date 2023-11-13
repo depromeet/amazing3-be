@@ -9,25 +9,22 @@ import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import io.jsonwebtoken.security.SecurityException
-import io.raemian.springboot.core.auth.domain.SecurityUser
+import io.raemian.springboot.core.auth.domain.CurrentUser
 import io.raemian.springboot.core.auth.domain.TokenDTO
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import java.security.Key
 import java.util.Date
-import java.util.stream.Collectors
 
 
 @Component
 class TokenProvider() {
     private val key: Key
 
-    private val secretKey: String = "c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK"
+    private val secretKey: String =
+        "c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK"
     private val AUTHORITIES_KEY = "auth"
     private val EMAIL_KEY = "email"
     private val ID_KEY = "id"
@@ -41,7 +38,7 @@ class TokenProvider() {
     }
 
     fun generateTokenDto(authentication: Authentication): TokenDTO {
-        val securityUser = authentication.principal as SecurityUser
+        val currentUser = authentication.principal as CurrentUser
         // 권한들 가져오기
         val authorities: String = authentication.authorities
             .map { obj: GrantedAuthority -> obj.authority }
@@ -54,7 +51,7 @@ class TokenProvider() {
             .setSubject(authentication.name) // payload "sub": "name"
             .claim(AUTHORITIES_KEY, authorities) // payload "auth": "ROLE_USER"
             .claim(EMAIL_KEY, authentication.name)
-            .claim(ID_KEY, securityUser.id)
+            .claim(ID_KEY, currentUser.id)
             .setExpiration(accessTokenExpiresIn) // payload "exp": 151621022 (ex)
             .signWith(key, SignatureAlgorithm.HS512) // header "alg": "HS512"
             .compact()
@@ -91,7 +88,7 @@ class TokenProvider() {
             .toLong()
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-        val principal = SecurityUser(id = id, claims.subject, "", authorities)
+        val principal = CurrentUser(id = id, claims.subject, "", authorities)
         return UsernamePasswordAuthenticationToken(principal, "", principal.authorities)
     }
 
@@ -104,10 +101,10 @@ class TokenProvider() {
             println("securty exception" + e)
         } catch (e: MalformedJwtException) {
             // log.info("잘못된 JWT 서명입니다.")
-            println("malformed "  + e)
+            println("malformed " + e)
         } catch (e: ExpiredJwtException) {
             // log.info("만료된 JWT 토큰입니다.")
-            println("expired token " +e)
+            println("expired token " + e)
         } catch (e: UnsupportedJwtException) {
             // log.info("지원되지 않는 JWT 토큰입니다.")
             println("not supoorted " + e)

@@ -2,7 +2,7 @@ package io.raemian.springboot.core.auth.controller
 
 import io.raemian.springboot.core.auth.controller.v1.request.SignInRequest
 import io.raemian.springboot.core.auth.controller.v1.request.SignUpRequest
-import io.raemian.springboot.core.auth.domain.SecurityUser
+import io.raemian.springboot.core.auth.domain.CurrentUser
 import io.raemian.springboot.core.auth.domain.TokenDTO
 import io.raemian.springboot.core.auth.service.AuthService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class AuthController(
-    private val authService: AuthService
+    private val authService: AuthService,
 ) {
 
     @PostMapping("/auth/sign-up")
@@ -28,7 +28,7 @@ class AuthController(
     }
 
     @GetMapping("/my")
-    fun my(@AuthenticationPrincipal user: SecurityUser): SecurityUser {
-        return user
+    fun my(@AuthenticationPrincipal currentUser: CurrentUser): CurrentUser {
+        return currentUser
     }
 }

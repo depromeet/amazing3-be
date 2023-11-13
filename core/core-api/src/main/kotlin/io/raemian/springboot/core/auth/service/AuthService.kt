@@ -1,21 +1,18 @@
 package io.raemian.springboot.core.auth.service
 
-import io.raemian.springboot.core.auth.domain.SecurityUser
+import io.raemian.springboot.core.auth.domain.CurrentUser
 import io.raemian.springboot.core.auth.domain.TokenDTO
 import io.raemian.springboot.core.auth.support.TokenProvider
 import io.raemian.springboot.storage.db.core.user.Authority
 import io.raemian.springboot.storage.db.core.user.User
 import io.raemian.springboot.storage.db.core.user.UserRepository
-import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.lang.IllegalArgumentException
 
 @Service
 class AuthService(
@@ -37,7 +34,7 @@ class AuthService(
 
     override fun loadUserByUsername(username: String): UserDetails {
         val user = userRepository.findByEmail(username) ?: throw UsernameNotFoundException("not found $username")
-        return SecurityUser(id = user.id!!, email = user.email, password = user.password)
+        return CurrentUser(id = user.id!!, email = user.email, password = user.password)
     }
 
     fun signIn(email: String, password: String): TokenDTO {
