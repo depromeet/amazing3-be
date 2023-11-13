@@ -29,6 +29,8 @@ class TokenProvider() {
 
     private val secretKey: String = "c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK"
     private val AUTHORITIES_KEY = "auth"
+    private val EMAIL_KEY = "email"
+    private val ID_KEY = "id"
     private val BEARER_TYPE = "Bearer"
     private val ACCESS_TOKEN_EXPIRE_TIME = (1000 * 60 * 300)  // 300분
     private val REFRESH_TOKEN_EXPIRE_TIME = (1000 * 60 * 60 * 24 * 70) // 70일
@@ -39,6 +41,7 @@ class TokenProvider() {
     }
 
     fun generateTokenDto(authentication: Authentication): TokenDTO {
+        val securityUser = authentication.principal as SecurityUser
         // 권한들 가져오기
         val authorities: String = authentication.authorities
             .map { obj: GrantedAuthority -> obj.authority }
@@ -48,8 +51,10 @@ class TokenProvider() {
         // Access Token 생성
         val accessTokenExpiresIn = Date(now + ACCESS_TOKEN_EXPIRE_TIME)
         val accessToken: String = Jwts.builder()
-            .setSubject(authentication.getName()) // payload "sub": "name"
+            .setSubject(authentication.name) // payload "sub": "name"
             .claim(AUTHORITIES_KEY, authorities) // payload "auth": "ROLE_USER"
+            .claim(EMAIL_KEY, authentication.name)
+            .claim(ID_KEY, securityUser.id)
             .setExpiration(accessTokenExpiresIn) // payload "exp": 151621022 (ex)
             .signWith(key, SignatureAlgorithm.HS512) // header "alg": "HS512"
             .compact()
@@ -76,14 +81,18 @@ class TokenProvider() {
 
         claims[AUTHORITIES_KEY].toString().split(",".toRegex())
         // 클레임에서 권한 정보 가져오기
-        val authorities: Collection<GrantedAuthority> =
-            claims[AUTHORITIES_KEY].toString().split(",".toRegex()).dropLastWhile { it.isEmpty() }
-                .toTypedArray()
-                .map { role: String? -> SimpleGrantedAuthority(role) }
+        val authorities = claims[AUTHORITIES_KEY]
+            .toString()
+            .split(",".toRegex())
+            .dropLastWhile { it.isEmpty() }
+
+        val id = claims[ID_KEY]
+            .toString()
+            .toLong()
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-        val principal: UserDetails = SecurityUser(claims.subject, "", "USER")
-        return UsernamePasswordAuthenticationToken(principal, "", authorities)
+        val principal = SecurityUser(id = id, claims.subject, "", authorities)
+        return UsernamePasswordAuthenticationToken(principal, "", principal.authorities)
     }
 
     fun validateToken(token: String?): Boolean {

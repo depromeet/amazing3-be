@@ -19,5 +19,5 @@ class User(
 
 
 enum class Authority {
-    USER, ADMIN
+    ROLE_USER, ROLE_ADMIN
 }
