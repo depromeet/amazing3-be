@@ -26,51 +26,23 @@ class OAuth2UserService(
             "google" -> {
                 val email = oAuth2User.attributes["email"]?.toString() ?: throw RuntimeException("이메일이없음")
                 val name = oAuth2User.attributes["name"]
-                val user = userRepository.findByEmail(email)
-                if (user == null) {
-                    val created = userRepository.save(
-                        User(
-                            email = email,
-                            password = "",
-                            authority = Authority.ROLE_USER,
-                        ),
-                    )
-                    return CurrentUser(
-                        id = created.id!!,
-                        email = created.email,
-                        password = "",
-                        authorities = listOf(),
-                    )
-                }
-                return CurrentUser(id = user.id!!, email, "", listOf())
+                val user = upsert(email)
+                CurrentUser(id = user.id!!, email, "", listOf())
             }
 
             "naver" -> {
                 val userInfo = oAuth2User.attributes[usernameAttributeName] as Map<String, String>
                 val email = userInfo["email"] ?: throw RuntimeException("이메일없음")
-                val user = userRepository.findByEmail(email)
-                if (user == null) {
-                    val created = userRepository.save(
-                        User(
-                            email = email,
-                            password = "",
-                            authority = Authority.ROLE_USER,
-                        ),
-                    )
-                    return CurrentUser(
-                        id = created.id!!,
-                        email = created.email,
-                        password = "",
-                        authorities = listOf(),
-                    )
-                }
-                return CurrentUser(user.id!!, email, "", listOf())
+                val user = upsert(email)
+                CurrentUser(user.id!!, email, "", listOf())
             }
 
             else -> throw RuntimeException("errrr")
         }
+    }
 
-
-        // userRepository.findByEmail()
+    private fun upsert(email: String): User {
+        return userRepository.findByEmail(email)
+            ?: return userRepository.save(User(email = email, password = "", authority = Authority.ROLE_USER))
     }
 }
