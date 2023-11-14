@@ -53,7 +53,9 @@ class WebSecurityConfig(
             }
             .authorizeHttpRequests {
                 it.requestMatchers(AntPathRequestMatcher("/auth/**")).permitAll()
-                    .anyRequest().permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/oauth2/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/login/**")).permitAll()
+                    .anyRequest().authenticated()
             }
             .oauth2Login {
                 it.userInfoEndpoint { endpoint -> endpoint.userService(oAuth2UserService) }
@@ -62,12 +64,12 @@ class WebSecurityConfig(
                     response.contentType = MediaType.APPLICATION_JSON_VALUE
                     response.characterEncoding = StandardCharsets.UTF_8.name()
 
-                    val tokenDTO = tokenProvider.generateTokenDtoV2(user)
+                    val tokenDTO = tokenProvider.generateTokenDto(user)
                     response.addHeader("x-token", tokenDTO.accessToken)
                 }
                 it.failureHandler { request, response, exception ->
                     log.info("eeeeeeeeeeeeeeeeeeee + ${exception.message}")
-                    response.addHeader("x-token", "ccc")
+                    response.addHeader("x-token", exception.message)
                 }
 
             }

@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User
 data class CurrentUser(
     val id: Long,
     val email: String,
+    val provider: String? = null,
     private val password: String,
     private val authorities: List<String> = listOf("ROLE_USER"),
 ) : UserDetails, OAuth2User {

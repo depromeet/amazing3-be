@@ -1,6 +1,7 @@
 package io.raemian.core.auth.service
 
 import io.raemian.core.auth.domain.CurrentUser
+import io.raemian.core.auth.domain.OAuthProvider
 import io.raemian.core.auth.support.TokenProvider
 import io.raemian.storage.db.core.user.Authority
 import io.raemian.storage.db.core.user.User
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service
 class OAuth2UserService(
     private val userRepository: UserRepository,
     private val tokenProvider: TokenProvider,
-    // private val authenticationManagerBuilder: AuthenticationManagerBuilder,
 ) : DefaultOAuth2UserService() {
     override fun loadUser(userRequest: OAuth2UserRequest): OAuth2User {
         val oAuth2User = super.loadUser(userRequest)
@@ -22,26 +22,38 @@ class OAuth2UserService(
             .providerDetails
             .userInfoEndpoint
             .userNameAttributeName
-        return when (userRequest.clientRegistration.registrationId) {
-            "google" -> {
+
+        val provider = OAuthProvider.valueOf(userRequest.clientRegistration.registrationId.uppercase())
+        return when (provider) {
+            OAuthProvider.GOOGLE -> {
                 val email = oAuth2User.attributes["email"]?.toString() ?: throw RuntimeException("이메일이없음")
                 val name = oAuth2User.attributes["name"]
-                val user = upsert(email)
-                CurrentUser(id = user.id!!, email, "", listOf())
+                val user = upsert(email, OAuthProvider.GOOGLE)
+                CurrentUser(
+                    id = user.id!!,
+                    email = email,
+                    provider = provider.name,
+                    password = "",
+                    authorities = listOf(),
+                )
             }
 
-            "naver" -> {
+            OAuthProvider.NAVER -> {
                 val userInfo = oAuth2User.attributes[usernameAttributeName] as Map<String, String>
                 val email = userInfo["email"] ?: throw RuntimeException("이메일없음")
-                val user = upsert(email)
-                CurrentUser(user.id!!, email, "", listOf())
+                val user = upsert(email, OAuthProvider.NAVER)
+                CurrentUser(
+                    id = user.id!!,
+                    email = email,
+                    provider = provider.name,
+                    password = "",
+                    authorities = listOf(),
+                )
             }
-
-            else -> throw RuntimeException("errrr")
         }
     }
 
-    private fun upsert(email: String): User {
+    private fun upsert(email: String, oAuthProvider: OAuthProvider): User {
         return userRepository.findByEmail(email)
             ?: return userRepository.save(User(email = email, password = "", authority = Authority.ROLE_USER))
     }

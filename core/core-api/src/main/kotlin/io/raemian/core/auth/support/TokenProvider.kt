@@ -41,7 +41,7 @@ class TokenProvider() {
         key = Keys.hmacShaKeyFor(keyBytes)
     }
 
-    fun generateTokenDtoV2(currentUser: CurrentUser): TokenDTO {
+    fun generateTokenDto(currentUser: CurrentUser): TokenDTO {
         val authorities: String = currentUser.authorities
             .map { obj: GrantedAuthority -> obj.authority }
             .joinToString(",")
@@ -122,7 +122,8 @@ class TokenProvider() {
             .toLong()
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-        val principal = CurrentUser(id = id, claims.subject, "", authorities)
+        val principal =
+            CurrentUser(id = id, email = claims.subject, password = "", provider = null, authorities = authorities)
         return UsernamePasswordAuthenticationToken(principal, "", principal.authorities)
     }
 

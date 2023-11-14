@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 class JwtSecurityConfig(
     private val tokenProvider: TokenProvider,
-) : SecurityConfigurerAdapter<DefaultSecurityFilterChain?, HttpSecurity>() {
+) : SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
 
     // TokenProvider 를 주입받아서 JwtFilter 를 통해 Security 로직에 필터를 등록
     override fun configure(http: HttpSecurity) {

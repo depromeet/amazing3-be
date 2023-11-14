@@ -34,16 +34,19 @@ class AuthService(
 
     override fun loadUserByUsername(username: String): UserDetails {
         val user = userRepository.findByEmail(username) ?: throw UsernameNotFoundException("not found $username")
-        return CurrentUser(id = user.id!!, email = user.email, password = user.password)
+        return CurrentUser(
+            id = user.id!!,
+            email = user.email,
+            password = user.password,
+            authorities = listOf(),
+        )
     }
 
     fun signIn(email: String, password: String): TokenDTO {
         val user = userRepository.findByEmail(email) ?: throw RuntimeException("아이디 또는 비밀번호 불일치 ")
-
         if (!passwordEncoder.matches(password, user.password)) {
             throw RuntimeException("아이디 또는 비밀번호 불일치 ")
         }
-
 
         val token = UsernamePasswordAuthenticationToken(email, password, arrayListOf())
         val authentication = authenticationManagerBuilder.`object`.authenticate(token)
