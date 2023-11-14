@@ -4,6 +4,7 @@ import io.raemian.core.auth.domain.CurrentUser
 import io.raemian.core.auth.service.OAuth2UserService
 import io.raemian.core.auth.support.TokenProvider
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
@@ -15,12 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
-import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
@@ -35,6 +30,8 @@ class WebSecurityConfig(
     private val tokenProvider: TokenProvider,
     private val oAuth2UserService: OAuth2UserService,
 ) {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -69,7 +66,7 @@ class WebSecurityConfig(
                     response.addHeader("x-token", tokenDTO.accessToken)
                 }
                 it.failureHandler { request, response, exception ->
-                    println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" + exception)
+                    log.info("eeeeeeeeeeeeeeeeeeee + ${exception.message}")
                     response.addHeader("x-token", "ccc")
                 }
 
@@ -95,23 +92,4 @@ class WebSecurityConfig(
     fun getPasswordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
     }
-
-    // @Bean
-    fun authorizedClientManager(
-        clientRegistrationRepository: ClientRegistrationRepository,
-        authorizedClientRepository: OAuth2AuthorizedClientRepository,
-    ): OAuth2AuthorizedClientManager {
-        val authorizedClientProvider: OAuth2AuthorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
-            .authorizationCode()
-            .refreshToken()
-            .clientCredentials()
-            .password()
-            .build()
-        val authorizedClientManager = DefaultOAuth2AuthorizedClientManager(
-            clientRegistrationRepository, authorizedClientRepository,
-        )
-        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider)
-        return authorizedClientManager
-    }
-
 }

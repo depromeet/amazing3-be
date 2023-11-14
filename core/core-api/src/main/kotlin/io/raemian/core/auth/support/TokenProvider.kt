@@ -11,6 +11,7 @@ import io.jsonwebtoken.security.Keys
 import io.jsonwebtoken.security.SecurityException
 import io.raemian.core.auth.domain.CurrentUser
 import io.raemian.core.auth.domain.TokenDTO
+import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
@@ -21,6 +22,9 @@ import java.util.Date
 
 @Component
 class TokenProvider() {
+
+    private val log = LoggerFactory.getLogger(javaClass)
+
     private val key: Key
 
     private val secretKey: String =
@@ -127,20 +131,15 @@ class TokenProvider() {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
             return true
         } catch (e: SecurityException) {
-            // log.info("잘못된 JWT 서명입니다.")
-            println("securty exception" + e)
+            log.info("잘못된 JWT 서명입니다.")
         } catch (e: MalformedJwtException) {
-            // log.info("잘못된 JWT 서명입니다.")
-            println("malformed " + e)
+            log.info("잘못된 JWT 서명입니다.")
         } catch (e: ExpiredJwtException) {
-            // log.info("만료된 JWT 토큰입니다.")
-            println("expired token " + e)
+            log.info("만료된 JWT 토큰입니다.")
         } catch (e: UnsupportedJwtException) {
-            // log.info("지원되지 않는 JWT 토큰입니다.")
-            println("not supoorted " + e)
+            log.info("지원되지 않는 JWT 토큰입니다.")
         } catch (e: IllegalArgumentException) {
-            // log.info("JWT 토큰이 잘못되었습니다.")
-            println("illegal " + e)
+            log.info("JWT 토큰이 잘못되었습니다.")
         }
         return false
     }
