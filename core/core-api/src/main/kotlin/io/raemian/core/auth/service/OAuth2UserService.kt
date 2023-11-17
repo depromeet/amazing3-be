@@ -2,7 +2,6 @@ package io.raemian.core.auth.service
 
 import io.raemian.core.auth.domain.CurrentUser
 import io.raemian.core.auth.domain.OAuthProvider
-import io.raemian.core.auth.support.TokenProvider
 import io.raemian.storage.db.core.user.Authority
 import io.raemian.storage.db.core.user.User
 import io.raemian.storage.db.core.user.UserRepository
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service
 @Service
 class OAuth2UserService(
     private val userRepository: UserRepository,
-    private val tokenProvider: TokenProvider,
 ) : DefaultOAuth2UserService() {
     override fun loadUser(userRequest: OAuth2UserRequest): OAuth2User {
         val oAuth2User = super.loadUser(userRequest)
@@ -23,8 +21,7 @@ class OAuth2UserService(
             .userInfoEndpoint
             .userNameAttributeName
 
-        val provider = OAuthProvider.valueOf(userRequest.clientRegistration.registrationId.uppercase())
-        return when (provider) {
+        return when (val provider = OAuthProvider.valueOf(userRequest.clientRegistration.registrationId.uppercase())) {
             OAuthProvider.GOOGLE -> {
                 val email = oAuth2User.attributes["email"]?.toString() ?: throw RuntimeException("이메일이없음")
                 val name = oAuth2User.attributes["name"]
