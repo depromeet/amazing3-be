@@ -17,29 +17,26 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.stereotype.Component
 import java.security.Key
+import java.time.Duration
 import java.util.Date
 
 
 @Component
-class TokenProvider() {
+class TokenProvider {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    private val key: Key
-
     private val secretKey: String =
         "c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK"
+    private val key: Key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey))
+
     private val AUTHORITIES_KEY = "auth"
     private val EMAIL_KEY = "email"
     private val ID_KEY = "id"
     private val BEARER_TYPE = "Bearer"
-    private val ACCESS_TOKEN_EXPIRE_TIME = (1000 * 60 * 300)  // 300분
-    private val REFRESH_TOKEN_EXPIRE_TIME = (1000 * 60 * 60 * 24 * 70) // 70일
+    private val ACCESS_TOKEN_EXPIRE_TIME = Duration.ofMinutes(300).toMillis()  // 300분
+    private val REFRESH_TOKEN_EXPIRE_TIME = Duration.ofDays(70).toMillis() // 70일
 
-    init {
-        val keyBytes = Decoders.BASE64.decode(secretKey)
-        key = Keys.hmacShaKeyFor(keyBytes)
-    }
 
     fun generateTokenDto(currentUser: CurrentUser): TokenDTO {
         val authorities: String = currentUser.authorities
