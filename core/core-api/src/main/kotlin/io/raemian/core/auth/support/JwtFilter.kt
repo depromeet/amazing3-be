@@ -13,7 +13,8 @@ class JwtFilter(
     private val tokenProvider: TokenProvider,
 ) : OncePerRequestFilter() {
 
-
+    private val AUTHORIZATION_HEADER = "Authorization"
+    private val BEARER_PREFIX = "Bearer "
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -33,9 +34,6 @@ class JwtFilter(
 
     // Request Header 에서 토큰 정보를 꺼내오기
     private fun resolveToken(request: HttpServletRequest): String {
-        val AUTHORIZATION_HEADER = "Authorization"
-        val BEARER_PREFIX = "Bearer "
-
         val bearerToken = request.getHeader(AUTHORIZATION_HEADER)
         return if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             bearerToken.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1].trim { it <= ' ' }
