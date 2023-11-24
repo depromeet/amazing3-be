@@ -7,13 +7,9 @@ tasks.getByName("jar") {
 }
 
 dependencies {
-    implementation(project(":core:core-enum"))
-    implementation(project(":support:monitoring"))
-    implementation(project(":support:logging"))
+    implementation(project(":infra:monitoring"))
+    implementation(project(":infra:logging"))
     implementation(project(":storage:db-core"))
-    implementation(project(":clients:client-example"))
-
-    testImplementation(project(":tests:api-docs"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
 
@@ -24,11 +20,16 @@ dependencies {
 
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
+
     // oauth-client
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-    // security-test
+
+    // web-client
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+
+    // test
     testImplementation("org.springframework.security:spring-security-test")
-
-
-
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
+    testImplementation("io.rest-assured:spring-mock-mvc")
 }
