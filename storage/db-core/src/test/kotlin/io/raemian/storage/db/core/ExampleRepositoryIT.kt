@@ -1,7 +1,5 @@
 package io.raemian.storage.db.core
 
-import io.raemian.storage.db.core.ExampleEntity
-import io.raemian.storage.db.core.ExampleRepository
 import io.raemian.storage.db.CoreDbContextTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
