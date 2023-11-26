@@ -38,6 +38,7 @@ class TokenProvider {
     private val REFRESH_TOKEN_EXPIRE_TIME = Duration.ofDays(70).toMillis() // 70일
 
 
+    // using oauth2 login
     fun generateTokenDto(currentUser: CurrentUser): TokenDTO {
         val authorities: String = currentUser.authorities
             .map { obj: GrantedAuthority -> obj.authority }
@@ -68,6 +69,7 @@ class TokenProvider {
         )
     }
 
+    // using local login
     fun generateTokenDto(authentication: Authentication): TokenDTO {
         val currentUser = authentication.principal as CurrentUser
         // 권한들 가져오기
