@@ -3,7 +3,6 @@ package io.raemian.core.auth.support
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 
-
 object SecurityUtil {
     // SecurityContext 에 유저 정보가 저장되는 시점
     fun currentMemberId(): Long {

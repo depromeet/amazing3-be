@@ -22,7 +22,6 @@ data class CurrentUser(
             .map { SimpleGrantedAuthority(it) }
             .toMutableList()
 
-
     override fun getPassword(): String = password
 
     override fun getUsername(): String = email
@@ -34,5 +33,4 @@ data class CurrentUser(
     override fun isCredentialsNonExpired(): Boolean = true
 
     override fun isEnabled(): Boolean = true
-
 }

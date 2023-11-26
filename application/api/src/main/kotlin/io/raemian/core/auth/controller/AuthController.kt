@@ -31,5 +31,4 @@ class AuthController(
     fun my(@AuthenticationPrincipal currentUser: CurrentUser): CurrentUser {
         return currentUser
     }
-
 }

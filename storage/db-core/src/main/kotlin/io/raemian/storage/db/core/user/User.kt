@@ -17,7 +17,6 @@ class User(
     val authority: Authority,
 ) : BaseEntity()
 
-
 enum class Authority {
     ROLE_USER, ROLE_ADMIN
 }

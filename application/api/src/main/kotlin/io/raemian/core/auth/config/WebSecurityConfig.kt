@@ -3,8 +3,6 @@ package io.raemian.core.auth.config
 import io.raemian.core.auth.domain.CurrentUser
 import io.raemian.core.auth.service.OAuth2UserService
 import io.raemian.core.auth.support.TokenProvider
-import jakarta.servlet.http.Cookie
-import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -19,16 +17,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.web.DefaultRedirectStrategy
 import org.springframework.security.web.DefaultSecurityFilterChain
-import org.springframework.security.web.RedirectStrategy
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.web.filter.CorsFilter
 import java.nio.charset.StandardCharsets
-
 
 @Configuration
 @EnableWebSecurity
@@ -79,7 +73,6 @@ class WebSecurityConfig(
                     log.info("eeeeeeeeeeeeeeeeeeee + ${exception.message}")
                     response.addHeader("x-token", exception.message)
                 }
-
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .apply(JwtSecurityConfig(tokenProvider))

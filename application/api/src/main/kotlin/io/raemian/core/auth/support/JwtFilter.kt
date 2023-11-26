@@ -8,7 +8,6 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.util.StringUtils
 import org.springframework.web.filter.OncePerRequestFilter
 
-
 class JwtFilter(
     private val tokenProvider: TokenProvider,
 ) : OncePerRequestFilter() {
@@ -37,6 +36,8 @@ class JwtFilter(
         val bearerToken = request.getHeader(AUTHORIZATION_HEADER)
         return if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             bearerToken.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1].trim { it <= ' ' }
-        } else ""
+        } else {
+            ""
+        }
     }
 }
