@@ -32,4 +32,9 @@ class AuthController(
         return currentUser
     }
 
+    @PostMapping("/re-issue")
+    fun reIssue(@AuthenticationPrincipal currentUser: CurrentUser) {
+
+    }
+
 }
