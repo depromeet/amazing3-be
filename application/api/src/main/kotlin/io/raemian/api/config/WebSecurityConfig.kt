@@ -1,7 +1,7 @@
 package io.raemian.api.config
 
-import io.raemian.api.domain.auth.CurrentUser
-import io.raemian.api.service.auth.OAuth2UserService
+import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.auth.service.OAuth2UserService
 import io.raemian.api.support.TokenProvider
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory

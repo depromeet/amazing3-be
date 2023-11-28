@@ -1,4 +1,4 @@
-package io.raemian.api.domain.auth
+package io.raemian.api.auth.domain
 
 data class TokenDTO(
     val grantType: String,

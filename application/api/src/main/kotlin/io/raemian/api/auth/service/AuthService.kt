@@ -1,7 +1,7 @@
-package io.raemian.api.service.auth
+package io.raemian.api.auth.service
 
-import io.raemian.api.domain.auth.CurrentUser
-import io.raemian.api.domain.auth.TokenDTO
+import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.auth.domain.TokenDTO
 import io.raemian.api.support.TokenProvider
 import io.raemian.storage.db.core.user.Authority
 import io.raemian.storage.db.core.user.User

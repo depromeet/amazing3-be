@@ -1,4 +1,4 @@
-package io.raemian.api.domain.auth
+package io.raemian.api.auth.domain
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
