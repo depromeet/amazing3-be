@@ -22,6 +22,19 @@ class AuthService(
     private val tokenProvider: TokenProvider,
 ) : UserDetailsService {
 
+    fun signIn(email: String, password: String): TokenDTO {
+        val user = userRepository.findByEmail(email) ?: throw RuntimeException("아이디 또는 비밀번호 불일치 ")
+        if (!passwordEncoder.matches(password, user.password)) {
+            throw RuntimeException("아이디 또는 비밀번호 불일치 ")
+        }
+
+        val token = UsernamePasswordAuthenticationToken(email, password, arrayListOf())
+        val authentication = authenticationManagerBuilder.`object`.authenticate(token)
+        val tokenDTO = tokenProvider.generateTokenDto(authentication)
+
+        return tokenDTO
+    }
+
     fun save(email: String, password: String) {
         userRepository.save(
             User(
@@ -40,18 +53,5 @@ class AuthService(
             password = user.password,
             authorities = listOf(),
         )
-    }
-
-    fun signIn(email: String, password: String): TokenDTO {
-        val user = userRepository.findByEmail(email) ?: throw RuntimeException("아이디 또는 비밀번호 불일치 ")
-        if (!passwordEncoder.matches(password, user.password)) {
-            throw RuntimeException("아이디 또는 비밀번호 불일치 ")
-        }
-
-        val token = UsernamePasswordAuthenticationToken(email, password, arrayListOf())
-        val authentication = authenticationManagerBuilder.`object`.authenticate(token)
-        val tokenDTO = tokenProvider.generateTokenDto(authentication)
-
-        return tokenDTO
     }
 }

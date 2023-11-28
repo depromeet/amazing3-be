@@ -67,7 +67,8 @@ class WebSecurityConfig(
 
                     val tokenDTO = tokenProvider.generateTokenDto(user)
                     // TODO edit redirect url
-                    response.sendRedirect("http://localhost:3000/login/oauth2/code/google?token=${tokenDTO.accessToken}")
+                    log.info("success")
+                    // response.sendRedirect("http://localhost:/login/oauth2/code/google?token=${tokenDTO.accessToken}")
                 }
                 it.failureHandler { request, response, exception ->
                     log.info("eeeeeeeeeeeeeeeeeeee + ${exception.message}")
@@ -87,7 +88,7 @@ class WebSecurityConfig(
             it
                 .ignoring()
                 .requestMatchers(PathRequest.toH2Console())
-                .requestMatchers(AntPathRequestMatcher("/favicon.ico"))
+                .requestMatchers(AntPathRequestMatcher("/favicon.ico", "/**/favicon.ico"))
         }
     }
 

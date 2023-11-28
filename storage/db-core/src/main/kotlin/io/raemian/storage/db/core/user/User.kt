@@ -5,6 +5,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
+import java.time.LocalDate
 
 @Entity(name = "USERS")
 class User(
@@ -12,7 +13,10 @@ class User(
     val email: String,
     @Column
     val password: String,
-
+    @Column
+    val nickname: String? = null,
+    @Column
+    val birth: LocalDate? = null,
     @Enumerated(EnumType.STRING)
     val authority: Authority,
 ) : BaseEntity()
