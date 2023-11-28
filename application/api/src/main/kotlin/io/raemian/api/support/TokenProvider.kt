@@ -9,8 +9,8 @@ import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import io.jsonwebtoken.security.SecurityException
-import io.raemian.api.domain.auth.CurrentUser
-import io.raemian.api.domain.auth.TokenDTO
+import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.auth.domain.TokenDTO
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication

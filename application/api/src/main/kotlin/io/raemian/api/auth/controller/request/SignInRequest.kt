@@ -1,4 +1,4 @@
-package io.raemian.api.controller.auth.request
+package io.raemian.api.auth.controller.request
 
 data class SignInRequest(
     val email: String,

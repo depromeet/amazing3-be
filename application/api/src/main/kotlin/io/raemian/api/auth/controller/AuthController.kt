@@ -1,10 +1,10 @@
-package io.raemian.api.controller.auth
+package io.raemian.api.auth.controller
 
-import io.raemian.api.controller.auth.request.SignInRequest
-import io.raemian.api.controller.auth.request.SignUpRequest
-import io.raemian.api.domain.auth.CurrentUser
-import io.raemian.api.domain.auth.TokenDTO
-import io.raemian.api.service.auth.AuthService
+import io.raemian.api.auth.controller.request.SignInRequest
+import io.raemian.api.auth.controller.request.SignUpRequest
+import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.auth.domain.TokenDTO
+import io.raemian.api.auth.service.AuthService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
