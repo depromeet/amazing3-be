@@ -75,7 +75,7 @@ class WebSecurityConfig(
                 }
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .apply(io.raemian.api.config.JwtSecurityConfig(tokenProvider))
+            .apply(JwtSecurityConfig(tokenProvider))
 
         return http.build()
     }
