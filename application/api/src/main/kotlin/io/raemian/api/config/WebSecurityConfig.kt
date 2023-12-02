@@ -56,6 +56,7 @@ class WebSecurityConfig(
                 it.requestMatchers(AntPathRequestMatcher("/auth/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/oauth2/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/login/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/sample")).permitAll()
                     .anyRequest().authenticated()
             }
             .oauth2Login {
