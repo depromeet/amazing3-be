@@ -23,7 +23,6 @@ class SampleController {
         )
     }
 
-
     private fun mapSuccess(item: Int): ResponseEntity<String> {
         return ResponseEntity.ok().body("$item")
     }
@@ -33,7 +32,6 @@ class SampleController {
             is IllegalArgumentFailure -> ResponseEntity.badRequest().body("illegal argument error")
             is ValidationFailure -> ResponseEntity.badRequest().body("validation error")
             else -> ResponseEntity.internalServerError().body("unknown error")
-
         }
     }
 
