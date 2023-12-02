@@ -41,11 +41,11 @@ class AuthService(
         val user = userRepository.findById(id)
             .getOrNull() ?: throw RuntimeException("")
 
-        val copied = user.updateInfo(
+        val updated = user.updateInfo(
             nickname = nickname,
             birth = birth,
         )
 
-        return userRepository.save(copied)
+        return userRepository.save(updated)
     }
 }
