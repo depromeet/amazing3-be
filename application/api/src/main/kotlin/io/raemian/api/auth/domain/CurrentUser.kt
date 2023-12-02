@@ -8,9 +8,11 @@ import org.springframework.security.oauth2.core.user.OAuth2User
 data class CurrentUser(
     val id: Long,
     val email: String,
-    val provider: String? = null,
-    private val password: String,
+
     private val authorities: List<String> = listOf("ROLE_USER"),
+
+    // not use field
+    private val password: String? = null,
 ) : UserDetails, OAuth2User {
 
     override fun getName(): String = email
@@ -22,7 +24,7 @@ data class CurrentUser(
             .map { SimpleGrantedAuthority(it) }
             .toMutableList()
 
-    override fun getPassword(): String = password
+    override fun getPassword(): String? = password
 
     override fun getUsername(): String = email
 

@@ -1,7 +1,6 @@
 package io.raemian.api.auth.controller
 
 import io.raemian.api.auth.controller.request.SignInRequest
-import io.raemian.api.auth.controller.request.SignUpRequest
 import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.auth.domain.TokenDTO
 import io.raemian.api.auth.service.AuthService
@@ -16,15 +15,9 @@ class AuthController(
     private val authService: AuthService,
 ) {
 
-    @PostMapping("/auth/sign-up")
-    fun signUp(@RequestBody signUpRequest: SignUpRequest): String {
-        authService.save(signUpRequest.email, signUpRequest.password)
-        return "${signUpRequest.email}/${signUpRequest.password}"
-    }
-
     @PostMapping("/auth/sign-in")
     fun signIn(@RequestBody signInRequest: SignInRequest): TokenDTO {
-        return authService.signIn(signInRequest.email, signInRequest.password)
+        return authService.signIn(signInRequest.email)
     }
 
     @GetMapping("/my")

@@ -66,16 +66,16 @@ class WebSecurityConfig(
                     response.characterEncoding = StandardCharsets.UTF_8.name()
 
                     val tokenDTO = tokenProvider.generateTokenDto(user)
+                    response.setHeader("x-token", tokenDTO.accessToken)
                     // TODO edit redirect url
-                    response.sendRedirect("http://localhost:3000/login/oauth2/code/google?token=${tokenDTO.accessToken}")
+                    response.sendRedirect("http://localhost:8080/login/oauth2/code/google?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
                 }
                 it.failureHandler { request, response, exception ->
-                    log.info("eeeeeeeeeeeeeeeeeeee + ${exception.message}")
                     response.addHeader("x-token", exception.message)
                 }
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .apply(io.raemian.api.config.JwtSecurityConfig(tokenProvider))
+            .apply(JwtSecurityConfig(tokenProvider))
 
         return http.build()
     }
@@ -87,7 +87,7 @@ class WebSecurityConfig(
             it
                 .ignoring()
                 .requestMatchers(PathRequest.toH2Console())
-                .requestMatchers(AntPathRequestMatcher("/favicon.ico"))
+                .requestMatchers(AntPathRequestMatcher("/favicon.ico", "**/favicon.ico"))
         }
     }
 
