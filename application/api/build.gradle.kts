@@ -13,6 +13,10 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-web")
 
+    // arrow
+    implementation("io.arrow-kt:arrow-core:1.2.0")
+    implementation("io.arrow-kt:arrow-fx-coroutines:1.2.0")
+
     // jwt
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
