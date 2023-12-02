@@ -6,6 +6,9 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
 import java.time.LocalDate
 
 @Entity(name = "USERS")
@@ -26,7 +29,22 @@ class User(
     @Column
     @Enumerated(EnumType.STRING)
     val authority: Authority,
-) : BaseEntity()
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null,
+) : BaseEntity() {
+    fun updateInfo(nickname: String, birth: LocalDate): User {
+        return User(
+            email = email,
+            nickname = nickname,
+            birth = birth,
+            provider = provider,
+            authority = authority,
+            id = id,
+        )
+    }
+}
 
 enum class Authority {
     ROLE_USER, ROLE_ADMIN
