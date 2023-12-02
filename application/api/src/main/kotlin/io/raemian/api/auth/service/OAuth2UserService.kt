@@ -54,6 +54,5 @@ class OAuth2UserService(
                     authority = Authority.ROLE_USER,
                 ),
             )
-
     }
 }
