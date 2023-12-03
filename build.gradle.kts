@@ -8,7 +8,7 @@ plugins {
     id("org.springframework.boot") apply false
     id("io.spring.dependency-management")
     id("org.asciidoctor.jvm.convert") apply false
-    id("org.jlleitschuh.gradle.ktlint") apply false
+    id("org.jlleitschuh.gradle.ktlint") version "12.0.2"
 }
 
 java.sourceCompatibility = JavaVersion.valueOf("VERSION_${property("javaVersion")}")
@@ -100,5 +100,9 @@ subprojects {
 
     tasks.getByName("asciidoctor") {
         dependsOn("restDocsTest")
+    }
+
+    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+        debug.set(true)
     }
 }
