@@ -29,8 +29,8 @@ spring:
               - name
             client-name: naver
           google:
-            client-id: 1007090557425-sk34pslk4o74bn9nc0oi4hrt77o30o7k.apps.googleusercontent.com
-            client-secret: U9PXLzkdKmdqUzuyGN-kyHa9
+            client-id: ${GOOGLE-CLIENT-ID}
+            client-secret: ${GOOGLE-CLIENT-SECRET}
             scope:
               - email
               - profile

@@ -33,6 +33,7 @@ class TokenProvider {
     private val EMAIL_KEY = "email"
     private val ID_KEY = "id"
     private val BEARER_TYPE = "Bearer"
+
     private val ACCESS_TOKEN_EXPIRE_TIME = Duration.ofMinutes(300).toMillis() // 300분
     private val REFRESH_TOKEN_EXPIRE_TIME = Duration.ofDays(70).toMillis() // 70일
 
@@ -118,7 +119,7 @@ class TokenProvider {
 
         // UserDetails 객체를 만들어서 Authentication 리턴
         val principal =
-            CurrentUser(id = id, email = claims.subject, password = "", provider = null, authorities = authorities)
+            CurrentUser(id = id, email = claims.subject, password = "", authorities = authorities)
         return UsernamePasswordAuthenticationToken(principal, "", principal.authorities)
     }
 

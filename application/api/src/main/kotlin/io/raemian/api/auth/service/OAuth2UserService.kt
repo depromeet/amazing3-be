@@ -1,10 +1,10 @@
 package io.raemian.api.auth.service
 
 import io.raemian.api.auth.domain.CurrentUser
-import io.raemian.api.auth.domain.OAuthProvider
 import io.raemian.storage.db.core.user.Authority
 import io.raemian.storage.db.core.user.User
 import io.raemian.storage.db.core.user.UserRepository
+import io.raemian.storage.db.core.user.enums.OAuthProvider
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.user.OAuth2User
@@ -17,8 +17,7 @@ class OAuth2UserService(
     override fun loadUser(userRequest: OAuth2UserRequest): OAuth2User {
         val oAuth2User = super.loadUser(userRequest)
         val usernameAttributeName = userRequest.clientRegistration
-            .providerDetails
-            .userInfoEndpoint
+            .providerDetails.userInfoEndpoint
             .userNameAttributeName
 
         return when (val provider = OAuthProvider.valueOf(userRequest.clientRegistration.registrationId.uppercase())) {
@@ -29,8 +28,6 @@ class OAuth2UserService(
                 CurrentUser(
                     id = user.id!!,
                     email = email,
-                    provider = provider.name,
-                    password = "",
                     authorities = listOf(),
                 )
             }
@@ -42,8 +39,6 @@ class OAuth2UserService(
                 CurrentUser(
                     id = user.id!!,
                     email = email,
-                    provider = provider.name,
-                    password = "",
                     authorities = listOf(),
                 )
             }
@@ -52,6 +47,12 @@ class OAuth2UserService(
 
     private fun upsert(email: String, oAuthProvider: OAuthProvider): User {
         return userRepository.findByEmail(email)
-            ?: return userRepository.save(User(email = email, password = "", authority = Authority.ROLE_USER))
+            ?: return userRepository.save(
+                User(
+                    email = email,
+                    provider = oAuthProvider,
+                    authority = Authority.ROLE_USER,
+                ),
+            )
     }
 }
