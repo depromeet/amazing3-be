@@ -1,13 +1,10 @@
 rootProject.name = "one-bailey"
 
 include(
-    "core:core-enum",
-    "core:core-api",
+    "application:api",
     "storage:db-core",
-    "tests:api-docs",
-    "support:logging",
-    "support:monitoring",
-    "clients:client-example"
+    "infra:logging",
+    "infra:monitoring",
 )
 
 pluginManagement {
