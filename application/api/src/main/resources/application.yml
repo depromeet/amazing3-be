@@ -12,18 +12,30 @@ spring:
 spring:
   profiles:
     group:
-      local: "security, db-core, logging, metrics"
+      local:
+        - security
+        - db-core
+        - logging
+        - metrics
 
 ---
 # dev
 spring:
   profiles:
     group:
-      dev: "security, db-core, logging, metrics"
+      dev:
+        - security
+        - db-core
+        - logging
+        - metrics
 
 ---
 # live
 spring:
   profiles:
     group:
-      live: "security, db-core, logging, metrics"
+      live:
+        - security
+        - db-core
+        - logging
+        - metrics
