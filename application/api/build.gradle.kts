@@ -7,7 +7,7 @@ tasks.getByName("jar") {
 }
 
 dependencies {
-    implementation(project(":infra:monitoring"))
+    implementation(project(":infra:metrics"))
     implementation(project(":infra:logging"))
     implementation(project(":storage:db-core"))
 
