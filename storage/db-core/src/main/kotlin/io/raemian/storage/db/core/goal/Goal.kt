@@ -1,7 +1,7 @@
 package io.raemian.storage.db.core.goal
 
 import io.raemian.storage.db.core.BaseEntity
-import io.raemian.storage.db.core.emoji.Sticker
+import io.raemian.storage.db.core.sticker.Sticker
 import io.raemian.storage.db.core.tag.Tag
 import io.raemian.storage.db.core.task.Task
 import io.raemian.storage.db.core.user.User

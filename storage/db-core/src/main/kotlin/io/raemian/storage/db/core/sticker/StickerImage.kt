@@ -1,4 +1,4 @@
-package io.raemian.storage.db.core.emoji
+package io.raemian.storage.db.core.sticker
 
 import jakarta.persistence.Embeddable
 
