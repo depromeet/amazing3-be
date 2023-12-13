@@ -86,6 +86,7 @@ class WebSecurityConfig(
         return WebSecurityCustomizer {
             it
                 .ignoring()
+                .requestMatchers(AntPathRequestMatcher("/one-baily-actuator/**"))
                 .requestMatchers(PathRequest.toH2Console())
                 .requestMatchers(AntPathRequestMatcher("/favicon.ico", "**/favicon.ico"))
         }

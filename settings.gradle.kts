@@ -4,7 +4,7 @@ include(
     "application:api",
     "storage:db-core",
     "infra:logging",
-    "infra:monitoring",
+    "infra:metrics",
 )
 
 pluginManagement {
