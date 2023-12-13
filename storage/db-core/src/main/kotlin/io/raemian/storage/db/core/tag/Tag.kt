@@ -14,7 +14,7 @@ import org.hibernate.annotations.Nationalized
 class Tag(
     @Column(nullable = false)
     @Nationalized
-    val name: String,
+    val content: String,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
