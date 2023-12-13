@@ -13,8 +13,11 @@ import java.time.LocalDate
 
 @Entity(name = "USERS")
 class User(
-    @Column
+    @Column(unique = true, nullable = false)
     val email: String,
+
+    @Column(unique = true)
+    val userName: String? = null,
 
     @Column
     val nickname: String? = null,
