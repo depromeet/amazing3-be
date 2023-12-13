@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import org.hibernate.annotations.Nationalized
 import java.time.LocalDate
 
 @Entity(name = "USERS")
@@ -17,9 +18,11 @@ class User(
     val email: String,
 
     @Column(unique = true)
+    @Nationalized
     val userName: String? = null,
 
     @Column
+    @Nationalized
     val nickname: String? = null,
 
     @Column
