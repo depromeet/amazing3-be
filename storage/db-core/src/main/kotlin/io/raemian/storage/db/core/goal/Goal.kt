@@ -39,7 +39,7 @@ class Goal(
 
     @ManyToOne
     @JoinColumn(name = "tag_id", nullable = false)
-    val tagId: Tag,
+    val tag: Tag,
 
     @Column(nullable = false)
     @Nationalized
