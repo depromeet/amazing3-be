@@ -22,9 +22,8 @@ import java.time.LocalDate
 @Entity
 @Table(name = "GOALS")
 class Goal(
-    @Column(nullable = false)
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     val user: User,
 
     @Column(nullable = false)
@@ -34,14 +33,12 @@ class Goal(
     @Column(nullable = false)
     val deadline: LocalDate,
 
-    @Column(nullable = false)
     @ManyToOne
-    @JoinColumn(name = "sticker_id")
+    @JoinColumn(name = "sticker_id", nullable = false)
     val sticker: Sticker,
 
-    @Column(nullable = false)
     @ManyToOne
-    @JoinColumn(name = "tag_id")
+    @JoinColumn(name = "tag_id", nullable = false)
     val tagId: Tag,
 
     @Column(nullable = false)
