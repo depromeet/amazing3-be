@@ -1,7 +1,11 @@
 package io.raemian.api.task
 
-import io.raemian.api.task.controller.CreateTaskResponse
+import io.raemian.api.task.controller.request.CreateTaskRequest
 import io.raemian.api.task.controller.request.DeleteTaskRequest
+import io.raemian.api.task.controller.request.RewriteTaskRequest
+import io.raemian.api.task.controller.request.UpdateTaskCompletionRequest
+import io.raemian.api.task.controller.response.CreateTaskResponse
+import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.task.Task
 import io.raemian.storage.db.core.task.TaskRepository
@@ -15,36 +19,46 @@ class TaskService(
 ) {
 
     @Transactional
-    fun create(goalId: Long, description: String): CreateTaskResponse {
-        val goal = goalRepository.getById(goalId)
-        val task = Task.createTask(goal, description)
+    fun create(currentUserId: Long, createTaskRequest: CreateTaskRequest): CreateTaskResponse {
+        val goal = goalRepository.getById(createTaskRequest.goalId)
+        validateCurrentUserIsGoalOwner(currentUserId, goal)
+
+        val task = Task.createTask(goal, createTaskRequest.description)
         taskRepository.save(task)
         return CreateTaskResponse(task.id!!)
     }
 
     @Transactional
-    fun rewrite(taskId: Long, newDescription: String) {
-        val task = taskRepository.getById(taskId)
-        task.rewrite(newDescription)
+    fun rewrite(currentUserId: Long, rewriteTaskRequest: RewriteTaskRequest) {
+        val task = taskRepository.getById(rewriteTaskRequest.taskId)
+        validateCurrentUserIsGoalOwner(currentUserId, task.goal)
+
+        task.rewrite(rewriteTaskRequest.newDescription)
         taskRepository.save(task)
     }
 
     @Transactional
-    fun updateTaskCompletion(taskId: Long, isDone: Boolean) {
-        val task = taskRepository.getById(taskId)
-        task.updateTaskCompletion(isDone)
+    fun updateTaskCompletion(
+        currentUserId: Long,
+        updateTaskCompletionRequest: UpdateTaskCompletionRequest,
+    ) {
+        val task = taskRepository.getById(updateTaskCompletionRequest.taskId)
+        validateCurrentUserIsGoalOwner(currentUserId, task.goal)
+
+        task.updateTaskCompletion(updateTaskCompletionRequest.isDone)
         taskRepository.save(task)
     }
 
     @Transactional
-    fun delete(userId: Long, deleteTaskRequest: DeleteTaskRequest) {
+    fun delete(currentUserId: Long, deleteTaskRequest: DeleteTaskRequest) {
         val task = taskRepository.getById(deleteTaskRequest.taskId)
-        validateTaskIsUsers(userId, task)
+        validateCurrentUserIsGoalOwner(currentUserId, task.goal)
+
         taskRepository.delete(task)
     }
 
-    private fun validateTaskIsUsers(userId: Long, task: Task) {
-        if (userId != task.goal.user.id) {
+    private fun validateCurrentUserIsGoalOwner(currentUserId: Long, goal: Goal) {
+        if (currentUserId != goal.user.id) {
             throw SecurityException()
         }
     }

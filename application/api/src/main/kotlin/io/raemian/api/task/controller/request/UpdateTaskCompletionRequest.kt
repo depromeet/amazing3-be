@@ -1,5 +1,6 @@
 package io.raemian.api.task.controller.request
 
-data class DeleteTaskRequest(
+data class UpdateTaskCompletionRequest(
     val taskId: Long,
+    val isDone: Boolean,
 )

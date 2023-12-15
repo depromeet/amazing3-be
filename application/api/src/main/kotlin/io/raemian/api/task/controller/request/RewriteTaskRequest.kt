@@ -1,5 +1,6 @@
 package io.raemian.api.task.controller.request
 
-data class DeleteTaskRequest(
+data class RewriteTaskRequest(
     val taskId: Long,
+    val newDescription: String,
 )
