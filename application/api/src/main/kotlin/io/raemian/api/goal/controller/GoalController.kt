@@ -57,6 +57,6 @@ class GoalController(
         @RequestBody deleteGoalRequest: DeleteGoalRequest,
     ): ResponseEntity<Unit> {
         goalService.delete(currentUser.id, deleteGoalRequest)
-        return ResponseEntity.ok().build()
+        return ResponseEntity.noContent().build()
     }
 }
