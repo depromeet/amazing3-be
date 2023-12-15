@@ -5,13 +5,11 @@ import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.sticker.Sticker
 import io.raemian.storage.db.core.sticker.StickerImage
-import io.raemian.storage.db.core.sticker.StickerRepository
 import io.raemian.storage.db.core.tag.Tag
-import io.raemian.storage.db.core.tag.TagRepository
 import io.raemian.storage.db.core.user.Authority
 import io.raemian.storage.db.core.user.User
-import io.raemian.storage.db.core.user.UserRepository
 import io.raemian.storage.db.core.user.enums.OAuthProvider
+import jakarta.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Assertions.assertAll
@@ -48,19 +46,13 @@ class GoalServiceTest {
     private lateinit var goalRepository: GoalRepository
 
     @Autowired
-    private lateinit var userRepository: UserRepository
-
-    @Autowired
-    private lateinit var stickerRepository: StickerRepository
-
-    @Autowired
-    private lateinit var tagRepository: TagRepository
+    private lateinit var entityManager: EntityManager
 
     @BeforeEach
     fun saveEntities() {
-        userRepository.save(USER_FIXTURE)
-        stickerRepository.save(STICKER_FIXTURE)
-        tagRepository.save(TAG_FIXTURE)
+        entityManager.merge(USER_FIXTURE)
+        entityManager.merge(STICKER_FIXTURE)
+        entityManager.merge(TAG_FIXTURE)
     }
 
     @Test
