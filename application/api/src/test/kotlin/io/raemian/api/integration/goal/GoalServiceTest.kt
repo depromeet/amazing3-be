@@ -114,6 +114,9 @@ class GoalServiceTest {
 
         // when
         // then
+        goalRepository.save(goal1)
+        goalRepository.save(goal2)
+
         val savedGoals = goalService.findAllByUserId(USER_FIXTURE.id!!)
 
         assertAll(
