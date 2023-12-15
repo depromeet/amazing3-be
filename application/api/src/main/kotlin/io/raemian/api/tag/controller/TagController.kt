@@ -14,7 +14,7 @@ class TagController(
 ) {
 
     @GetMapping
-    fun findAll(): ResponseEntity<TagResponse> {
+    fun findAll(): ResponseEntity<List<TagResponse>> {
         return ResponseEntity.ok(tagService.findAll())
     }
 }

@@ -11,7 +11,8 @@ class StickerService(
 ) {
 
     @Transactional(readOnly = true)
-    fun findAll(): StickerResponse {
-        return StickerResponse(stickerRepository.findAll())
+    fun findAll(): List<StickerResponse> {
+        return stickerRepository.findAll()
+            .map(::StickerResponse)
     }
 }

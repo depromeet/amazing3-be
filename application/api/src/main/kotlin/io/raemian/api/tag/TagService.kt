@@ -11,7 +11,8 @@ class TagService(
 ) {
 
     @Transactional(readOnly = true)
-    fun findAll(): TagResponse {
-        return TagResponse(tagRepository.findAll())
+    fun findAll(): List<TagResponse> {
+        return tagRepository.findAll()
+            .map(::TagResponse)
     }
 }

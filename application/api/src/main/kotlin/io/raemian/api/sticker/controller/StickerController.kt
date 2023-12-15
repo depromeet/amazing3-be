@@ -14,7 +14,7 @@ class StickerController(
 ) {
 
     @GetMapping
-    fun findAll(): ResponseEntity<StickerResponse> {
+    fun findAll(): ResponseEntity<List<StickerResponse>> {
         return ResponseEntity.ok(stickerService.findAll())
     }
 }
