@@ -10,7 +10,8 @@ data class GoalsResponse(
 
     constructor(goals: List<Goal>) : this(
         Goals(
-            goals.map(::GoalInfo)),
+            goals.map(::GoalInfo),
+        ),
     )
 
     data class GoalInfo(

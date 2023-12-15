@@ -40,7 +40,6 @@ class GoalController(
     ): ResponseEntity<GoalResponse> =
         ResponseEntity.ok(goalService.getById(goalId))
 
-
     @PostMapping
     fun create(
         @AuthenticationPrincipal currentUser: CurrentUser,
