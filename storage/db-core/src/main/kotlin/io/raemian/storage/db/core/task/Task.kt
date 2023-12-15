@@ -44,4 +44,8 @@ class Task private constructor(
     fun rewrite(newDescription: String) {
         this.description = newDescription
     }
+
+    fun updateTaskCompletion(isDone: Boolean) {
+        this.isDone = isDone
+    }
 }
