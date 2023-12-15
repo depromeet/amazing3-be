@@ -1,7 +1,6 @@
 package io.raemian.api.task
 
 import io.raemian.api.task.controller.request.CreateTaskRequest
-import io.raemian.api.task.controller.request.DeleteTaskRequest
 import io.raemian.api.task.controller.request.RewriteTaskRequest
 import io.raemian.api.task.controller.request.UpdateTaskCompletionRequest
 import io.raemian.api.task.controller.response.CreateTaskResponse
@@ -29,8 +28,8 @@ class TaskService(
     }
 
     @Transactional
-    fun rewrite(currentUserId: Long, rewriteTaskRequest: RewriteTaskRequest) {
-        val task = taskRepository.getById(rewriteTaskRequest.taskId)
+    fun rewrite(currentUserId: Long, taskId: Long, rewriteTaskRequest: RewriteTaskRequest) {
+        val task = taskRepository.getById(taskId)
         validateCurrentUserIsGoalOwner(currentUserId, task.goal)
 
         task.rewrite(rewriteTaskRequest.newDescription)
@@ -40,9 +39,10 @@ class TaskService(
     @Transactional
     fun updateTaskCompletion(
         currentUserId: Long,
+        taskId: Long,
         updateTaskCompletionRequest: UpdateTaskCompletionRequest,
     ) {
-        val task = taskRepository.getById(updateTaskCompletionRequest.taskId)
+        val task = taskRepository.getById(taskId)
         validateCurrentUserIsGoalOwner(currentUserId, task.goal)
 
         task.updateTaskCompletion(updateTaskCompletionRequest.isDone)
@@ -50,8 +50,8 @@ class TaskService(
     }
 
     @Transactional
-    fun delete(currentUserId: Long, deleteTaskRequest: DeleteTaskRequest) {
-        val task = taskRepository.getById(deleteTaskRequest.taskId)
+    fun delete(currentUserId: Long, taskId: Long) {
+        val task = taskRepository.getById(taskId)
         validateCurrentUserIsGoalOwner(currentUserId, task.goal)
 
         taskRepository.delete(task)
