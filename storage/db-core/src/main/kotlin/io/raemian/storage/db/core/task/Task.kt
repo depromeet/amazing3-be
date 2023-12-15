@@ -14,7 +14,7 @@ import org.hibernate.annotations.Nationalized
 
 @Entity
 @Table(name = "TASKS")
-class Task(
+class Task private constructor(
     @ManyToOne
     @JoinColumn(name = "goal_id")
     val goal: Goal,
@@ -29,4 +29,11 @@ class Task(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-) : BaseEntity()
+) : BaseEntity() {
+
+    companion object {
+        fun createTask(goal: Goal, description: String): Task {
+            return Task(goal, false, description)
+        }
+    }
+}
