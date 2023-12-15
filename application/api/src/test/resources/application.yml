@@ -1,0 +1,49 @@
+# default
+spring:
+  profiles:
+    default: local
+  application:
+    name: api
+  mvc.throw-exception-if-no-handler-found: true
+  web.resources.add-mappings: false
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        format_sql: true
+
+---
+# local
+spring:
+  profiles:
+    group:
+      local:
+        - security
+        - db-core
+        - logging
+        - metrics
+
+---
+# dev
+spring:
+  profiles:
+    group:
+      dev:
+        - security
+        - db-core
+        - logging
+        - metrics
+
+---
+# live
+spring:
+  profiles:
+    group:
+      live:
+        - security
+        - db-core
+        - logging
+        - metrics
