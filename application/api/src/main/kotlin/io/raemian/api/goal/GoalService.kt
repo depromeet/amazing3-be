@@ -43,8 +43,8 @@ class GoalService(
         val user = userService.getById(userId)
 
         val goal = Goal(user, title, deadline, sticker, tag, description!!, emptyList())
-        val savedGoal = goalRepository.save(goal)
-        return CreateGoalResponse(savedGoal.id!!)
+        goalRepository.save(goal)
+        return CreateGoalResponse(goal.id!!)
     }
 
     @Transactional
