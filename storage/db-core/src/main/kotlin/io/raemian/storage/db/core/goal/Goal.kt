@@ -42,7 +42,7 @@ class Goal(
     val tag: Tag,
 
     @Nationalized
-    val description: String?,
+    val description: String = "",
 
     @OneToMany(mappedBy = "goal", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
     val tasks: List<Task>,

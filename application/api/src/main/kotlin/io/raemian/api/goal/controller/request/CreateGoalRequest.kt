@@ -6,5 +6,5 @@ data class CreateGoalRequest(
     val monthOfDeadLine: String,
     val stickerId: Long,
     val tagId: Long,
-    val description: String?,
+    val description: String? = "",
 )
