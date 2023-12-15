@@ -34,9 +34,9 @@ class GoalController(
         return ResponseEntity.ok(response)
     }
 
-    @GetMapping("/{goal_id}")
+    @GetMapping("/{goalId}")
     fun getByUserId(
-        @PathVariable("goal_id") goalId: Long,
+        @PathVariable("goalId") goalId: Long,
     ): ResponseEntity<GoalResponse> =
         ResponseEntity.ok(goalService.getById(goalId))
 
