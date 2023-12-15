@@ -6,6 +6,5 @@ interface GoalRepository : JpaRepository<Goal, Long> {
     fun findAllByUserId(userId: Long): List<Goal>
 
     override fun getById(id: Long): Goal =
-        findById(id)
-            .orElseThrow() { NoSuchElementException("목표가 없습니다 $id") }
+        findById(id).orElseThrow() { NoSuchElementException("목표가 없습니다 $id") }
 }
