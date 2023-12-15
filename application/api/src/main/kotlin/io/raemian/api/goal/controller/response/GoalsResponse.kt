@@ -10,8 +10,7 @@ data class GoalsResponse(
 
     constructor(goals: List<Goal>) : this(
         Goals(
-            goals.map(::GoalInfo)
-                .toList()),
+            goals.map(::GoalInfo)),
     )
 
     data class GoalInfo(
@@ -20,16 +19,16 @@ data class GoalsResponse(
         val deadline: LocalDate,
         val sticker: StickerImage,
         val tagContent: String,
-        val description: String,
+        val description: String? = "",
     ) {
 
         constructor(goal: Goal) : this(
-            goal.id,
-            goal.title,
-            goal.deadline,
-            goal.sticker.stickerImage,
-            goal.tag.content,
-            goal.description,
+            id = goal.id,
+            title = goal.title,
+            deadline = goal.deadline,
+            sticker = goal.sticker.stickerImage,
+            tagContent = goal.tag.content,
+            description = goal.description,
         )
     }
 

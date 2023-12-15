@@ -41,9 +41,8 @@ class Goal(
     @JoinColumn(name = "tag_id", nullable = false)
     val tag: Tag,
 
-    @Column(nullable = false)
     @Nationalized
-    val description: String,
+    val description: String?,
 
     @OneToMany(mappedBy = "goal", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
     val tasks: List<Task>,
