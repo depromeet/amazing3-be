@@ -12,6 +12,6 @@ data class StickerResponse(
     constructor(sticker: Sticker) : this(
         sticker.id,
         sticker.name,
-        sticker.stickerImage
+        sticker.stickerImage,
     )
 }
