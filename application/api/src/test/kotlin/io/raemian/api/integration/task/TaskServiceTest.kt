@@ -1,7 +1,9 @@
 package io.raemian.api.integration.task
 
 import io.raemian.api.task.TaskService
-import io.raemian.api.task.controller.request.DeleteTaskRequest
+import io.raemian.api.task.controller.request.CreateTaskRequest
+import io.raemian.api.task.controller.request.RewriteTaskRequest
+import io.raemian.api.task.controller.request.UpdateTaskCompletionRequest
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.sticker.Sticker
@@ -72,9 +74,15 @@ class TaskServiceTest {
     @Test
     @DisplayName("Goal ID와 description으로 Task를 생성할 수 있다.")
     fun createTest() {
-        val response = taskService.create(GOAL_FIXTURE.id!!, "description")
-        val task = taskRepository.getById(response.id)
+        // given
+        // when
+        val response = taskService.create(
+            currentUserId = USER_FIXTURE.id!!,
+            CreateTaskRequest(GOAL_FIXTURE.id!!, "description"),
+        )
 
+        // then
+        val task = taskRepository.getById(response.id)
         assertThat(task.id).isEqualTo(response.id)
         assertThat(task.description).isEqualTo("description")
         assertThat(task.goal.description).isEqualTo(GOAL_FIXTURE.description)
@@ -83,9 +91,15 @@ class TaskServiceTest {
     @Test
     @DisplayName("Task 생성시 isDone 값은 false로 설정된다.")
     fun createTaskIsDoneFalseTest() {
-        val response = taskService.create(GOAL_FIXTURE.id!!, "description")
-        val task = taskRepository.getById(response.id)
+        // given
+        // when
+        val response = taskService.create(
+            currentUserId = USER_FIXTURE.id!!,
+            CreateTaskRequest(GOAL_FIXTURE.id!!, "description"),
+        )
 
+        // then
+        val task = taskRepository.getById(response.id)
         assertThat(task.isDone).isEqualTo(false)
     }
 
@@ -99,7 +113,11 @@ class TaskServiceTest {
 
         // when
         val newDescription = "new description"
-        taskService.rewrite(newTask.id!!, newDescription)
+        taskService.rewrite(
+            currentUserId = USER_FIXTURE.id!!,
+            taskId = newTask.id!!,
+            RewriteTaskRequest(newDescription),
+        )
 
         // then
         val task = taskRepository.getById(newTask.id!!)
@@ -114,7 +132,11 @@ class TaskServiceTest {
         taskRepository.save(newTask)
 
         // when
-        taskService.updateTaskCompletion(newTask.id!!, true)
+        taskService.updateTaskCompletion(
+            currentUserId = USER_FIXTURE.id!!,
+            taskId = newTask.id!!,
+            UpdateTaskCompletionRequest(true),
+        )
 
         // then
         val task = taskRepository.getById(newTask.id!!)
@@ -129,7 +151,7 @@ class TaskServiceTest {
         taskRepository.save(newTask)
 
         // when
-        taskService.delete(USER_FIXTURE.id!!, DeleteTaskRequest(newTask.id!!))
+        taskService.delete(USER_FIXTURE.id!!, newTask.id!!)
 
         // then
         val task = taskRepository.findById(newTask.id!!)
