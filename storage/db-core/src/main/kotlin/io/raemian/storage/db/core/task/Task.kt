@@ -20,11 +20,11 @@ class Task private constructor(
     val goal: Goal,
 
     @Column(nullable = false)
-    val isDone: Boolean,
+    var isDone: Boolean,
 
     @Column(nullable = false)
     @Nationalized
-    val description: String,
+    var description: String,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,15 @@ class Task private constructor(
 
     companion object {
         fun createTask(goal: Goal, description: String): Task {
-            return Task(goal, false, description)
+            return Task(
+                goal = goal,
+                isDone = false,
+                description = description,
+            )
         }
+    }
+
+    fun rewrite(newDescription: String) {
+        this.description = newDescription
     }
 }
