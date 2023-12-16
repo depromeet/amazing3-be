@@ -56,6 +56,12 @@ class WebSecurityConfig(
                 it.requestMatchers(AntPathRequestMatcher("/auth/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/oauth2/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/login/**")).permitAll()
+                    .requestMatchers(
+                        AntPathRequestMatcher("/swagger*/**"),
+                        AntPathRequestMatcher("/v3/api-docs/**"),
+                        AntPathRequestMatcher("/swagger-resources/**"),
+                        AntPathRequestMatcher("/webjars/**"),
+                    ).permitAll()
                     .anyRequest().authenticated()
             }
             .oauth2Login {

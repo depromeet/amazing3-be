@@ -7,6 +7,7 @@ import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.DeleteGoalRequest
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.goal.controller.response.GoalsResponse
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -26,6 +27,7 @@ class GoalController(
     private val goalService: GoalService,
 ) {
 
+    @Operation(summary = "유저 목표 전체 조회 API")
     @GetMapping
     fun findAllByUserId(
         @AuthenticationPrincipal currentUser: CurrentUser,
@@ -34,12 +36,14 @@ class GoalController(
         return ResponseEntity.ok(response)
     }
 
+    @Operation(summary = "목표 단건 조회 API")
     @GetMapping("/{goalId}")
     fun getByUserId(
         @PathVariable("goalId") goalId: Long,
     ): ResponseEntity<GoalResponse> =
         ResponseEntity.ok(goalService.getById(goalId))
 
+    @Operation(summary = "목표 생성 API")
     @PostMapping
     fun create(
         @AuthenticationPrincipal currentUser: CurrentUser,
@@ -51,6 +55,7 @@ class GoalController(
             .body(response)
     }
 
+    @Operation(summary = "목표 삭제 API")
     @DeleteMapping
     fun delete(
         @AuthenticationPrincipal currentUser: CurrentUser,

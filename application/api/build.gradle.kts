@@ -13,23 +13,26 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-web")
 
-    // jwt
+    /* jwt */
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
-    // security
+    /* security */
     implementation("org.springframework.boot:spring-boot-starter-security")
 
-    // oauth-client
+    /* oauth-client */
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 
-    // web-client
+    /* web-client */
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
-    // test
+    /* test */
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
     testImplementation("io.rest-assured:spring-mock-mvc")
+
+    /* swagger */
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 }
