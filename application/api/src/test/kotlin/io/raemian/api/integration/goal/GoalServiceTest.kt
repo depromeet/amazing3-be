@@ -113,7 +113,7 @@ class GoalServiceTest {
         // then
         assertAll(
             Executable {
-                assertThat(savedGoals.goals.goalInfos.size).isEqualTo(2)
+                assertThat(savedGoals.goalsCount).isEqualTo(2)
                 assertThat(savedGoals.goals.goalInfos[0].tagContent).isEqualTo(goal1.tag.content)
                 assertThat(savedGoals.goals.goalInfos[1].tagContent).isEqualTo(goal2.tag.content)
             },
@@ -154,7 +154,7 @@ class GoalServiceTest {
         val savedGoals = goalService.findAllByUserId(USER_FIXTURE.id!!)
 
         // then
-        var month = (now.monthValue + 1).toString()
+        var month = (now.monthValue).toString()
         if (month.length == 1) {
             month = "0$month"
         }

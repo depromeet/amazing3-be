@@ -6,12 +6,14 @@ import io.raemian.storage.db.core.sticker.StickerImage
 
 data class GoalsResponse(
     val goals: Goals,
+    val goalsCount: Int,
 ) {
 
     constructor(goals: List<Goal>) : this(
         Goals(
             goals.map(::GoalInfo),
         ),
+        goals.size,
     )
 
     data class GoalInfo(
