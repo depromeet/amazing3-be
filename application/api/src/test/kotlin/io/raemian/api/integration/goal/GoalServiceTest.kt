@@ -104,18 +104,67 @@ class GoalServiceTest {
             emptyList(),
         )
 
-        // when
-        // then
         goalRepository.save(goal1)
         goalRepository.save(goal2)
 
+        // when
         val savedGoals = goalService.findAllByUserId(USER_FIXTURE.id!!)
 
+        // then
         assertAll(
             Executable {
                 assertThat(savedGoals.goals.goalInfos.size).isEqualTo(2)
                 assertThat(savedGoals.goals.goalInfos[0].tagContent).isEqualTo(goal1.tag.content)
                 assertThat(savedGoals.goals.goalInfos[1].tagContent).isEqualTo(goal2.tag.content)
+            },
+        )
+    }
+
+    @Test
+    @DisplayName("GoalsResponse와 GoalResponse의 deadline 포멧은 'YYYY.MM'이다.")
+    @Transactional
+    fun responseFormattingTest() {
+        // given
+        val now = LocalDate.now()
+        val goal1 = Goal(
+            USER_FIXTURE,
+            "제목1",
+            now,
+            STICKER_FIXTURE,
+            TAG_FIXTURE,
+            "",
+            emptyList(),
+        )
+
+        val goal2 = Goal(
+            USER_FIXTURE,
+            "제목2",
+            now,
+            STICKER_FIXTURE,
+            TAG_FIXTURE,
+            "",
+            emptyList(),
+        )
+
+        goalRepository.save(goal1)
+        goalRepository.save(goal2)
+
+        // when
+        val savedGoal = goalService.getById(goal1.id!!)
+        val savedGoals = goalService.findAllByUserId(USER_FIXTURE.id!!)
+
+        // then
+        var month = (now.monthValue + 1).toString()
+        if (month.length == 1) {
+            month = "0$month"
+        }
+        val deadline = "${now.year}.${month}"
+
+        assertAll(
+            Executable {
+                assertThat(savedGoal.deadline).isEqualTo(deadline)
+                assertThat(savedGoals.goals.goalInfos[0].deadline).isEqualTo(deadline)
+                assertThat(savedGoals.goals.goalInfos[1].deadline).isEqualTo(deadline)
             },
         )
     }
