@@ -5,12 +5,12 @@ import io.raemian.storage.db.core.sticker.StickerImage
 import java.time.LocalDate
 
 class GoalsResponse private constructor(
-    val goals: Goals,
+    val goals: List<GoalInfo>,
 ) {
 
     companion object {
         fun of(goals: List<Goal>): GoalsResponse =
-            GoalsResponse(Goals(goals.map(::GoalInfo)))
+            GoalsResponse(goals.map(::GoalInfo))
     }
 
     data class GoalInfo(
@@ -31,8 +31,4 @@ class GoalsResponse private constructor(
             description = goal.description,
         )
     }
-
-    data class Goals(
-        val goalInfos: List<GoalInfo>,
-    )
 }
