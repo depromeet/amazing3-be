@@ -4,17 +4,18 @@ import io.raemian.api.support.format
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.sticker.StickerImage
 
-data class GoalsResponse(
-    val goals: Goals,
+class GoalsResponse private constructor(
+    val goals: List<GoalInfo>,
     val goalsCount: Int,
 ) {
 
-    constructor(goals: List<Goal>) : this(
-        Goals(
-            goals.map(::GoalInfo),
-        ),
-        goals.size,
-    )
+    companion object {
+        fun from(goals: List<Goal>): GoalsResponse =
+            GoalsResponse(
+                goals.map(::GoalInfo),
+                goals.size,
+            )
+    }
 
     data class GoalInfo(
         val id: Long?,
@@ -30,8 +31,4 @@ data class GoalsResponse(
             tagContent = goal.tag.content,
         )
     }
-
-    data class Goals(
-        val goalInfos: List<GoalInfo>,
-    )
 }
