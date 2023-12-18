@@ -4,15 +4,14 @@ import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.sticker.StickerImage
 import java.time.LocalDate
 
-data class GoalsResponse(
+class GoalsResponse private constructor(
     val goals: Goals,
 ) {
 
-    constructor(goals: List<Goal>) : this(
-        Goals(
-            goals.map(::GoalInfo),
-        ),
-    )
+    companion object {
+        fun of(goals: List<Goal>): GoalsResponse =
+            GoalsResponse(Goals(goals.map(::GoalInfo)))
+    }
 
     data class GoalInfo(
         val id: Long?,
