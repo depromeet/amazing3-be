@@ -7,10 +7,10 @@ import java.time.Year
 fun LocalDate.format(): String {
     var month = (this.monthValue).toString()
     if (month.length == 1) {
-        month = "0${month}"
+        month = "0$month"
     }
 
-    return "${this.year}.${month}"
+    return "${this.year}.$month"
 }
 
 object RaemianLocalDate {
