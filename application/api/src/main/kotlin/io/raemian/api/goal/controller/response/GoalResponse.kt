@@ -1,5 +1,6 @@
 package io.raemian.api.goal.controller.response
 
+import io.raemian.api.support.format
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.sticker.StickerImage
 import io.raemian.storage.db.core.tag.Tag
