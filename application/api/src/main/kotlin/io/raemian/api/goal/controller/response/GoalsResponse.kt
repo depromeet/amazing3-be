@@ -9,7 +9,7 @@ class GoalsResponse private constructor(
 ) {
 
     companion object {
-        fun of(goals: List<Goal>): GoalsResponse =
+        fun from(goals: List<Goal>): GoalsResponse =
             GoalsResponse(goals.map(::GoalInfo))
     }
 
