@@ -158,7 +158,7 @@ class GoalServiceTest {
         if (month.length == 1) {
             month = "0$month"
         }
-        val deadline = "${now.year}.${month}"
+        val deadline = "${now.year}.$month"
 
         assertAll(
             Executable {
