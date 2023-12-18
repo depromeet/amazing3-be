@@ -24,7 +24,7 @@ class GoalService(
     @Transactional(readOnly = true)
     fun findAllByUserId(userId: Long): GoalsResponse {
         val goals = goalRepository.findAllByUserId(userId)
-        return GoalsResponse(goals)
+        return GoalsResponse.from(goals)
     }
 
     @Transactional(readOnly = true)
