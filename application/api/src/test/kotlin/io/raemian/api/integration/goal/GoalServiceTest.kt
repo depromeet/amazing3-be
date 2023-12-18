@@ -114,8 +114,8 @@ class GoalServiceTest {
         assertAll(
             Executable {
                 assertThat(savedGoals.goals.goalInfos.size).isEqualTo(2)
-                assertThat(savedGoals.goals.goalInfos[0].title).isEqualTo(goal1.title)
-                assertThat(savedGoals.goals.goalInfos[1].title).isEqualTo(goal2.title)
+                assertThat(savedGoals.goals.goalInfos[0].tagContent).isEqualTo(goal1.tag.content)
+                assertThat(savedGoals.goals.goalInfos[1].tagContent).isEqualTo(goal2.tag.content)
             },
         )
     }
