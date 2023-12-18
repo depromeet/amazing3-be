@@ -16,20 +16,16 @@ data class GoalsResponse(
 
     data class GoalInfo(
         val id: Long?,
-        val title: String,
         val deadline: LocalDate,
         val sticker: StickerImage,
         val tagContent: String,
-        val description: String? = "",
     ) {
 
         constructor(goal: Goal) : this(
             id = goal.id,
-            title = goal.title,
             deadline = goal.deadline,
             sticker = goal.sticker.stickerImage,
             tagContent = goal.tag.content,
-            description = goal.description,
         )
     }
 
