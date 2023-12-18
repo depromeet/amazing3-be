@@ -4,11 +4,10 @@ import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.sticker.StickerImage
 import io.raemian.storage.db.core.tag.Tag
 import io.raemian.storage.db.core.task.Task
-import java.time.LocalDate
 
 data class GoalResponse(
     val title: String,
-    val deadline: LocalDate,
+    val deadline: String,
     val sticker: StickerImage,
     val tagInfo: TagInfo,
     val tasks: List<TaskInfo>,
@@ -16,7 +15,7 @@ data class GoalResponse(
 
     constructor(goal: Goal) : this(
         goal.title,
-        goal.deadline,
+        goal.deadline.format(),
         goal.sticker.stickerImage,
         TagInfo(goal.tag),
         goal.tasks.map(::TaskInfo),
