@@ -56,6 +56,7 @@ class WebSecurityConfig(
                 it.requestMatchers(AntPathRequestMatcher("/auth/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/oauth2/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/login/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/one-baily-actuator/**")).permitAll()
                     .requestMatchers(
                         AntPathRequestMatcher("/swagger*/**"),
                         AntPathRequestMatcher("/v3/api-docs/**"),
@@ -74,7 +75,7 @@ class WebSecurityConfig(
                     val tokenDTO = tokenProvider.generateTokenDto(user)
                     response.setHeader("x-token", tokenDTO.accessToken)
                     // TODO edit redirect url
-                    response.sendRedirect("http://localhost:8080/login/oauth2/code/google?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
+                    response.sendRedirect("http://localhost:3000/login/oauth2/code/google?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
                 }
                 it.failureHandler { request, response, exception ->
                     response.addHeader("x-token", exception.message)
@@ -92,7 +93,6 @@ class WebSecurityConfig(
         return WebSecurityCustomizer {
             it
                 .ignoring()
-                .requestMatchers(AntPathRequestMatcher("/one-baily-actuator/**"))
                 .requestMatchers(PathRequest.toH2Console())
                 .requestMatchers(AntPathRequestMatcher("/favicon.ico", "**/favicon.ico"))
         }
