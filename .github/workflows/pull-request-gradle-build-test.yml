@@ -1,8 +1,8 @@
-name : Pull Request Gradle Build Test
+name: Pull Request Gradle Build Test
 
 on:
   pull_request:
-    types: [opened, synchronize, closed]
+    types: [ opened, synchronize, closed ]
 
 permissions: read-all
 
@@ -34,8 +34,10 @@ jobs:
 
       - name: gradlew 권한 부여
         run: chmod +x ./gradlew
-        
+
       - name: Gradle Build
         if: steps.changes.outputs.application == 'true'
+        env:
+          JASYPT_ENCRYPTION_PASSWORD: ${{ secrets.PROPERTY_ENCRYPTION_PASSWORD }}
         run: |
           ./gradlew build --no-build-cache
