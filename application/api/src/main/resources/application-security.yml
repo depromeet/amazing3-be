@@ -22,6 +22,7 @@ spring:
               - name
             client-name: naver
           google:
+            redirect-uri: ${GOOGLE-REDIRECT-URI}
             client-id: ${GOOGLE-CLIENT-ID}
             client-secret: ${GOOGLE-CLIENT-SECRET}
             scope:
@@ -54,6 +55,7 @@ spring:
               - name
             client-name: naver
           google:
+            redirect-uri: ${GOOGLE-REDIRECT-URI}
             client-id: ${GOOGLE-CLIENT-ID}
             client-secret: ${GOOGLE-CLIENT-SECRET}
             scope:
@@ -87,6 +89,7 @@ spring:
               - name
             client-name: naver
           google:
+            redirect-uri: ${GOOGLE-REDIRECT-URI}
             client-id: ${GOOGLE-CLIENT-ID}
             client-secret: ${GOOGLE-CLIENT-SECRET}
             scope:
