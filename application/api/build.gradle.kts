@@ -35,4 +35,7 @@ dependencies {
 
     /* swagger */
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+
+    /* jasypt */
+    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
 }
