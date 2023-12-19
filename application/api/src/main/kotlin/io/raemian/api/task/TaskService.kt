@@ -24,7 +24,7 @@ class TaskService(
 
         val task = Task.createTask(goal, createTaskRequest.description)
         taskRepository.save(task)
-        return CreateTaskResponse(task.id!!)
+        return CreateTaskResponse(task.id!!, task.description)
     }
 
     @Transactional

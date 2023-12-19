@@ -7,6 +7,7 @@ import io.raemian.api.task.controller.request.CreateTaskRequest
 import io.raemian.api.task.controller.request.RewriteTaskRequest
 import io.raemian.api.task.controller.request.UpdateTaskCompletionRequest
 import io.raemian.api.task.controller.response.CreateTaskResponse
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -23,6 +24,7 @@ class TaskController(
     private val taskService: TaskService,
 ) {
 
+    @Operation(summary = "Task 생성 API입니다.")
     @PostMapping
     fun create(
         @AuthenticationPrincipal currentUser: CurrentUser,
@@ -33,6 +35,7 @@ class TaskController(
             .body(response)
     }
 
+    @Operation(summary = "Task의 description을 수정하는 API입니다.")
     @PatchMapping("/{taskId}/description")
     fun rewrite(
         @AuthenticationPrincipal currentUser: CurrentUser,
@@ -43,6 +46,7 @@ class TaskController(
         return ResponseEntity.ok().build()
     }
 
+    @Operation(summary = "Task의 완료 여부를 수정하는 API입니다.")
     @PatchMapping("/{taskId}/isDone")
     fun updateTaskCompletion(
         @AuthenticationPrincipal currentUser: CurrentUser,
@@ -53,6 +57,7 @@ class TaskController(
         return ResponseEntity.ok().build()
     }
 
+    @Operation(summary = "Task를 삭제하는 API입니다.")
     @DeleteMapping("/{taskId}")
     fun updateTaskCompletion(
         @AuthenticationPrincipal currentUser: CurrentUser,

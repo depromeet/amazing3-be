@@ -1,10 +1,10 @@
 package io.raemian.api.goal.controller
 
 import io.raemian.api.auth.domain.CurrentUser
-import io.raemian.api.goal.CreateGoalResponse
 import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.DeleteGoalRequest
+import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.goal.controller.response.GoalsResponse
 import io.swagger.v3.oas.annotations.Operation

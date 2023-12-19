@@ -2,6 +2,7 @@ package io.raemian.api.goal
 
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.DeleteGoalRequest
+import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.goal.controller.response.GoalsResponse
 import io.raemian.api.sticker.StickerService
@@ -44,7 +45,7 @@ class GoalService(
 
         val goal = Goal(user, title, deadline, sticker, tag, description!!, emptyList())
         goalRepository.save(goal)
-        return CreateGoalResponse(goal.id!!)
+        return CreateGoalResponse(goal)
     }
 
     @Transactional
