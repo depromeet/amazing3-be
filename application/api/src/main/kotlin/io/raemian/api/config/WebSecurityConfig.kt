@@ -56,6 +56,7 @@ class WebSecurityConfig(
                 it.requestMatchers(AntPathRequestMatcher("/auth/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/oauth2/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/login/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/one-baily-actuator/**")).permitAll()
                     .requestMatchers(
                         AntPathRequestMatcher("/swagger*/**"),
                         AntPathRequestMatcher("/v3/api-docs/**"),
@@ -92,7 +93,6 @@ class WebSecurityConfig(
         return WebSecurityCustomizer {
             it
                 .ignoring()
-                .requestMatchers(AntPathRequestMatcher("/one-baily-actuator/**"))
                 .requestMatchers(PathRequest.toH2Console())
                 .requestMatchers(AntPathRequestMatcher("/favicon.ico", "**/favicon.ico"))
         }
