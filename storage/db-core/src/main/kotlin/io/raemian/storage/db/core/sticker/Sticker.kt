@@ -2,7 +2,6 @@ package io.raemian.storage.db.core.sticker
 
 import io.raemian.storage.db.core.BaseEntity
 import jakarta.persistence.Column
-import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -17,9 +16,8 @@ class Sticker(
     @Nationalized
     val name: String,
 
-    @Embedded
     @Column(nullable = false)
-    val stickerImage: StickerImage,
+    val url: String,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
