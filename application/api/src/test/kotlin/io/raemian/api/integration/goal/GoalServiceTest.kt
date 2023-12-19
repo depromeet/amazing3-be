@@ -168,4 +168,60 @@ class GoalServiceTest {
             },
         )
     }
+
+    // 정렬 테스트
+    @Test
+    @DisplayName("Goals 전체 조회시 Deadline 기준 오름차순, CreatedAt 기준 내림차순으로 정렬된다.")
+    @Transactional
+    fun sortGoalsTest() {
+        // given
+        val deadline이_내일이고_가장_처음_만들어진_객체 = Goal(
+            USER_FIXTURE,
+            "제목1",
+            LocalDate.now()
+                .plusDays(1),
+            STICKER_FIXTURE,
+            TAG_FIXTURE,
+            "",
+            emptyList(),
+        )
+
+        val deadline이_내일이고_가장_나중에_만들어진_객체 = Goal(
+            USER_FIXTURE,
+            "제목2",
+            LocalDate.now()
+                .plusDays(1),
+            STICKER_FIXTURE,
+            TAG_FIXTURE,
+            "",
+            emptyList(),
+        )
+
+        val deadline이_오늘인_객체 = Goal(
+            USER_FIXTURE,
+            "제목2",
+            LocalDate.now(),
+            STICKER_FIXTURE,
+            TAG_FIXTURE,
+            "",
+            emptyList(),
+        )
+
+        // 역순으로 저장한다.
+        goalRepository.save(deadline이_내일이고_가장_처음_만들어진_객체)
+        goalRepository.save(deadline이_내일이고_가장_나중에_만들어진_객체)
+        goalRepository.save(deadline이_오늘인_객체)
+
+        // when
+        val savedGoals = goalService.findAllByUserId(USER_FIXTURE.id!!)
+
+        // then
+        assertAll(
+            Executable {
+                assertThat(savedGoals.goals[0].id).isEqualTo(deadline이_오늘인_객체.id)
+                assertThat(savedGoals.goals[1].id).isEqualTo(deadline이_내일이고_가장_나중에_만들어진_객체.id)
+                assertThat(savedGoals.goals[2].id).isEqualTo(deadline이_내일이고_가장_처음_만들어진_객체.id)
+            },
+        )
+    }
 }
