@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.util.Arrays
 
-
 @OpenAPIDefinition(
     info = Info(
         title = "BANDIBOODI API 명세",
