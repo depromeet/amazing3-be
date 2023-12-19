@@ -4,15 +4,22 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: none
-    properties:
-      hibernate.default_batch_fetch_size: 100
 
 ---
 # local
+spring.config.activate.on-profile: local
+
 spring:
-  config:
-    active:
-      on-profile: local
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:core;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    hikari:
+      pool-name: db-core-pool
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
   jpa:
     hibernate:
       ddl-auto: create
@@ -20,78 +27,29 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
-  h2:
-    console:
-      enabled: true
-
-storage:
-  datasource:
-    core:
-      driver-class-name: org.h2.Driver
-      jdbc-url: jdbc:h2:mem:core;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-      username: sa
-      pool-name: core-db-pool
-      data-source-properties:
-        rewriteBatchedStatements: true
-
 ---
 # dev
 spring.config.activate.on-profile: dev
 
-storage:
+spring:
   datasource:
-    core:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://${storage.database.core-db.url}
-      username: ${storage.database.core-db.username}
-      password: ${storage.database.core-db.password}
-      maximum-pool-size: 5
-      connection-timeout: 1100
-      keepalive-time: 30000
-      validation-timeout: 1000
-      max-lifetime: 600000
-      pool-name: core-db-pool
-      data-source-properties:
-        socketTimeout: 3000
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
-        useLocalSessionState: true
-        rewriteBatchedStatements: true
-        cacheResultSetMetadata: true
-        cacheServerConfiguration: true
-        elideSetAutoCommits: true
-        maintainTimeStats: false
-
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB-URL}
+    username: ${DB-USERNAME}
+    password: ${DB-PASSWORD}
+    hikari:
+      pool-name: db-core-pool
 
 
 ---
 # live
 spring.config.activate.on-profile: live
 
-storage:
+spring:
   datasource:
-    core:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://${storage.database.core-db.url}
-      username: ${storage.database.core-db.username}
-      password: ${storage.database.core-db.password}
-      maximum-pool-size: 25
-      connection-timeout: 1100
-      keepalive-time: 30000
-      validation-timeout: 1000
-      max-lifetime: 600000
-      pool-name: core-db-pool
-      data-source-properties:
-        socketTimeout: 3000
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
-        useLocalSessionState: true
-        rewriteBatchedStatements: true
-        cacheResultSetMetadata: true
-        cacheServerConfiguration: true
-        elideSetAutoCommits: true
-        maintainTimeStats: false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB-URL}
+    username: ${DB-USERNAME}
+    password: ${DB-PASSWORD}
+    hikari:
+      pool-name: db-core-pool
