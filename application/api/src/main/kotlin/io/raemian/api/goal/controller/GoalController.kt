@@ -1,6 +1,7 @@
 package io.raemian.api.goal.controller
 
 import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.goal.GoalReadService
 import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.DeleteGoalRequest
@@ -25,6 +26,7 @@ fun String.toUri(): URI = URI.create(this)
 @RequestMapping("/goal")
 class GoalController(
     private val goalService: GoalService,
+    private val goalReadService: GoalReadService,
 ) {
 
     @Operation(summary = "유저 목표 전체 조회 API")
@@ -32,7 +34,7 @@ class GoalController(
     fun findAllByUserId(
         @AuthenticationPrincipal currentUser: CurrentUser,
     ): ResponseEntity<GoalsResponse> {
-        val response = goalService.findAllByUserId(currentUser.id)
+        val response = goalReadService.findAllByUserId(currentUser.id)
         return ResponseEntity.ok(response)
     }
 
@@ -41,7 +43,7 @@ class GoalController(
     fun getByUserId(
         @PathVariable("goalId") goalId: Long,
     ): ResponseEntity<GoalResponse> =
-        ResponseEntity.ok(goalService.getById(goalId))
+        ResponseEntity.ok(goalReadService.getById(goalId))
 
     @Operation(summary = "목표 생성 API")
     @PostMapping
