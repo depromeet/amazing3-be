@@ -7,7 +7,6 @@ import io.raemian.api.task.controller.request.UpdateTaskCompletionRequest
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.sticker.Sticker
-import io.raemian.storage.db.core.sticker.StickerImage
 import io.raemian.storage.db.core.tag.Tag
 import io.raemian.storage.db.core.task.Task
 import io.raemian.storage.db.core.task.TaskRepository
@@ -38,7 +37,7 @@ class TaskServiceTest {
             Authority.ROLE_USER,
         )
 
-        val STICKER_FIXTURE = Sticker("sticker", StickerImage("image yeah"))
+        val STICKER_FIXTURE = Sticker("sticker", "image yeah")
         val TAG_FIXTURE = Tag("꿈")
         val GOAL_FIXTURE = Goal(
             user = USER_FIXTURE,

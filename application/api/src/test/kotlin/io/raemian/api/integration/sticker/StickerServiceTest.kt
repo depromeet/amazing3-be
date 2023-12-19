@@ -2,7 +2,6 @@ package io.raemian.api.integration.sticker
 
 import io.raemian.api.sticker.StickerService
 import io.raemian.storage.db.core.sticker.Sticker
-import io.raemian.storage.db.core.sticker.StickerImage
 import io.raemian.storage.db.core.sticker.StickerRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
@@ -25,8 +24,8 @@ class StickerServiceTest {
     @DisplayName("저장된 전체 Tag를 조회할 수 있다.")
     fun findAllByUserIdTest() {
         // given
-        val sticker1 = Sticker("sticker", StickerImage("image1"))
-        val sticker2 = Sticker("sticker2", StickerImage("image2"))
+        val sticker1 = Sticker("sticker", "image1")
+        val sticker2 = Sticker("sticker2", "image2")
 
         stickerRepository.save(sticker1)
         stickerRepository.save(sticker2)
@@ -39,9 +38,9 @@ class StickerServiceTest {
             Executable {
                 assertThat(stickers.size).isEqualTo(2)
                 assertThat(stickers[0].name).isEqualTo(sticker1.name)
-                assertThat(stickers[0].stickerImage).isEqualTo(sticker1.stickerImage)
+                assertThat(stickers[0].url).isEqualTo(sticker1.url)
                 assertThat(stickers[1].name).isEqualTo(sticker2.name)
-                assertThat(stickers[1].stickerImage).isEqualTo(sticker2.stickerImage)
+                assertThat(stickers[1].url).isEqualTo(sticker2.url)
             },
         )
     }

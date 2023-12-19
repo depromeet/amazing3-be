@@ -4,7 +4,6 @@ import io.raemian.api.goal.GoalReadService
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.sticker.Sticker
-import io.raemian.storage.db.core.sticker.StickerImage
 import io.raemian.storage.db.core.tag.Tag
 import io.raemian.storage.db.core.user.Authority
 import io.raemian.storage.db.core.user.User
@@ -35,7 +34,7 @@ class GoalReadServiceTest {
             Authority.ROLE_USER,
         )
 
-        val STICKER_FIXTURE = Sticker("sticker", StickerImage("image yeah"))
+        val STICKER_FIXTURE = Sticker("sticker", "image yeah")
         val TAG_FIXTURE = Tag("꿈")
     }
 
