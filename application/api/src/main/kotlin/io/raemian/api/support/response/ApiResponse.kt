@@ -3,16 +3,12 @@ package io.raemian.api.support.response
 import io.raemian.api.support.error.ErrorMessage
 import io.raemian.api.support.error.ErrorType
 
-data class ApiResponse<T> private constructor(
+class ApiResponse<T> private constructor(
     val result: ResultType,
-    val data: T? = null,
+    val body: T? = null,
     val error: ErrorMessage? = null,
 ) {
     companion object {
-        fun success(): ApiResponse<Any> {
-            return ApiResponse(ResultType.SUCCESS, null, null)
-        }
-
         fun <S> success(data: S): ApiResponse<S> {
             return ApiResponse(ResultType.SUCCESS, data, null)
         }
