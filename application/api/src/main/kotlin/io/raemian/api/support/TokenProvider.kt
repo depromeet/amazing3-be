@@ -67,7 +67,6 @@ class TokenProvider {
         )
     }
 
-
     fun getAuthentication(accessToken: String): Authentication {
         // 토큰 복호화
         val claims = parseClaims(accessToken)
