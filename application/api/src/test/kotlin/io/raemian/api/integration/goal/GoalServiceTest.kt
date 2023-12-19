@@ -104,18 +104,67 @@ class GoalServiceTest {
             emptyList(),
         )
 
-        // when
-        // then
         goalRepository.save(goal1)
         goalRepository.save(goal2)
 
+        // when
         val savedGoals = goalService.findAllByUserId(USER_FIXTURE.id!!)
+
+        // then
+        assertAll(
+            Executable {
+                assertThat(savedGoals.goalsCount).isEqualTo(2)
+                assertThat(savedGoals.goals[0].tagContent).isEqualTo(goal1.tag.content)
+                assertThat(savedGoals.goals[1].tagContent).isEqualTo(goal2.tag.content)
+            },
+        )
+    }
+
+    @Test
+    @DisplayName("GoalsResponse와 GoalResponse의 deadline 포멧은 'YYYY.MM'이다.")
+    @Transactional
+    fun responseFormattingTest() {
+        // given
+        val now = LocalDate.now()
+        val goal1 = Goal(
+            USER_FIXTURE,
+            "제목1",
+            now,
+            STICKER_FIXTURE,
+            TAG_FIXTURE,
+            "",
+            emptyList(),
+        )
+
+        val goal2 = Goal(
+            USER_FIXTURE,
+            "제목2",
+            now,
+            STICKER_FIXTURE,
+            TAG_FIXTURE,
+            "",
+            emptyList(),
+        )
+
+        goalRepository.save(goal1)
+        goalRepository.save(goal2)
+
+        // when
+        val savedGoal = goalService.getById(goal1.id!!)
+        val savedGoals = goalService.findAllByUserId(USER_FIXTURE.id!!)
+
+        // then
+        var month = (now.monthValue).toString()
+        if (month.length == 1) {
+            month = "0$month"
+        }
+        val deadline = "${now.year}.$month"
 
         assertAll(
             Executable {
-                assertThat(savedGoals.goals.size).isEqualTo(2)
-                assertThat(savedGoals.goals[0].title).isEqualTo(goal1.title)
-                assertThat(savedGoals.goals[1].title).isEqualTo(goal2.title)
+                assertThat(savedGoal.deadline).isEqualTo(deadline)
+                assertThat(savedGoals.goals[0].deadline).isEqualTo(deadline)
+                assertThat(savedGoals.goals[1].deadline).isEqualTo(deadline)
             },
         )
     }
