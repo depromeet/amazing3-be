@@ -34,7 +34,7 @@ dependencies {
     testImplementation("io.rest-assured:spring-mock-mvc")
 
     /* swagger */
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 
     /* jasypt */
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")

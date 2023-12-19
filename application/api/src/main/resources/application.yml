@@ -12,6 +12,11 @@ jasypt:
     bean: stringEncryptor
   secret-key: ${JASYPT_ENCRYPTION_PASSWORD}
 
+
+server:
+  servlet:
+    context-path: /api
+
 ---
 # local
 spring:
