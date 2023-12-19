@@ -1,34 +1,34 @@
 package io.raemian.api.goal.controller.response
 
+import io.raemian.api.support.format
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.sticker.StickerImage
-import java.time.LocalDate
 
 class GoalsResponse private constructor(
     val goals: List<GoalInfo>,
+    val goalsCount: Int,
 ) {
 
     companion object {
         fun from(goals: List<Goal>): GoalsResponse =
-            GoalsResponse(goals.map(::GoalInfo))
+            GoalsResponse(
+                goals.map(::GoalInfo),
+                goals.size,
+            )
     }
 
     data class GoalInfo(
         val id: Long?,
-        val title: String,
-        val deadline: LocalDate,
+        val deadline: String,
         val sticker: StickerImage,
         val tagContent: String,
-        val description: String? = "",
     ) {
 
         constructor(goal: Goal) : this(
             id = goal.id,
-            title = goal.title,
-            deadline = goal.deadline,
+            deadline = goal.deadline.format(),
             sticker = goal.sticker.stickerImage,
             tagContent = goal.tag.content,
-            description = goal.description,
         )
     }
 }
