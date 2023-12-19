@@ -25,7 +25,8 @@ class GoalService(
     @Transactional(readOnly = true)
     fun findAllByUserId(userId: Long): GoalsResponse {
         val goals = goalRepository.findAllByUserId(userId)
-        return GoalsResponse.from(goals)
+        val sortedGoals = sortByDeadlineAscendingAndCreatedAtDescending(goals)
+        return GoalsResponse.from(sortedGoals)
     }
 
     @Transactional(readOnly = true)
@@ -53,6 +54,13 @@ class GoalService(
         val goal = goalRepository.getById(deleteGoalRequest.goalId)
         validateGoalIsUsers(userId, goal)
         goalRepository.delete(goal)
+    }
+
+    private fun sortByDeadlineAscendingAndCreatedAtDescending(goals: List<Goal>): List<Goal> {
+        return goals.sortedWith(
+            compareBy<Goal> { it.deadline }
+                .thenByDescending { it.createdAt },
+        )
     }
 
     private fun validateGoalIsUsers(userId: Long, goal: Goal) {
