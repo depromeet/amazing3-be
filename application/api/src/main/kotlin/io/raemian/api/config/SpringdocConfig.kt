@@ -2,15 +2,16 @@ package io.raemian.api.config
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.info.Info
+import io.swagger.v3.oas.annotations.servers.Server
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.util.Arrays
 
 @OpenAPIDefinition(
+    servers = arrayOf(Server(url = "https://www.one-bailey.o-r.kr/api")),
     info = Info(
         title = "BANDIBOODI API 명세",
         description = "BANDIBOODI 메인/어드밍 API 명세서",
@@ -29,6 +30,6 @@ class SpringdocConfig {
 
         return OpenAPI()
             .components(Components().addSecuritySchemes("bearerAuth", securityScheme))
-            .security(Arrays.asList(securityRequirement))
+            .security(listOf(securityRequirement))
     }
 }
