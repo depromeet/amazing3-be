@@ -8,6 +8,7 @@ import io.raemian.api.goal.controller.request.DeleteGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.goal.controller.response.GoalsResponse
+import io.raemian.api.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -33,28 +34,31 @@ class GoalController(
     @GetMapping
     fun findAllByUserId(
         @AuthenticationPrincipal currentUser: CurrentUser,
-    ): ResponseEntity<GoalsResponse> {
+    ): ResponseEntity<ApiResponse<GoalsResponse>> {
         val response = goalReadService.findAllByUserId(currentUser.id)
-        return ResponseEntity.ok(response)
+        return ResponseEntity
+            .ok(ApiResponse.success(response))
     }
 
     @Operation(summary = "목표 단건 조회 API")
     @GetMapping("/{goalId}")
     fun getByUserId(
         @PathVariable("goalId") goalId: Long,
-    ): ResponseEntity<GoalResponse> =
-        ResponseEntity.ok(goalReadService.getById(goalId))
+    ): ResponseEntity<ApiResponse<GoalResponse>> =
+        ResponseEntity.ok(
+            ApiResponse.success(goalReadService.getById(goalId)),
+        )
 
     @Operation(summary = "목표 생성 API")
     @PostMapping
     fun create(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @RequestBody createGoalRequest: CreateGoalRequest,
-    ): ResponseEntity<CreateGoalResponse> {
+    ): ResponseEntity<ApiResponse<CreateGoalResponse>> {
         val response = goalService.create(currentUser.id, createGoalRequest)
         return ResponseEntity
             .created("/goal/${response.id}".toUri())
-            .body(response)
+            .body(ApiResponse.success(response))
     }
 
     @Operation(summary = "목표 삭제 API")
