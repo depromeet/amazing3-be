@@ -1,6 +1,6 @@
 package io.raemian.api.integration.goal
 
-import io.raemian.api.goal.GoalService
+import io.raemian.api.goal.GoalReadService
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.sticker.Sticker
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @SpringBootTest
-class GoalServiceTest {
+class GoalReadServiceTest {
 
     companion object {
         val USER_FIXTURE = User(
@@ -40,7 +40,7 @@ class GoalServiceTest {
     }
 
     @Autowired
-    private lateinit var goalService: GoalService
+    private lateinit var goalReadService: GoalReadService
 
     @Autowired
     private lateinit var goalRepository: GoalRepository
@@ -61,13 +61,13 @@ class GoalServiceTest {
     fun getByIdTest() {
         // given
         val goal = Goal(
-            USER_FIXTURE,
-            "짱이 될거야",
-            LocalDate.MAX,
-            STICKER_FIXTURE,
-            TAG_FIXTURE,
-            "열심히, 잘, 최선을 다해 꼭 짱이 된다.",
-            emptyList(),
+            user = USER_FIXTURE,
+            title = "짱이 될거야",
+            deadline = LocalDate.MAX,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "열심히, 잘, 최선을 다해 꼭 짱이 된다.",
+            tasks = emptyList(),
         )
 
         val savedGoal = goalRepository.save(goal)
@@ -75,7 +75,7 @@ class GoalServiceTest {
         // when
         // then
         assertThatCode {
-            goalService.getById(savedGoal.id!!)
+            goalReadService.getById(savedGoal.id!!)
         }.doesNotThrowAnyException()
     }
 
@@ -85,30 +85,30 @@ class GoalServiceTest {
     fun findAllByUserIdTest() {
         // given
         val goal1 = Goal(
-            USER_FIXTURE,
-            "제목1",
-            LocalDate.MAX,
-            STICKER_FIXTURE,
-            TAG_FIXTURE,
-            "",
-            emptyList(),
+            user = USER_FIXTURE,
+            title = "제목1",
+            deadline = LocalDate.MAX,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "",
+            tasks = emptyList(),
         )
 
         val goal2 = Goal(
-            USER_FIXTURE,
-            "제목2",
-            LocalDate.MAX,
-            STICKER_FIXTURE,
-            TAG_FIXTURE,
-            "",
-            emptyList(),
+            user = USER_FIXTURE,
+            title = "제목2",
+            deadline = LocalDate.MAX,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "",
+            tasks = emptyList(),
         )
 
         goalRepository.save(goal1)
         goalRepository.save(goal2)
 
         // when
-        val savedGoals = goalService.findAllByUserId(USER_FIXTURE.id!!)
+        val savedGoals = goalReadService.findAllByUserId(USER_FIXTURE.id!!)
 
         // then
         assertAll(
@@ -127,31 +127,30 @@ class GoalServiceTest {
         // given
         val now = LocalDate.now()
         val goal1 = Goal(
-            USER_FIXTURE,
-            "제목1",
-            now,
-            STICKER_FIXTURE,
-            TAG_FIXTURE,
-            "",
-            emptyList(),
+            user = USER_FIXTURE,
+            title = "제목1",
+            deadline = now,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "",
+            tasks = emptyList(),
         )
 
         val goal2 = Goal(
-            USER_FIXTURE,
-            "제목2",
-            now,
-            STICKER_FIXTURE,
-            TAG_FIXTURE,
-            "",
-            emptyList(),
+            user = USER_FIXTURE,
+            title = "제목2",
+            deadline = now,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "",
+            tasks = emptyList(),
         )
-
         goalRepository.save(goal1)
         goalRepository.save(goal2)
 
         // when
-        val savedGoal = goalService.getById(goal1.id!!)
-        val savedGoals = goalService.findAllByUserId(USER_FIXTURE.id!!)
+        val savedGoal = goalReadService.getById(goal1.id!!)
+        val savedGoals = goalReadService.findAllByUserId(USER_FIXTURE.id!!)
 
         // then
         var month = (now.monthValue).toString()
@@ -176,35 +175,35 @@ class GoalServiceTest {
     fun sortGoalsTest() {
         // given
         val deadline이_내일이고_가장_처음_만들어진_객체 = Goal(
-            USER_FIXTURE,
-            "제목1",
-            LocalDate.now()
+            user = USER_FIXTURE,
+            title = "제목1",
+            deadline = LocalDate.now()
                 .plusDays(1),
-            STICKER_FIXTURE,
-            TAG_FIXTURE,
-            "",
-            emptyList(),
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "",
+            tasks = emptyList(),
         )
 
         val deadline이_내일이고_가장_나중에_만들어진_객체 = Goal(
-            USER_FIXTURE,
-            "제목2",
-            LocalDate.now()
+            user = USER_FIXTURE,
+            title = "제목2",
+            deadline = LocalDate.now()
                 .plusDays(1),
-            STICKER_FIXTURE,
-            TAG_FIXTURE,
-            "",
-            emptyList(),
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "",
+            tasks = emptyList(),
         )
 
         val deadline이_오늘인_객체 = Goal(
-            USER_FIXTURE,
-            "제목2",
-            LocalDate.now(),
-            STICKER_FIXTURE,
-            TAG_FIXTURE,
-            "",
-            emptyList(),
+            user = USER_FIXTURE,
+            title = "제목2",
+            deadline = LocalDate.now(),
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "",
+            tasks = emptyList(),
         )
 
         // 역순으로 저장한다.
@@ -213,7 +212,7 @@ class GoalServiceTest {
         goalRepository.save(deadline이_오늘인_객체)
 
         // when
-        val savedGoals = goalService.findAllByUserId(USER_FIXTURE.id!!)
+        val savedGoals = goalReadService.findAllByUserId(USER_FIXTURE.id!!)
 
         // then
         assertAll(

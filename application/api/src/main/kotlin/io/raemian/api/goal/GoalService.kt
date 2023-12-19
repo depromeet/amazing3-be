@@ -3,8 +3,6 @@ package io.raemian.api.goal
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.DeleteGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
-import io.raemian.api.goal.controller.response.GoalResponse
-import io.raemian.api.goal.controller.response.GoalsResponse
 import io.raemian.api.sticker.StickerService
 import io.raemian.api.support.RaemianLocalDate
 import io.raemian.api.tag.TagService
@@ -21,20 +19,6 @@ class GoalService(
     private val tagService: TagService,
     private val goalRepository: GoalRepository,
 ) {
-
-    @Transactional(readOnly = true)
-    fun findAllByUserId(userId: Long): GoalsResponse {
-        val goals = goalRepository.findAllByUserId(userId)
-        val sortedGoals = sortByDeadlineAscendingAndCreatedAtDescending(goals)
-        return GoalsResponse.from(sortedGoals)
-    }
-
-    @Transactional(readOnly = true)
-    fun getById(id: Long): GoalResponse {
-        val goal = goalRepository.getById(id)
-        return GoalResponse(goal)
-    }
-
     @Transactional
     fun create(userId: Long, createGoalRequest: CreateGoalRequest): CreateGoalResponse {
         val (title, yearOfDeadline, monthOfDeadLine, stickerId, tagId, description) = createGoalRequest
@@ -54,13 +38,6 @@ class GoalService(
         val goal = goalRepository.getById(deleteGoalRequest.goalId)
         validateGoalIsUsers(userId, goal)
         goalRepository.delete(goal)
-    }
-
-    private fun sortByDeadlineAscendingAndCreatedAtDescending(goals: List<Goal>): List<Goal> {
-        return goals.sortedWith(
-            compareBy<Goal> { it.deadline }
-                .thenByDescending { it.createdAt },
-        )
     }
 
     private fun validateGoalIsUsers(userId: Long, goal: Goal) {
