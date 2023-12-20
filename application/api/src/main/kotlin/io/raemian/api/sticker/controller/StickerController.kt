@@ -2,6 +2,7 @@ package io.raemian.api.sticker.controller
 
 import io.raemian.api.sticker.StickerService
 import io.raemian.api.sticker.controller.response.StickerResponse
+import io.raemian.api.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,7 +17,8 @@ class StickerController(
 
     @Operation(summary = "스티커 전체 조회 API")
     @GetMapping
-    fun findAll(): ResponseEntity<List<StickerResponse>> {
-        return ResponseEntity.ok(stickerService.findAll())
-    }
+    fun findAll(): ResponseEntity<ApiResponse<List<StickerResponse>>> =
+        ResponseEntity.ok(
+            ApiResponse.success(stickerService.findAll()),
+        )
 }
