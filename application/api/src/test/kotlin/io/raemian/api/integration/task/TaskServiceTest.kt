@@ -154,6 +154,6 @@ class TaskServiceTest {
 
         // then
         val task = taskRepository.findById(newTask.id!!)
-        assertThat(task.isEmpty).isEqualTo(true)
+        assertThat(task.isEmpty).isTrue()
     }
 }
