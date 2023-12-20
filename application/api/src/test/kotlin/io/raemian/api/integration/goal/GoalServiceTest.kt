@@ -70,7 +70,8 @@ class GoalServiceTest {
         )
 
         val createResponse = goalService.create(
-            USER_FIXTURE.id!!, createGoalRequest,
+            USER_FIXTURE.id!!,
+            createGoalRequest,
         )
 
         val goal = goalRepository.getById(createResponse.id)

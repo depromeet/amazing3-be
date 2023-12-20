@@ -35,7 +35,6 @@ class RaemianLocalDateTest {
         val year2 = (1..2024).random().toString()
         val month2 = (1..12).random().toString()
 
-
         // when
         val localDate1 = RaemianLocalDate.of(year1, month1)
         val localDate2 = RaemianLocalDate.of(year2, month2)
@@ -72,7 +71,7 @@ class RaemianLocalDateTest {
             month = "0$month"
         }
 
-        val expectedLocalDate = "${year}.$month"
+        val expectedLocalDate = "$year.$month"
 
         assertThat(formattedLocalDate).isEqualTo(expectedLocalDate)
     }
