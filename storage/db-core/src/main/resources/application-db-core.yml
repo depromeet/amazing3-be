@@ -34,9 +34,9 @@ spring.config.activate.on-profile: dev
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(beSp896XvPBkns0kzH3tlNQEz21NwXRDod/p0bVV0DjBfa4GcSyitf/1D9v5iwGmLNXzRwekPS8=)
-    username: ENC(WcnAxhO0qmAO5+qduh85dQ==)
-    password: ENC(cKgWKoQ1xPm3stuyPT0sCg==)
+    url: jdbc:mysql://${DB-URL}
+    username: ${DB-USERNAME}
+    password: ${DB-PASSWORD}
     hikari:
       pool-name: db-core-pool
 

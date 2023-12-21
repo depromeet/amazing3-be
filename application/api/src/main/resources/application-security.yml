@@ -22,9 +22,9 @@ spring:
               - name
             client-name: naver
           google:
-            redirect-uri: ENC(1nLPI1HHtBur53TcEE1vt/aFsQVvfwwUHoIe0bxrztiAPLuHfrIlVQdXfPOQPKjR/5BAH1WTNwyy3bVtHwL9UuNQP583Nxyu)
-            client-id: ENC(DcoBp86FnyGsZ3QGf++3vLiyeJwWtZcCHHcQR1o5bSHqrsGWGvemGgjSnMgRJy1BZXTNQEGEbg36gPSh+LuMqV5U2PO5vohM+5LH0UWm/gVhlNl/vM85cw==)
-            client-secret: ENC(SCv0TGTTXDdlyn76WzcaErJgPRfAhSeBDa1SkHN1UyeMNNWMTU40qGhFFmvirudA)
+            redirect-uri: ${GOOGLE-REDIRECT-URI}
+            client-id: ${GOOGLE-CLIENT-ID}
+            client-secret: ${GOOGLE-CLIENT-SECRET}
             scope:
               - email
               - profile
@@ -55,9 +55,9 @@ spring:
               - name
             client-name: naver
           google:
-            redirect-uri: ENC(1nLPI1HHtBur53TcEE1vt/aFsQVvfwwUHoIe0bxrztiAPLuHfrIlVQdXfPOQPKjR/5BAH1WTNwyy3bVtHwL9UuNQP583Nxyu)
-            client-id: ENC(DcoBp86FnyGsZ3QGf++3vLiyeJwWtZcCHHcQR1o5bSHqrsGWGvemGgjSnMgRJy1BZXTNQEGEbg36gPSh+LuMqV5U2PO5vohM+5LH0UWm/gVhlNl/vM85cw==)
-            client-secret: ENC(SCv0TGTTXDdlyn76WzcaErJgPRfAhSeBDa1SkHN1UyeMNNWMTU40qGhFFmvirudA)
+            redirect-uri: ${GOOGLE-REDIRECT-URI}
+            client-id: ${GOOGLE-CLIENT-ID}
+            client-secret: ${GOOGLE-CLIENT-SECRET}
             scope:
               - email
               - profile
@@ -89,9 +89,10 @@ spring:
               - name
             client-name: naver
           google:
-            redirect-uri: ENC(1nLPI1HHtBur53TcEE1vt/aFsQVvfwwUHoIe0bxrztiAPLuHfrIlVQdXfPOQPKjR/5BAH1WTNwyy3bVtHwL9UuNQP583Nxyu)
-            client-id: ENC(DcoBp86FnyGsZ3QGf++3vLiyeJwWtZcCHHcQR1o5bSHqrsGWGvemGgjSnMgRJy1BZXTNQEGEbg36gPSh+LuMqV5U2PO5vohM+5LH0UWm/gVhlNl/vM85cw==)
-            client-secret: ENC(SCv0TGTTXDdlyn76WzcaErJgPRfAhSeBDa1SkHN1UyeMNNWMTU40qGhFFmvirudA)
+            redirect-uri: ${GOOGLE-REDIRECT-URI}
+            client-id: ${GOOGLE-CLIENT-ID}
+            client-secret: ${GOOGLE-CLIENT-SECRET}
             scope:
               - email
               - profile
+
