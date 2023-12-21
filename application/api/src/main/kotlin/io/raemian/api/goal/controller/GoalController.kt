@@ -4,7 +4,6 @@ import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.goal.GoalReadService
 import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
-import io.raemian.api.goal.controller.request.DeleteGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.goal.controller.response.GoalsResponse
@@ -62,12 +61,12 @@ class GoalController(
     }
 
     @Operation(summary = "목표 삭제 API")
-    @DeleteMapping
+    @DeleteMapping("/{goalId}")
     fun delete(
         @AuthenticationPrincipal currentUser: CurrentUser,
-        @RequestBody deleteGoalRequest: DeleteGoalRequest,
+        @PathVariable goalId: Long,
     ): ResponseEntity<Unit> {
-        goalService.delete(currentUser.id, deleteGoalRequest)
+        goalService.delete(currentUser.id, goalId)
         return ResponseEntity.noContent().build()
     }
 }

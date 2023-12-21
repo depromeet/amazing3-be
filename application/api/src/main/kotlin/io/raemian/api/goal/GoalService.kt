@@ -1,7 +1,6 @@
 package io.raemian.api.goal
 
 import io.raemian.api.goal.controller.request.CreateGoalRequest
-import io.raemian.api.goal.controller.request.DeleteGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.sticker.StickerService
 import io.raemian.api.support.RaemianLocalDate
@@ -34,8 +33,8 @@ class GoalService(
     }
 
     @Transactional
-    fun delete(userId: Long, deleteGoalRequest: DeleteGoalRequest) {
-        val goal = goalRepository.getById(deleteGoalRequest.goalId)
+    fun delete(userId: Long, goalId: Long) {
+        val goal = goalRepository.getById(goalId)
         validateGoalIsUsers(userId, goal)
         goalRepository.delete(goal)
     }
