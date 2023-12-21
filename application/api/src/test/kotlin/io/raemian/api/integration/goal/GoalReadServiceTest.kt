@@ -26,12 +26,13 @@ class GoalReadServiceTest {
 
     companion object {
         val USER_FIXTURE = User(
-            "dfghcvb111@naver.com",
-            "binaryHoHo",
-            "binaryHoHoHo",
-            LocalDate.MIN,
-            OAuthProvider.NAVER,
-            Authority.ROLE_USER,
+            email = "dfghcvb111@naver.com",
+            userName = "binaryHoHo",
+            nickname = "binaryHoHoHo",
+            birth = LocalDate.MIN,
+            image = "",
+            provider = OAuthProvider.NAVER,
+            authority = Authority.ROLE_USER,
         )
 
         val STICKER_FIXTURE = Sticker("sticker", "image yeah")
