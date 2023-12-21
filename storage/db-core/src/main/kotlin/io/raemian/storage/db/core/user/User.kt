@@ -29,6 +29,9 @@ class User(
     val birth: LocalDate? = null,
 
     @Column
+    val image: String,
+
+    @Column
     @Enumerated(EnumType.STRING)
     val provider: OAuthProvider,
 
@@ -45,6 +48,7 @@ class User(
             email = email,
             nickname = nickname,
             birth = birth,
+            image = image,
             provider = provider,
             authority = authority,
             id = id,
