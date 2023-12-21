@@ -15,11 +15,6 @@ spring:
       hibernate:
         format_sql: true
 
-jasypt:
-  encryptor:
-    bean: stringEncryptor
-  secret-key: ${JASYPT_ENCRYPTION_PASSWORD}
-
 ---
 # local
 spring:
