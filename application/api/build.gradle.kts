@@ -24,9 +24,6 @@ dependencies {
     /* oauth-client */
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 
-    /* web-client */
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
-
     /* test */
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
