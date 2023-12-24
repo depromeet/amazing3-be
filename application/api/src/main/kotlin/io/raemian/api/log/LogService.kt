@@ -1,12 +1,12 @@
-package io.raemian.api.logging
+package io.raemian.api.log
 
-import io.raemian.api.logging.controller.request.CreateSlackErrorLogRequest
+import io.raemian.api.log.controller.request.CreateSlackErrorLogRequest
 import io.raemian.infra.logging.enums.ErrorLocationEnum
 import io.raemian.infra.logging.logger.SlackLogger
 import org.springframework.stereotype.Service
 
 @Service
-class LoggingService(
+class LogService(
     val slackLogger: SlackLogger,
 ) {
 

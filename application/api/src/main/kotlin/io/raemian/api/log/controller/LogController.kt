@@ -1,7 +1,7 @@
-package io.raemian.api.logging.controller
+package io.raemian.api.log.controller
 
-import io.raemian.api.logging.LoggingService
-import io.raemian.api.logging.controller.request.CreateSlackErrorLogRequest
+import io.raemian.api.log.LogService
+import io.raemian.api.log.controller.request.CreateSlackErrorLogRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/log")
 class LogController(
-    val loggingService: LoggingService,
+    val loggingService: LogService,
 ) {
 
     @PostMapping("/slack/error")

@@ -1,4 +1,4 @@
-package io.raemian.api.logging.controller.request
+package io.raemian.api.log.controller.request
 
 import io.raemian.infra.logging.enums.ErrorLocationEnum
 
