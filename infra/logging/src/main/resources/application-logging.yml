@@ -2,12 +2,22 @@
 spring.config.activate.on-profile: local
 logging.config: classpath:logback/logback-local.xml
 
+slack:
+  webhook:
+    url: ${SLACK-WEBHOOK-URL}
 ---
 # dev
 spring.config.activate.on-profile: dev
 logging.config: classpath:logback/logback-dev.xml
 
+slack:
+  webhook:
+    url: ${SLACK-WEBHOOK-URL}
 ---
 # live
 spring.config.activate.on-profile: live
 logging.config: classpath:logback/logback-live.xml
+
+slack:
+  webhook:
+    url: ${SLACK-WEBHOOK-URL}
