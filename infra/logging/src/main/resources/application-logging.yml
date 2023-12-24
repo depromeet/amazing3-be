@@ -4,7 +4,7 @@ logging.config: classpath:logback/logback-local.xml
 
 slack:
   webhook:
-    url: ${SLACK-WEBHOOK-URL}
+    url: ${SLACK-WEBHOOK-URL:EMPTY}
 ---
 # dev
 spring.config.activate.on-profile: dev
@@ -12,7 +12,7 @@ logging.config: classpath:logback/logback-dev.xml
 
 slack:
   webhook:
-    url: ${SLACK-WEBHOOK-URL}
+    url: ${SLACK-WEBHOOK-URL:EMPTY}
 ---
 # live
 spring.config.activate.on-profile: live
@@ -20,4 +20,4 @@ logging.config: classpath:logback/logback-live.xml
 
 slack:
   webhook:
-    url: ${SLACK-WEBHOOK-URL}
+    url: ${SLACK-WEBHOOK-URL:EMPTY}
