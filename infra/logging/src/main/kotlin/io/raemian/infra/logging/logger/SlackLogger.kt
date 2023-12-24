@@ -80,8 +80,8 @@ class SlackLogger(
 
     private fun defaultError(
         errorLocation: ErrorLocationEnum,
-        errorMessage: String,
         appName: String,
+        errorMessage: String,
     ) {
         slack.send(
             url,
