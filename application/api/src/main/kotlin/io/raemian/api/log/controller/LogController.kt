@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/log")
 class LogController(
-    val loggingService: LogService,
+    val logService: LogService,
 ) {
 
     @PostMapping("/slack/error")
     fun createSlackErrorLog(@RequestBody createSlackErrorLogRequest: CreateSlackErrorLogRequest): ResponseEntity<Unit> {
-        loggingService.createSlackErrorLog(createSlackErrorLogRequest)
+        logService.createSlackErrorLog(createSlackErrorLogRequest)
         return ResponseEntity.noContent().build()
     }
 }
