@@ -8,7 +8,7 @@ enum class LogTemplate(val message: String) {
     REFERER("*Referer*: %s"),
     ;
 
-    fun of(vararg value: String): String {
+    fun of(vararg value: String?): String {
         return this.message.format(*value)
     }
 }

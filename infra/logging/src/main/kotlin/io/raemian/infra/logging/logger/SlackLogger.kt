@@ -42,10 +42,9 @@ class SlackLogger(
         errorLocation: ErrorLocationEnum,
         appName: String,
         errorMessage: String = "EMPTY VALUE",
-        userAgent: String = "",
-        referer: String = "",
+        userAgent: String? = "",
+        referer: String? = "",
     ) {
-        Thread.sleep(1000)
         when (errorLocation) {
             ErrorLocationEnum.CLIENT -> clientError(errorLocation, appName, errorMessage, userAgent, referer)
             else -> defaultError(errorLocation, appName, errorMessage)
@@ -56,8 +55,8 @@ class SlackLogger(
         errorLocation: ErrorLocationEnum,
         appName: String,
         errorMessage: String,
-        userAgent: String,
-        referer: String,
+        userAgent: String?,
+        referer: String?,
     ) {
         slack.send(
             url,
@@ -115,7 +114,7 @@ class SlackLogger(
         }
     }
 
-    private fun createUserAgentBlock(userAgent: String): SectionBlock {
+    private fun createUserAgentBlock(userAgent: String?): SectionBlock {
         return section { section: SectionBlock.SectionBlockBuilder ->
             section.text(
                 markdownText(USERAGENT.of(userAgent)),
@@ -123,7 +122,7 @@ class SlackLogger(
         }
     }
 
-    private fun createRefererBlock(referer: String): SectionBlock {
+    private fun createRefererBlock(referer: String?): SectionBlock {
         return section { section: SectionBlock.SectionBlockBuilder ->
             section.text(
                 markdownText(REFERER.of(referer)),
