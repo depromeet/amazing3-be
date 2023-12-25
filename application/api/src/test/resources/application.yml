@@ -7,13 +7,14 @@ spring:
   mvc.throw-exception-if-no-handler-found: true
   web.resources.add-mappings: false
 
-  jpa:
-    hibernate:
-      ddl-auto: create
-    database-platform: org.hibernate.dialect.H2Dialect
-    properties:
-      hibernate:
-        format_sql: true
+server:
+  servlet:
+    context-path: /api
+
+
+springdoc:
+  server:
+    url: ${SPRINGDOC-SERVER-URL:http://localhost:8080/api}
 
 ---
 # local
