@@ -7,6 +7,7 @@ import io.raemian.storage.db.core.task.Task
 
 data class GoalResponse(
     val title: String,
+    val description: String,
     val deadline: String,
     val stickerUrl: String,
     val tagInfo: TagInfo,
@@ -15,6 +16,7 @@ data class GoalResponse(
 
     constructor(goal: Goal) : this(
         goal.title,
+        goal.description,
         goal.deadline.format(),
         goal.sticker.url,
         TagInfo(goal.tag),

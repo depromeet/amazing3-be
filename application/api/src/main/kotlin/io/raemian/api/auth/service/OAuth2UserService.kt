@@ -24,7 +24,8 @@ class OAuth2UserService(
             OAuthProvider.GOOGLE -> {
                 val email = oAuth2User.attributes["email"]?.toString() ?: throw RuntimeException("이메일이없음")
                 val name = oAuth2User.attributes["name"]
-                val user = upsert(email, OAuthProvider.GOOGLE)
+                val image = oAuth2User.attributes["picture"]?.toString() ?: ""
+                val user = upsert(email, image, OAuthProvider.GOOGLE)
                 CurrentUser(
                     id = user.id!!,
                     email = email,
@@ -35,7 +36,8 @@ class OAuth2UserService(
             OAuthProvider.NAVER -> {
                 val userInfo = oAuth2User.attributes[usernameAttributeName] as Map<String, String>
                 val email = userInfo["email"] ?: throw RuntimeException("이메일없음")
-                val user = upsert(email, OAuthProvider.NAVER)
+                val image = ""
+                val user = upsert(email, image, OAuthProvider.NAVER)
                 CurrentUser(
                     id = user.id!!,
                     email = email,
@@ -45,11 +47,12 @@ class OAuth2UserService(
         }
     }
 
-    private fun upsert(email: String, oAuthProvider: OAuthProvider): User {
+    private fun upsert(email: String, image: String, oAuthProvider: OAuthProvider): User {
         return userRepository.findByEmail(email)
             ?: return userRepository.save(
                 User(
                     email = email,
+                    image = image,
                     provider = oAuthProvider,
                     authority = Authority.ROLE_USER,
                 ),

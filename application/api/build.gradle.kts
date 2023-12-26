@@ -24,9 +24,6 @@ dependencies {
     /* oauth-client */
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 
-    /* web-client */
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
-
     /* test */
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
@@ -35,7 +32,4 @@ dependencies {
 
     /* swagger */
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
-
-    /* jasypt */
-    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
 }

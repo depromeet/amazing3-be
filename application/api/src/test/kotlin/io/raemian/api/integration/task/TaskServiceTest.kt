@@ -32,9 +32,10 @@ class TaskServiceTest {
             email = "dfghcvb111@naver.com",
             userName = "binaryHoHo",
             nickname = "binaryHoHoHo",
-            LocalDate.MIN,
-            OAuthProvider.NAVER,
-            Authority.ROLE_USER,
+            image = "",
+            birth = LocalDate.MIN,
+            provider = OAuthProvider.NAVER,
+            authority = Authority.ROLE_USER,
         )
 
         val STICKER_FIXTURE = Sticker("sticker", "image yeah")
