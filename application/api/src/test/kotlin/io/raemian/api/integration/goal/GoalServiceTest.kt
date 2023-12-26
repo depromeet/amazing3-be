@@ -2,7 +2,6 @@ package io.raemian.api.integration.goal
 
 import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
-import io.raemian.api.goal.controller.request.DeleteGoalRequest
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.sticker.Sticker
@@ -29,12 +28,13 @@ class GoalServiceTest {
 
     companion object {
         val USER_FIXTURE = User(
-            "dfghcvb111@naver.com",
-            "binaryHoHo",
-            "binaryHoHoHo",
-            LocalDate.MIN,
-            OAuthProvider.NAVER,
-            Authority.ROLE_USER,
+            email = "dfghcvb111@naver.com",
+            userName = "binaryHoHo",
+            nickname = "binaryHoHoHo",
+            birth = LocalDate.MIN,
+            image = "",
+            provider = OAuthProvider.NAVER,
+            authority = Authority.ROLE_USER,
         )
 
         val STICKER_FIXTURE = Sticker("sticker", "image yeah")
@@ -66,7 +66,7 @@ class GoalServiceTest {
             stickerId = STICKER_FIXTURE.id!!,
             tagId = TAG_FIXTURE.id!!,
             yearOfDeadline = "2023",
-            monthOfDeadLine = "12",
+            monthOfDeadline = "12",
         )
 
         val createResponse = goalService.create(
@@ -84,7 +84,7 @@ class GoalServiceTest {
                 Assertions.assertThat(goal.deadline.year.toString())
                     .isEqualTo(createGoalRequest.yearOfDeadline)
                 Assertions.assertThat(goal.deadline.monthValue.toString())
-                    .isEqualTo(createGoalRequest.monthOfDeadLine)
+                    .isEqualTo(createGoalRequest.monthOfDeadline)
             },
         )
     }
@@ -107,7 +107,7 @@ class GoalServiceTest {
         goalRepository.save(goal)
 
         // when
-        goalService.delete(USER_FIXTURE.id!!, DeleteGoalRequest(goal.id!!))
+        goalService.delete(USER_FIXTURE.id!!, goal.id!!)
 
         // then
         assertThat(goalRepository.findById(goal.id!!).isEmpty).isTrue()
