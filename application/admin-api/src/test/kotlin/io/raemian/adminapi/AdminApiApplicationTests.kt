@@ -9,5 +9,4 @@ class AdminApiApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }

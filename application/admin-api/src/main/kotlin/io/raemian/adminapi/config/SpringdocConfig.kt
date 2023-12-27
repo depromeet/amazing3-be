@@ -26,5 +26,4 @@ class SpringdocConfig {
         .version("v1.0.0")
 
     private fun apiServer() = Server().url(url)
-
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
-class GlobalExceptionHandler{
+class GlobalExceptionHandler {
     private val log: Logger = LoggerFactory.getLogger(javaClass)
 
     @ExceptionHandler(Exception::class)
