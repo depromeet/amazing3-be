@@ -10,6 +10,12 @@ spring:
 server:
   servlet:
     context-path: /api
+
+
+springdoc:
+  server:
+    url: ${SPRINGDOC-SERVER-URL:http://localhost:8080/api}
+
 ---
 # local
 spring:
