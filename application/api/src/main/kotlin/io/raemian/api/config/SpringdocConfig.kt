@@ -27,7 +27,7 @@ class SpringdocConfig {
 
     private fun apiInfo() = Info()
         .title("BANDIBOODI API 명세")
-        .description("BANDIBOODI 메인/어드밍 API 명세서")
+        .description("BANDIBOODI API 명세서")
         .version("v1.0.0")
 
     private fun apiServer() = Server().url(url)
