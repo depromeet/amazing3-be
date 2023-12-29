@@ -1,5 +1,7 @@
 package io.raemian.adminapi.tag
 
+import io.raemian.adminapi.support.error.CoreApiException
+import io.raemian.adminapi.support.error.ErrorType
 import io.raemian.adminapi.tag.controller.request.CreateTagRequest
 import io.raemian.adminapi.tag.controller.request.UpdateTagRequest
 import io.raemian.adminapi.tag.controller.response.TagResponse
@@ -13,8 +15,13 @@ class TagService(
 ) {
 
     @Transactional
-    fun create(createTagRequest: CreateTagRequest) : TagResponse =
-        TagResponse.from(tagRepository.save(createTagRequest.toEntity()))
+    fun create(createTagRequest: CreateTagRequest): TagResponse {
+        if (tagRepository.existsTagsByContent(createTagRequest.content)) {
+            throw CoreApiException(ErrorType.DUPLICATE_TAG_ERROR)
+        }
+
+        return TagResponse.from(tagRepository.save(createTagRequest.toEntity()))
+    }
 
     @Transactional(readOnly = true)
     fun findAll(): List<TagResponse> {
@@ -30,7 +37,7 @@ class TagService(
     }
 
     @Transactional
-    fun delete(tagId: Long): Unit {
+    fun delete(tagId: Long) {
         val tags = tagRepository.getById(tagId)
         tagRepository.delete(tags)
     }

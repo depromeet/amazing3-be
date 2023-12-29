@@ -4,6 +4,7 @@ include(
     "application:api",
     "application:admin-api",
     "storage:db-core",
+    "storage:image",
     "infra:logging",
     "infra:metrics",
 )

@@ -11,7 +11,6 @@ server:
   servlet:
     context-path: /admin-api
 
-
 springdoc:
   server:
     url: ${SPRINGDOC-SERVER-URL:http://localhost:8080/admin-api}
@@ -23,6 +22,7 @@ spring:
     group:
       local:
         - db-core
+        - image
 
 ---
 # dev
@@ -31,6 +31,7 @@ spring:
     group:
       dev:
         - db-core
+        - image
 
 ---
 # live
@@ -39,3 +40,4 @@ spring:
     group:
       live:
         - db-core
+        - image

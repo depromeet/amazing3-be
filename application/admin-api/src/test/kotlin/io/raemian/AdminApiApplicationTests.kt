@@ -1,4 +1,4 @@
-package io.raemian.adminapi
+package io.raemian
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

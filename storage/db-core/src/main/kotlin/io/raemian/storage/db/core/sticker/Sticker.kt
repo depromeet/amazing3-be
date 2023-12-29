@@ -14,12 +14,20 @@ import org.hibernate.annotations.Nationalized
 class Sticker(
     @Column(nullable = false)
     @Nationalized
-    val name: String,
+    var name: String,
 
     @Column(nullable = false)
-    val url: String,
+    var url: String,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-) : BaseEntity()
+) : BaseEntity() {
+    fun updateNameAndUrl (
+        name: String,
+        url: String
+    ) {
+        this.name = name
+        this.url = url
+    }
+}
