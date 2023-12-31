@@ -27,7 +27,7 @@ class GoalReadServiceTest {
     companion object {
         val USER_FIXTURE = User(
             email = "dfghcvb111@naver.com",
-            userName = "binaryHoHo",
+            username = "binaryHoHo",
             nickname = "binaryHoHoHo",
             birth = LocalDate.MIN,
             image = "",
