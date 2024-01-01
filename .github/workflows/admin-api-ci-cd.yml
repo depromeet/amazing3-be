@@ -3,6 +3,8 @@ name: Java CI with Gradle
 on:
   push:
     branches: [ "develop" ]
+    paths-ignore:
+      - 'application/api/**' # application/api 폴더 내의 변화 무시
 
 permissions:
   contents: read
@@ -26,8 +28,8 @@ jobs:
       - name: push to dockerhub
         run: |
           docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build --no-cache -t ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }} ./application/api/Dockerfile  .
-          docker push ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }}
+          docker build --no-cache -t ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }} ./application/admin-api/Dockerfile  .
+          docker push ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_ADMIN_REPO }}
       - name: deploy
         uses: appleboy/ssh-action@master
         with:
@@ -36,4 +38,4 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            ${{ secrets.SSH_SCRIPT }}
+            ${{ secrets.SSH_SCRIPT_FOR_ADMIN }}
