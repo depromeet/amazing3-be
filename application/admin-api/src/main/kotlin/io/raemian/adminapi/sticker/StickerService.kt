@@ -9,15 +9,13 @@ import io.raemian.image.enums.FileExtensionType
 import io.raemian.image.repository.ImageRepository
 import io.raemian.storage.db.core.sticker.Sticker
 import io.raemian.storage.db.core.sticker.StickerRepository
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.io.File
 
 @Service
 class StickerService(
     private val stickerRepository: StickerRepository,
-    private val imageRepository: ImageRepository
+    private val imageRepository: ImageRepository,
 ) {
 
     @Transactional
@@ -38,9 +36,9 @@ class StickerService(
         stickerRepository.findAll().map(::StickerResponse)
 
     @Transactional
-    fun update (
+    fun update(
         stickerId: Long,
-        updateStickerRequest: UpdateStickerRequest
+        updateStickerRequest: UpdateStickerRequest,
     ): StickerResponse {
         val newFileName = validateFileName(updateStickerRequest.image.originalFilename)
 
@@ -49,7 +47,8 @@ class StickerService(
         val url = imageRepository.update(
             newFileName,
             splitFileNameFromUrl(stickers.url),
-            updateStickerRequest.image.inputStream)
+            updateStickerRequest.image.inputStream,
+        )
 
         val updatedStickers = stickerRepository.save(Sticker(updateStickerRequest.name, url))
 
@@ -58,7 +57,7 @@ class StickerService(
 
     @Transactional
     fun delete(
-        stickerId: Long
+        stickerId: Long,
     ) {
         val stickers = stickerRepository.getById(stickerId)
 
@@ -72,11 +71,11 @@ class StickerService(
     }
 
     private fun validateFileName(fileName: String?): String {
-        if(fileName.isNullOrBlank()) {
+        if (fileName.isNullOrBlank()) {
             throw CoreApiException(ErrorType.NO_IMAGE_NAME_ERROR)
         }
 
-        if(!fileName.endsWith(FileExtensionType.PNG.value)) {
+        if (!fileName.endsWith(FileExtensionType.PNG.value)) {
             throw CoreApiException(ErrorType.NO_PNG_FILE_ERROR)
         }
 

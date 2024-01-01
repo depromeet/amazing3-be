@@ -6,4 +6,4 @@ import java.io.Serializable
 data class CreateStickerRequest(
     val name: String,
     val image: MultipartFile,
-): Serializable
+) : Serializable

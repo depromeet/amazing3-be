@@ -23,9 +23,9 @@ class Sticker(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 ) : BaseEntity() {
-    fun updateNameAndUrl (
+    fun updateNameAndUrl(
         name: String,
-        url: String
+        url: String,
     ) {
         this.name = name
         this.url = url

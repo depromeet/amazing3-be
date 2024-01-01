@@ -1,6 +1,5 @@
 package io.raemian.image.repository
 
-import io.raemian.image.enums.FileExtensionType
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Repository
 import java.io.File
@@ -16,11 +15,11 @@ class ImageRepository {
     @Value("\${server.image.file-path}")
     private lateinit var path: String
 
-    fun upload (
+    fun upload(
         fileName: String,
-        inputStream: InputStream
+        inputStream: InputStream,
     ): String {
-        if(isExist(fileName)) {
+        if (isExist(fileName)) {
             throw IllegalStateException("이미 동일한 이름의 이미지가 존재합니다.")
         }
 
@@ -29,13 +28,13 @@ class ImageRepository {
         return createUrl(fileName)
     }
 
-    fun update (
+    fun update(
         newFileName: String,
         oldFileName: String,
-        inputStream: InputStream
+        inputStream: InputStream,
     ): String {
         // 파일이 존재하면 삭제
-        if(isExist(oldFileName)) {
+        if (isExist(oldFileName)) {
             File(createPath(oldFileName)).delete()
         }
 
@@ -44,11 +43,11 @@ class ImageRepository {
         return createUrl(newFileName)
     }
 
-    fun delete (
-        fileName: String
+    fun delete(
+        fileName: String,
     ) {
         // 파일이 존재하지 않는다면 생략
-        if(!isExist(fileName)) {
+        if (!isExist(fileName)) {
             return
         }
 
@@ -57,21 +56,21 @@ class ImageRepository {
         file.delete()
     }
 
-    fun isExist (
-        fileName: String
+    fun isExist(
+        fileName: String,
     ): Boolean {
         val file: File = File(createPath(fileName))
 
-        if(file.exists()) {
+        if (file.exists()) {
             return true
         }
 
-        return false;
+        return false
     }
 
     private fun createPath(fileName: String): String =
-        "%s/${fileName}".format(path)
+        "%s/$fileName".format(path)
 
     private fun createUrl(fileName: String): String =
-        "%s/${fileName}".format(url)
+        "%s/$fileName".format(url)
 }
