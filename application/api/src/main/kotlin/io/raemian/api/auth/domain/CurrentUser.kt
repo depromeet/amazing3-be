@@ -10,7 +10,8 @@ data class CurrentUser(
     val email: String,
 
     private val authorities: List<String> = listOf("ROLE_USER"),
-
+    val accessToken: String? = null,
+    val refreshToken: String? = null,
     // not use field
     private val password: String? = null,
 ) : UserDetails, OAuth2User {

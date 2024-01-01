@@ -14,7 +14,6 @@ import io.raemian.api.auth.domain.TokenDTO
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.stereotype.Component
 import java.security.Key
 import java.time.Duration
@@ -38,9 +37,7 @@ class TokenProvider {
     private val REFRESH_TOKEN_EXPIRE_TIME = Duration.ofDays(70).toMillis() // 70일
 
     fun generateTokenDto(currentUser: CurrentUser): TokenDTO {
-        val authorities: String = currentUser.authorities
-            .map { obj: GrantedAuthority -> obj.authority }
-            .joinToString(",")
+        val authorities = currentUser.authorities.joinToString(",") { it.authority }
         val now: Long = Date().time
 
         // Access Token 생성

@@ -4,7 +4,6 @@ import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.auth.service.OAuth2UserService
 import io.raemian.api.support.JwtAuthFilter
 import io.raemian.api.support.JwtExceptionFilter
-import io.raemian.api.support.TokenProvider
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -30,7 +29,6 @@ import java.nio.charset.StandardCharsets
 @EnableWebSecurity
 class WebSecurityConfig(
     private val corsFilter: CorsFilter,
-    private val tokenProvider: TokenProvider,
     private val oAuth2UserService: OAuth2UserService,
     private val jwtExceptionFilter: JwtExceptionFilter,
     private val jwtAuthFilter: JwtAuthFilter,
@@ -75,14 +73,13 @@ class WebSecurityConfig(
                     response.contentType = MediaType.APPLICATION_JSON_VALUE
                     response.characterEncoding = StandardCharsets.UTF_8.name()
 
-                    val tokenDTO = tokenProvider.generateTokenDto(user)
-                    response.setHeader("x-token", tokenDTO.accessToken)
+                    response.setHeader("x-token", user.accessToken)
                     // TODO edit redirect url
-                    response.sendRedirect("https://www.bandiboodi.com/login/oauth2/code/google?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
-                    // response.sendRedirect("http://localhost:8080/api/login/oauth2/code/google?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
+                    // response.sendRedirect("https://www.bandiboodi.com/login/oauth2/code/google?token=${user.accessToken}&refresh=${user.refreshToken}")
+                    response.sendRedirect("http://localhost:8080/api/login/oauth2/code/google?token=${user.accessToken}&refresh=${user.refreshToken}")
                 }
                 it.failureHandler { request, response, exception ->
-                    response.addHeader("x-token", exception.message)
+                    log.error("oauth2 login fail ${exception.message}")
                 }
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
