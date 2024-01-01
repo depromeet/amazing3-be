@@ -2,6 +2,8 @@ package io.raemian.api.config
 
 import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.auth.service.OAuth2UserService
+import io.raemian.api.support.JwtAuthFilter
+import io.raemian.api.support.JwtExceptionFilter
 import io.raemian.api.support.TokenProvider
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
@@ -30,6 +32,8 @@ class WebSecurityConfig(
     private val corsFilter: CorsFilter,
     private val tokenProvider: TokenProvider,
     private val oAuth2UserService: OAuth2UserService,
+    private val jwtExceptionFilter: JwtExceptionFilter,
+    private val jwtAuthFilter: JwtAuthFilter,
 ) : SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -41,12 +45,10 @@ class WebSecurityConfig(
             .formLogin { it.disable() }
             .httpBasic { it.disable() }
             .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(jwtExceptionFilter, jwtAuthFilter::class.java)
             .exceptionHandling {
                 it
-                    .authenticationEntryPoint { request, response, authException ->
-                        // 유효한 자격증명을 제공하지 않고 접근하려 할때 401
-                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
-                    }
                     .accessDeniedHandler { request, response, accessDeniedException ->
                         // 필요한 권한이 없이 접근하려 할때 403
                         response.sendError(HttpServletResponse.SC_FORBIDDEN)
@@ -77,13 +79,13 @@ class WebSecurityConfig(
                     response.setHeader("x-token", tokenDTO.accessToken)
                     // TODO edit redirect url
                     response.sendRedirect("https://www.bandiboodi.com/login/oauth2/code/google?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
+                    // response.sendRedirect("http://localhost:8080/api/login/oauth2/code/google?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
                 }
                 it.failureHandler { request, response, exception ->
                     response.addHeader("x-token", exception.message)
                 }
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .apply(JwtSecurityConfig(tokenProvider))
 
         return http.build()
     }

@@ -71,7 +71,7 @@ class TokenProvider {
         // 토큰 복호화
         val claims = parseClaims(accessToken)
         if (claims[AUTHORITIES_KEY] == null) {
-            throw RuntimeException("권한 정보가 없는 토큰입니다.")
+            throw SecurityException("권한 정보가 없는 토큰입니다.")
         }
 
         claims[AUTHORITIES_KEY].toString().split(",".toRegex())
@@ -91,22 +91,25 @@ class TokenProvider {
         return UsernamePasswordAuthenticationToken(principal, "", principal.authorities)
     }
 
-    fun validateToken(token: String?): Boolean {
+    // FIXME : edit return type boolean -> unit
+    fun validateToken(token: String): Boolean {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
+            Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
             return true
         } catch (e: SecurityException) {
-            log.info("잘못된 JWT 서명입니다.")
+            throw SecurityException("잘못된 JWT 서명입니다.")
         } catch (e: MalformedJwtException) {
-            log.info("잘못된 JWT 서명입니다.")
+            throw MalformedJwtException("변형된 JWT 서명입니다.")
         } catch (e: ExpiredJwtException) {
-            log.info("만료된 JWT 토큰입니다.")
+            throw ExpiredJwtException(null, parseClaims(token), "만료된 JWT 입니다.")
         } catch (e: UnsupportedJwtException) {
-            log.info("지원되지 않는 JWT 토큰입니다.")
+            throw UnsupportedJwtException("지원되지 않는 JWT 입니다.")
         } catch (e: IllegalArgumentException) {
-            log.info("JWT 토큰이 잘못되었습니다.")
+            throw IllegalArgumentException("JWT 가 잘못되었습니다.")
         }
-        return false
     }
 
     private fun parseClaims(accessToken: String): Claims {
