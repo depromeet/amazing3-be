@@ -4,7 +4,6 @@ import io.raemian.api.user.UserService
 import io.raemian.api.user.controller.UpdateGoalsPublicRequest
 import io.raemian.storage.db.core.user.Authority
 import io.raemian.storage.db.core.user.User
-import io.raemian.storage.db.core.user.UserRepository
 import io.raemian.storage.db.core.user.enums.OAuthProvider
 import jakarta.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
@@ -37,9 +36,6 @@ class UserServiceTest {
     private lateinit var userService: UserService
 
     @Autowired
-    private lateinit var userRepository: UserRepository
-
-    @Autowired
     private lateinit var entityManager: EntityManager
 
     @BeforeEach
@@ -61,7 +57,7 @@ class UserServiceTest {
         )
 
         // then
-        val user = userRepository.getById(USER_FIXTURE.id!!)
+        val user = entityManager.find(User::class.java, USER_FIXTURE.id!!)
         assertThat(isGoalsPublicBeforeUpdate).isNotEqualTo(user.isGoalsPublic)
     }
 }
