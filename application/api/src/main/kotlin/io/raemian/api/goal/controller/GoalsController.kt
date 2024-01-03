@@ -20,7 +20,7 @@ class GoalsController(
 
     @Operation(summary = "로그인된 유저의 전체 목표 조회 API")
     @GetMapping
-    fun findAllByUserId(
+    fun findAllByCurrentUser(
         @AuthenticationPrincipal currentUser: CurrentUser,
     ): ResponseEntity<ApiResponse<GoalsResponse>> {
         val response = goalReadService.findAllByUserId(currentUser.id)
@@ -30,7 +30,7 @@ class GoalsController(
 
     @Operation(summary = "UserName으로 전체 목표 조회 API")
     @GetMapping("/{userName}")
-    fun findUserGoals(@PathVariable("userName") userName: String): ResponseEntity<ApiResponse<GoalsResponse>> {
+    fun findAllByUserName(@PathVariable("userName") userName: String): ResponseEntity<ApiResponse<GoalsResponse>> {
         val response = goalReadService.findAllByUserName(userName)
         return ResponseEntity
             .ok(ApiResponse.success(response))
