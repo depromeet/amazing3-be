@@ -58,7 +58,7 @@ class User(
         )
     }
 
-    fun updateIsGoalsPublic(isGoalsPublic: Boolean) {
+    fun updateGoalsPublic(isGoalsPublic: Boolean) {
         this.isGoalsPublic = isGoalsPublic
     }
 }
