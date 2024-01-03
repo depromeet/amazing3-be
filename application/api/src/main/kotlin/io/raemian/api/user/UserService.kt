@@ -12,9 +12,7 @@ class UserService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getById(userId: Long): User {
-        return userRepository.getById(userId)
-    }
+    fun getById(userId: Long): User = userRepository.getById(userId)
 
     @Transactional
     fun updateGoalsPublic(userId: Long, updateGoalsPublicRequest: UpdateIsGoalsPublicRequest) {
