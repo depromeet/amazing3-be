@@ -19,7 +19,7 @@ class GoalReadService(
     }
 
     @Transactional(readOnly = true)
-    fun findAllByUsername(username: String): GoalsResponse {
+    fun findAllByUserName(username: String): GoalsResponse {
         val goals = goalRepository.findAllByUserUserName(username)
         val sortedGoals = sortByDeadlineAscendingAndCreatedAtDescending(goals)
         return GoalsResponse.from(sortedGoals)

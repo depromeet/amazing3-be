@@ -6,7 +6,6 @@ import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
-import io.raemian.api.goal.controller.response.GoalsResponse
 import io.raemian.api.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -28,16 +27,6 @@ class GoalController(
     private val goalService: GoalService,
     private val goalReadService: GoalReadService,
 ) {
-
-    @Operation(summary = "유저 목표 전체 조회 API")
-    @GetMapping
-    fun findAllByUserId(
-        @AuthenticationPrincipal currentUser: CurrentUser,
-    ): ResponseEntity<ApiResponse<GoalsResponse>> {
-        val response = goalReadService.findAllByUserId(currentUser.id)
-        return ResponseEntity
-            .ok(ApiResponse.success(response))
-    }
 
     @Operation(summary = "목표 단건 조회 API")
     @GetMapping("/{goalId}")
