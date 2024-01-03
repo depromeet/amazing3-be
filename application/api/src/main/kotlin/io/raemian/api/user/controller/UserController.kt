@@ -20,9 +20,9 @@ class UserController(
     @PatchMapping("/publication")
     fun updateIsGoalsPublic(
         @AuthenticationPrincipal currentUser: CurrentUser,
-        @RequestBody updateIsGoalsPublicRequest: UpdateIsGoalsPublicRequest,
+        @RequestBody updateGoalsPublicRequest: UpdateGoalsPublicRequest,
     ): ResponseEntity<Unit> {
-        userService.updateGoalsPublic(currentUser.id, updateIsGoalsPublicRequest)
+        userService.updateGoalsPublic(currentUser.id, updateGoalsPublicRequest)
         return ResponseEntity.ok().build()
     }
 }

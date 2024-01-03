@@ -1,5 +1,5 @@
 package io.raemian.api.user.controller
 
-data class UpdateIsGoalsPublicRequest(
+data class UpdateGoalsPublicRequest(
     val isGoalsPublic: Boolean,
 )
