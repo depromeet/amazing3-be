@@ -39,6 +39,9 @@ class User(
     @Enumerated(EnumType.STRING)
     val authority: Authority,
 
+    @Column
+    var isGoalsPublic: Boolean = true,
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
@@ -53,6 +56,10 @@ class User(
             authority = authority,
             id = id,
         )
+    }
+
+    fun updateIsGoalsPublic(isGoalsPublic: Boolean) {
+        this.isGoalsPublic = isGoalsPublic
     }
 }
 
