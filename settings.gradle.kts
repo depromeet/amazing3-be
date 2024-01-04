@@ -2,7 +2,7 @@ rootProject.name = "one-bailey"
 
 include(
     "application:api",
-    "application:admin-api",
+    "application:admin",
     "storage:db-core",
     "storage:image",
     "infra:logging",

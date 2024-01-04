@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: Admin CI/CD
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
       - name: push to dockerhub
         run: |
           docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build --no-cache -t ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }} -f ./application/admin-api/Dockerfile  .
+          docker build --no-cache -t ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }} -f ./application/admin/Dockerfile  .
           docker push ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_ADMIN_REPO }}
       - name: deploy
         uses: appleboy/ssh-action@master

@@ -1,10 +1,10 @@
-name: Java CI with Gradle
+name: Api CI/CD
 
 on:
   push:
     branches: [ "develop" ]
     paths-ignore:
-      - 'application/admin-api/**' # application/admin-api 폴더 내의 변화 무시
+      - 'application/admin/**' # application/admin 폴더 내의 변화 무시
 
 permissions:
   contents: read
