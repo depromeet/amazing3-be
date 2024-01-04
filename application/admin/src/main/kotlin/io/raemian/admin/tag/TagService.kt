@@ -24,10 +24,9 @@ class TagService(
     }
 
     @Transactional(readOnly = true)
-    fun findAll(): List<TagResponse> {
-        return tagRepository.findAll()
-            .map(::TagResponse)
-    }
+    fun findAll(): List<TagResponse> =
+        tagRepository.findAll().map(::TagResponse)
+
 
     @Transactional
     fun update(tagId: Long, updateTagRequest: UpdateTagRequest): TagResponse {
