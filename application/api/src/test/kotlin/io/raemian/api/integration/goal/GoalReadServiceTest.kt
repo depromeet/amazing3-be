@@ -11,6 +11,7 @@ import io.raemian.storage.db.core.user.enums.OAuthProvider
 import jakarta.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -33,6 +34,7 @@ class GoalReadServiceTest {
             image = "",
             provider = OAuthProvider.NAVER,
             authority = Authority.ROLE_USER,
+            isGoalsPublic = true
         )
 
         val STICKER_FIXTURE = Sticker("sticker", "image yeah")
@@ -80,6 +82,33 @@ class GoalReadServiceTest {
     }
 
     @Test
+    @DisplayName("목표 조회시, 목표 주인의 Goals 공개 여부가 false일 때, 예외를 발생시킨다.")
+    @Transactional
+    fun validateUserGoalsPublicTest() {
+        // given
+        val user = entityManager.find(User::class.java, USER_FIXTURE.id)
+        user.updateGoalsPublic(false)
+
+        val goal = Goal(
+            user = user,
+            title = "목표",
+            deadline = LocalDate.MAX,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "목표 설명.",
+            tasks = emptyList(),
+        )
+
+        val savedGoal = goalRepository.save(goal)
+
+        // when
+        // then
+        assertThatThrownBy {
+            goalReadService.getById(savedGoal.id!!)
+        }.isInstanceOf(SecurityException::class.java)
+    }
+
+    @Test
     @DisplayName("User ID를 통해 유저가 가진 전체 Goal을 조회 할 수 있다.")
     @Transactional
     fun findAllByUserIdTest() {
@@ -118,6 +147,72 @@ class GoalReadServiceTest {
                 assertThat(savedGoals.goals[1].tagContent).isEqualTo(goal2.tag.content)
             },
         )
+    }
+
+    @Test
+    @DisplayName("UserName을 통해 다른 유저의 Goals를 조회할 수 있다.")
+    @Transactional
+    fun findAllByUserNameTest() {
+        // given
+        val goal1 = Goal(
+            user = USER_FIXTURE,
+            title = "제목1",
+            deadline = LocalDate.MAX,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "",
+            tasks = emptyList(),
+        )
+
+        val goal2 = Goal(
+            user = USER_FIXTURE,
+            title = "제목2",
+            deadline = LocalDate.MAX,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "",
+            tasks = emptyList(),
+        )
+
+        goalRepository.save(goal1)
+        goalRepository.save(goal2)
+
+        // when
+        val goals = goalReadService.findAllByUserName(USER_FIXTURE.userName!!)
+
+        // then
+        assertAll(
+            Executable {
+                assertThat(goals.goalsCount).isEqualTo(2)
+                assertThat(goals.goals[0].tagContent).isEqualTo(goal1.tag.content)
+                assertThat(goals.goals[1].tagContent).isEqualTo(goal2.tag.content)
+            },
+        )
+    }
+
+    @Test
+    @DisplayName("UserName을 통해 다른 유저의 Goals 전체 조회시 공개 여부가 false라면 예외를 발생시킨다.")
+    @Transactional
+    fun findAllByUserNameValidateUserGoalsPublicTest() {
+        // given
+        val user = entityManager.find(User::class.java, USER_FIXTURE.id)
+        user.updateGoalsPublic(false)
+
+        val goal = Goal(
+            user = user,
+            title = "목표1",
+            deadline = LocalDate.MAX,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "설명1",
+            tasks = emptyList(),
+        )
+
+        // when
+        // then
+        assertThatThrownBy {
+            goalReadService.findAllByUserName(USER_FIXTURE.userName!!)
+        }.isInstanceOf(SecurityException::class.java)
     }
 
     @Test
