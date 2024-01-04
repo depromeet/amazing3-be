@@ -14,9 +14,13 @@ import org.hibernate.annotations.Nationalized
 class Tag(
     @Column(nullable = false)
     @Nationalized
-    val content: String,
+    var content: String,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-) : BaseEntity()
+) : BaseEntity() {
+    fun updateContent(content: String) {
+        this.content = content
+    }
+}
