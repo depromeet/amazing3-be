@@ -34,7 +34,7 @@ class GoalReadServiceTest {
             image = "",
             provider = OAuthProvider.NAVER,
             authority = Authority.ROLE_USER,
-            isGoalsPublic = true
+            isGoalsPublic = true,
         )
 
         val STICKER_FIXTURE = Sticker("sticker", "image yeah")
