@@ -35,6 +35,7 @@ class GoalServiceTest {
             image = "",
             provider = OAuthProvider.NAVER,
             authority = Authority.ROLE_USER,
+            providerId = "",
         )
 
         val STICKER_FIXTURE = Sticker("sticker", "image yeah")
