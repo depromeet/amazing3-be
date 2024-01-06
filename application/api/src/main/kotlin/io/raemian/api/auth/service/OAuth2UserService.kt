@@ -61,7 +61,7 @@ class OAuth2UserService(
                 val nickname = properties["nickname"]
                 val email = properties["email"] ?: throw RuntimeException("이메일없음")
                 val user = upsert(
-                    email = email,
+                    email = id,
                     image = profileImage,
                     oAuthProvider = provider,
                 )
