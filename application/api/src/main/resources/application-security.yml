@@ -121,7 +121,7 @@ spring:
             client-name: naver
           kakao:
             client-id: 303a910470dcf31025f848d901654bb8
-            redirect-uri: https://www.bandiboodi.com/login/oauth2/code/kakao
+            redirect-uri: https://www.bandiboodi.com/login/oauth2/code/google
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
