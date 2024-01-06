@@ -44,6 +44,20 @@ class OAuth2UserService(
                     authorities = listOf(),
                 )
             }
+
+            OAuthProvider.KAKAO -> {
+                val id = oAuth2User.attributes["id"]?.toString() ?: ""
+                val properties = oAuth2User.attributes["properties"] as Map<String, String>
+                val profileImage = properties["profile_image"] ?: ""
+                val thumbnailImage = properties["thumbnail_image"]
+                val nickname = properties["nickname"]
+                val user = upsert(id, profileImage, provider)
+                CurrentUser(
+                    id = user.id!!,
+                    email = id,
+                    authorities = listOf(),
+                )
+            }
         }
     }
 
