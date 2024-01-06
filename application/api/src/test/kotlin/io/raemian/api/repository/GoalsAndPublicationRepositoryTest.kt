@@ -135,7 +135,6 @@ class GoalsAndPublicationRepositoryTest {
         )
         entityManager.merge(USER_FIXTURE2)
 
-
         val goalsAndPublication =
             goalsAndPublicationRepository.findGoalsAndPublicationByUserName(USER_FIXTURE2.userName!!)
         assertThat(goalsAndPublication.isGoalsPublic).isFalse()
