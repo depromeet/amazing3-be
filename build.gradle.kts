@@ -8,7 +8,7 @@ plugins {
     id("org.springframework.boot") apply false
     id("io.spring.dependency-management")
     id("org.asciidoctor.jvm.convert") apply false
-    id("org.jlleitschuh.gradle.ktlint") apply false
+    id("org.jlleitschuh.gradle.ktlint") version "12.0.2"
 }
 
 java.sourceCompatibility = JavaVersion.valueOf("VERSION_${property("javaVersion")}")
@@ -32,19 +32,16 @@ subprojects {
     apply(plugin = "org.asciidoctor.jvm.convert")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
-    dependencyManagement {
-        imports {
-            mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudDependenciesVersion")}")
-        }
-    }
-
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+        implementation("org.springframework.boot:spring-boot-gradle-plugin:3.1.5")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("com.ninja-squad:springmockk:${property("springMockkVersion")}")
         annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+        implementation("org.springframework:spring-context")
+
         kapt("org.springframework.boot:spring-boot-configuration-processor")
     }
 
@@ -66,14 +63,14 @@ subprojects {
 
     tasks.test {
         useJUnitPlatform {
-            excludeTags("develop", "restdocs")
+            excludeTags("develop")
         }
     }
 
     tasks.register<Test>("unitTest") {
         group = "verification"
         useJUnitPlatform {
-            excludeTags("develop", "context", "restdocs")
+            excludeTags("develop", "context")
         }
     }
 
@@ -84,13 +81,6 @@ subprojects {
         }
     }
 
-    tasks.register<Test>("restDocsTest") {
-        group = "verification"
-        useJUnitPlatform {
-            includeTags("restdocs")
-        }
-    }
-
     tasks.register<Test>("developTest") {
         group = "verification"
         useJUnitPlatform {
@@ -98,7 +88,7 @@ subprojects {
         }
     }
 
-    tasks.getByName("asciidoctor") {
-        dependsOn("restDocsTest")
+    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+        debug.set(true)
     }
 }
