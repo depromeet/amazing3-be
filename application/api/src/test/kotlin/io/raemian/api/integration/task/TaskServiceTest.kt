@@ -30,12 +30,13 @@ class TaskServiceTest {
     companion object {
         val USER_FIXTURE = User(
             email = "dfghcvb111@naver.com",
-            userName = "binaryHoHo",
+            username = "binaryHoHo",
             nickname = "binaryHoHoHo",
             image = "",
             birth = LocalDate.MIN,
             provider = OAuthProvider.NAVER,
             authority = Authority.ROLE_USER,
+            providerId = "",
         )
 
         val STICKER_FIXTURE = Sticker("sticker", "image yeah")

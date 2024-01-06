@@ -15,11 +15,14 @@ import java.time.LocalDate
 @Entity(name = "USERS")
 class User(
     @Column(unique = true, nullable = false)
+    val providerId: String,
+
+    @Column(unique = true, nullable = false)
     val email: String,
 
     @Column(unique = true)
     @Nationalized
-    val userName: String? = null,
+    val username: String? = null,
 
     @Column
     @Nationalized
@@ -45,6 +48,7 @@ class User(
 ) : BaseEntity() {
     fun updateInfo(nickname: String, birth: LocalDate): User {
         return User(
+            providerId = providerId,
             email = email,
             nickname = nickname,
             birth = birth,
