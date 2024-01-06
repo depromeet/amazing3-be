@@ -75,10 +75,12 @@ class WebSecurityConfig(
 
                     val tokenDTO = tokenProvider.generateTokenDto(user)
                     response.setHeader("x-token", tokenDTO.accessToken)
+                    log.info("x-token access ${tokenDTO.accessToken}")
                     // TODO edit redirect url
                     response.sendRedirect("http://localhost:3000/login/oauth2/code/kakao?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
                 }
                 it.failureHandler { request, response, exception ->
+                    log.error("x-token error ${exception.message}")
                     response.addHeader("x-token", exception.message)
                 }
             }

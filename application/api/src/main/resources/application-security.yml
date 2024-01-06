@@ -74,7 +74,7 @@ spring:
             client-name: naver
           kakao:
             client-id: aa
-            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            redirect-uri: http://localhost:3000/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
