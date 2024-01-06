@@ -111,17 +111,17 @@ spring:
             user_name_attribute: id
         registration:
           naver:
-            client-id: vgN1UV17b1tmD7wevFBW
-            client-secret: msVA_NMsGr
-            redirect-uri: https://www.one-bailey.o-r.kr/api/login/oauth2/code/naver
+            client-id: ${NAVER-CLIENT-ID}
+            client-secret: ${NAVER-CLIENT-SECRET}
+            redirect-uri: ${NAVER-REDIRECT-URI}
             authorization-grant-type: authorization_code
             scope:
               - email
               - name
             client-name: naver
           kakao:
-            client-id: 303a910470dcf31025f848d901654bb8
-            redirect-uri: https://www.one-bailey.o-r.kr/api/login/oauth2/code/kakao
+            client-id: ${KAKAO-CLIENT-ID}
+            redirect-uri: ${KAKAO-REDIRECT-URI}
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
