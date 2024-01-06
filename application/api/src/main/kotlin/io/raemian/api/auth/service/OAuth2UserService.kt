@@ -26,7 +26,6 @@ class OAuth2UserService(
                 val name = oAuth2User.attributes["name"]?.toString()
                 val image = oAuth2User.attributes["picture"]?.toString() ?: ""
                 val user = upsert(
-                    providerId = email,
                     email = email,
                     image = image,
                     oAuthProvider = provider,
@@ -43,7 +42,6 @@ class OAuth2UserService(
                 val email = userInfo["email"] ?: throw RuntimeException("이메일없음")
                 val image = userInfo["profile_image"] ?: ""
                 val user = upsert(
-                    providerId = email,
                     email = email,
                     image = image,
                     oAuthProvider = provider,
@@ -61,9 +59,9 @@ class OAuth2UserService(
                 val profileImage = properties["profile_image"] ?: ""
                 val thumbnailImage = properties["thumbnail_image"]
                 val nickname = properties["nickname"]
+                val email = properties["email"] ?: throw RuntimeException("이메일없음")
                 val user = upsert(
-                    providerId = id,
-                    email = id,
+                    email = email,
                     image = profileImage,
                     oAuthProvider = provider,
                 )
@@ -76,11 +74,10 @@ class OAuth2UserService(
         }
     }
 
-    private fun upsert(providerId: String, email: String, image: String, oAuthProvider: OAuthProvider): User {
+    private fun upsert(email: String, image: String, oAuthProvider: OAuthProvider): User {
         return userRepository.findByEmail(email)
             ?: return userRepository.save(
                 User(
-                    providerId = providerId,
                     email = email,
                     image = image,
                     provider = oAuthProvider,
