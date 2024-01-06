@@ -69,7 +69,7 @@ class OAuth2UserService(
                 )
                 CurrentUser(
                     id = user.id!!,
-                    email = id,
+                    email = user.email,
                     authorities = listOf(),
                 )
             }
