@@ -15,9 +15,6 @@ import java.time.LocalDate
 @Entity(name = "USERS")
 class User(
     @Column(unique = true, nullable = false)
-    val providerId: String,
-
-    @Column(unique = true, nullable = false)
     val email: String,
 
     @Column(unique = true)
@@ -42,6 +39,8 @@ class User(
     @Enumerated(EnumType.STRING)
     val authority: Authority,
 
+    @Column
+    val providerId: String? = null,
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
