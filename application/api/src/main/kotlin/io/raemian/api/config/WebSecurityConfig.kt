@@ -77,7 +77,8 @@ class WebSecurityConfig(
                     response.setHeader("x-token", tokenDTO.accessToken)
                     log.info("x-token access ${tokenDTO.accessToken}")
                     // TODO edit redirect url
-                    response.sendRedirect("https://bandiboodi.com/login/oauth2/code/google?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
+                    val redirectUrl = "https://bandiboodi.com/oauth2/token"
+                    response.sendRedirect("$redirectUrl?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
                 }
                 it.failureHandler { request, response, exception ->
                     log.error("x-token error ${exception.message}")
