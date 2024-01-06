@@ -66,7 +66,7 @@ spring:
           naver:
             client-id: aa
             client-secret: aa
-            redirect-uri: http://localhost:8080/login/oauth2/code/naver
+            redirect-uri: http://localhost:3000/login/oauth2/code/naver
             authorization-grant-type: authorization_code
             scope:
               - email
@@ -121,7 +121,7 @@ spring:
             client-name: naver
           kakao:
             client-id: 303a910470dcf31025f848d901654bb8
-            redirect-uri: https://www.bandiboodi.com/login/oauth2/code/kakao
+            redirect-uri: http://localhost:3000/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
