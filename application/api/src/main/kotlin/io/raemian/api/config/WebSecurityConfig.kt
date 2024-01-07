@@ -64,7 +64,7 @@ class WebSecurityConfig(
                         AntPathRequestMatcher("/swagger-resources/**"),
                         AntPathRequestMatcher("/webjars/**"),
                     ).permitAll()
-                    .anyRequest().authenticated()
+                    .anyRequest().permitAll()
             }
             .oauth2Login {
                 it.userInfoEndpoint { endpoint -> endpoint.userService(oAuth2UserService) }
@@ -75,10 +75,13 @@ class WebSecurityConfig(
 
                     val tokenDTO = tokenProvider.generateTokenDto(user)
                     response.setHeader("x-token", tokenDTO.accessToken)
+                    log.info("x-token access ${tokenDTO.accessToken}")
                     // TODO edit redirect url
-                    response.sendRedirect("https://www.bandiboodi.com/login/oauth2/code/google?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
+                    val redirectUrl = "https://bandiboodi.com/oauth2/token"
+                    response.sendRedirect("$redirectUrl?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
                 }
                 it.failureHandler { request, response, exception ->
+                    log.error("x-token error ${exception.message}")
                     response.addHeader("x-token", exception.message)
                 }
             }

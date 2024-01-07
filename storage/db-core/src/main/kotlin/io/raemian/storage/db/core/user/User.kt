@@ -19,7 +19,7 @@ class User(
 
     @Column(unique = true)
     @Nationalized
-    val userName: String? = null,
+    val username: String? = null,
 
     @Column
     @Nationalized
