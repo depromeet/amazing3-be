@@ -64,7 +64,7 @@ class WebSecurityConfig(
                         AntPathRequestMatcher("/swagger-resources/**"),
                         AntPathRequestMatcher("/webjars/**"),
                     ).permitAll()
-                    .anyRequest().authenticated()
+                    .anyRequest().permitAll()
             }
             .oauth2Login {
                 it.userInfoEndpoint { endpoint -> endpoint.userService(oAuth2UserService) }
@@ -73,13 +73,17 @@ class WebSecurityConfig(
                     response.contentType = MediaType.APPLICATION_JSON_VALUE
                     response.characterEncoding = StandardCharsets.UTF_8.name()
 
-                    response.setHeader("x-token", user.accessToken)
+                    val tokenDTO = tokenProvider.generateTokenDto(user)
+                    response.setHeader("x-token", tokenDTO.accessToken)
+                    log.info("x-token access ${tokenDTO.accessToken}")
                     // TODO edit redirect url
-                    // response.sendRedirect("https://www.bandiboodi.com/login/oauth2/code/google?token=${user.accessToken}&refresh=${user.refreshToken}")
-                    response.sendRedirect("http://localhost:8080/api/login/oauth2/code/google?token=${user.accessToken}&refresh=${user.refreshToken}")
+                    val redirectUrl = "https://bandiboodi.com/oauth2/token"
+                    response.sendRedirect("$redirectUrl?token=${user.accessToken}&refresh=${user.refreshToken}")
                 }
                 it.failureHandler { request, response, exception ->
-                    log.error("oauth2 login fail ${exception.message}")
+                    log.error("x-token error ${exception.message}")
+                    response.addHeader("x-token", exception.message)
+
                 }
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
