@@ -16,7 +16,7 @@ class AuthService(
 ) : UserDetailsService {
 
     fun getUserById(id: Long): User {
-        val user = userRepository.findById(id).getOrNull() ?: throw RuntimeException("")
+        val user = userRepository.findById(id).getOrNull() ?: throw RuntimeException("not found user")
         return user
     }
 
