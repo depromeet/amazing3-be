@@ -1,0 +1,41 @@
+name: DEV Api CI/CD
+
+on:
+  push:
+    branches: [ "develop" ]
+    paths-ignore:
+      - 'application/admin/**' # application/admin 폴더 내의 변화 무시
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup jdk 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: build with gradle
+        run: ./gradlew bootJar
+
+      - name: push to dockerhub
+        run: |
+          docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build --no-cache -t ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO_PATH }}:${{secrets.DOCKER_TAG_DEV}} -f ./application/api/dev/Dockerfile  .
+          docker push ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO_PATH }}:${{secrets.DOCKER_TAG_DEV}}
+      - name: deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            ${{ secrets.SSH_SCRIPT_FOR_API_DEV }}
