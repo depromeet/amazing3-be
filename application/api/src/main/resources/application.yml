@@ -37,7 +37,8 @@ spring:
         - db-core
         - logging
         - metrics
-
+server:
+  port: 8888
 ---
 # live
 spring:
