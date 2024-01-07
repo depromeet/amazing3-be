@@ -1,6 +1,9 @@
 # local
 spring.config.activate.on-profile: local
 
+server:
+  port: 8080
+
 spring:
   security:
     oauth2:
@@ -47,6 +50,9 @@ spring:
 # dev
 spring.config.activate.on-profile: dev
 
+server:
+  port: 8888
+
 spring:
   security:
     oauth2:
@@ -88,11 +94,12 @@ spring:
               - email
               - profile
 
-
-
 ---
 # live
 spring.config.activate.on-profile: live
+
+server:
+  port: 8080
 
 spring:
   security:
