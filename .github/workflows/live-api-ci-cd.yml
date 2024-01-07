@@ -2,7 +2,7 @@ name: LIVE Api CI/CD
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
     paths-ignore:
       - 'application/admin/**' # application/admin 폴더 내의 변화 무시
 
