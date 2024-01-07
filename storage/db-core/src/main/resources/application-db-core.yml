@@ -34,9 +34,9 @@ spring.config.activate.on-profile: dev
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB-URL}
-    username: ${DB-USERNAME}
-    password: ${DB-PASSWORD}
+    url: ENC(wFZhmY8RyHVz3Db0FxA2k8Gy1BT+EEwtBLjUvNv9P9mBOHjrQmgWQAfWb6etj3m6h3jU3K1N+StnAFksnuiihw==)
+    username: ENC(M1f7GXnd/Z8BDDngEIah5g==)
+    password: ENC(JNuIVg3Uiy3nkCJ6cofP2g==)
     hikari:
       pool-name: db-core-pool
 
@@ -48,8 +48,8 @@ spring.config.activate.on-profile: live
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB-URL}
-    username: ${DB-USERNAME}
-    password: ${DB-PASSWORD}
+    url: ENC(9n6GqejEgPw7JydktZV3dEsvDROGY5/78wy7SX2V+bV3l240rLsBJ+Ifum4azvuM1NJX2NPhxv8H6lXQl9rD5w==)
+    username: ENC(bIViZ1+HmLQh+mwgMrzpNQ==)
+    password: ENC(O5EA7gDiTtoofaZKIjnong==)
     hikari:
       pool-name: db-core-pool
