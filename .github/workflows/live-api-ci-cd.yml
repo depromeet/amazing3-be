@@ -38,4 +38,4 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            ${{ secrets.SSH_SCRIPT }}
+            ${{ secrets.SSH_SCRIPT_FOR_API_LIVE }}
