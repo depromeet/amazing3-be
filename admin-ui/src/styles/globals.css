@@ -1,0 +1,62 @@
+@import "./_custom_preflight.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    font-size: 14px;
+  }
+}
+
+@layer components {
+  h2.title {
+    @apply my-5 text-xl;
+  }
+
+  h3.title {
+    @apply my-5 text-lg;
+  }
+
+  .enable-transition {
+    @apply transition-all duration-300;
+  }
+
+  .link-with-icon {
+    @apply inline-flex items-center gap-1;
+  }
+
+  .flex-item-list {
+    @apply flex items-center gap-2;
+  }
+
+  .btn-with-icon {
+    @apply inline-flex items-center gap-1;
+  }
+
+  .btn-with-icon svg {
+    @apply w-4 h-4;
+  }
+
+  .btn {
+    @apply enable-transition border border-gray-300 rounded-lg hover:border-brand cursor-pointer;
+  }
+
+  .cols-2 {
+    @apply grid sm:grid-cols-1 md:grid-cols-2 gap-2;
+  }
+
+  .cols-3 {
+    @apply grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2;
+  }
+
+  .ellipsis-text {
+    @apply whitespace-nowrap overflow-hidden overflow-ellipsis;
+  }
+}
+
+@import "./_spinner.css";
+@import "./_custom_antd.css";
+@import "./_custom_quill.css";
