@@ -1,7 +1,6 @@
 package io.raemian.api.goal.controller
 
 import io.raemian.api.auth.domain.CurrentUser
-import io.raemian.api.goal.GoalReadService
 import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
@@ -25,7 +24,6 @@ fun String.toUri(): URI = URI.create(this)
 @RequestMapping("/goal")
 class GoalController(
     private val goalService: GoalService,
-    private val goalReadService: GoalReadService,
 ) {
 
     @Operation(summary = "목표 단건 조회 API")
@@ -34,7 +32,7 @@ class GoalController(
         @PathVariable("goalId") goalId: Long,
     ): ResponseEntity<ApiResponse<GoalResponse>> =
         ResponseEntity.ok(
-            ApiResponse.success(goalReadService.getById(goalId)),
+            ApiResponse.success(goalService.getById(goalId)),
         )
 
     @Operation(summary = "목표 생성 API")

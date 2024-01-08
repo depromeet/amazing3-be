@@ -30,6 +30,13 @@ class LifeMapService(
         return createLifeMapResponse(lifeMaps)
     }
 
+    @Transactional
+    fun updatePublication(userId: Long, updatePublicationRequest: UpdatePublicationRequest) {
+        val lifeMap = lifeMapRepository.findAllByUserId(userId)
+            .first()
+        lifeMap.updatePublication(updatePublicationRequest.isPublic)
+    }
+
     private fun createLifeMapResponse(lifeMaps: List<LifeMap>): LifeMapResponse {
         val sortedLifeMaps = lifeMaps.stream()
             .filter { it.isPublic }

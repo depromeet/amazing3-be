@@ -6,7 +6,9 @@ import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -32,5 +34,15 @@ class LifeMapController(
         val response = lifeMapService.findAllByUserName(userName)
         return ResponseEntity
             .ok(ApiResponse.success(response))
+    }
+
+    @Operation(summary = "인생 지도 공개 여부를 수정하는 API")
+    @PatchMapping("/publication")
+    fun updateIsGoalsPublic(
+        @AuthenticationPrincipal currentUser: CurrentUser,
+        @RequestBody updatePublicationRequest: UpdatePublicationRequest,
+    ): ResponseEntity<Unit> {
+        lifeMapService.updatePublication(currentUser.id, updatePublicationRequest)
+        return ResponseEntity.ok().build()
     }
 }
