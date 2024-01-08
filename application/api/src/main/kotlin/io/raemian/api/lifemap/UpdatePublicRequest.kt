@@ -1,5 +1,5 @@
 package io.raemian.api.lifemap
 
-data class UpdatePublicationRequest(
+data class UpdatePublicRequest(
     val isPublic: Boolean,
 )
