@@ -31,10 +31,10 @@ class LifeMapService(
     }
 
     @Transactional
-    fun updatePublication(userId: Long, updatePublicationRequest: UpdatePublicationRequest) {
+    fun updatePublic(userId: Long, updatePublicRequest: UpdatePublicRequest) {
         val lifeMap = lifeMapRepository.findAllByUserId(userId)
             .first()
-        lifeMap.updatePublication(updatePublicationRequest.isPublic)
+        lifeMap.updatePublication(updatePublicRequest.isPublic)
     }
 
     private fun createLifeMapResponse(lifeMaps: List<LifeMap>): LifeMapResponse {

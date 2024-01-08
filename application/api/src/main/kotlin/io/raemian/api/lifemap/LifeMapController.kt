@@ -38,11 +38,11 @@ class LifeMapController(
 
     @Operation(summary = "인생 지도 공개 여부를 수정하는 API")
     @PatchMapping("/publication")
-    fun updateIsGoalsPublic(
+    fun updatePublic(
         @AuthenticationPrincipal currentUser: CurrentUser,
-        @RequestBody updatePublicationRequest: UpdatePublicationRequest,
+        @RequestBody updatePublicRequest: UpdatePublicRequest,
     ): ResponseEntity<Unit> {
-        lifeMapService.updatePublication(currentUser.id, updatePublicationRequest)
+        lifeMapService.updatePublic(currentUser.id, updatePublicRequest)
         return ResponseEntity.ok().build()
     }
 }
