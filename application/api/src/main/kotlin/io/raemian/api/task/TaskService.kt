@@ -58,7 +58,7 @@ class TaskService(
     }
 
     private fun validateCurrentUserIsGoalOwner(currentUserId: Long, goal: Goal) {
-        if (currentUserId != goal.user.id) {
+        if (currentUserId != goal.lifeMap.user.id) {
             throw SecurityException()
         }
     }
