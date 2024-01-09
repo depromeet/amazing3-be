@@ -1,7 +1,7 @@
 # default
 spring:
   jpa:
-    open-in-view: false
+    open-in-view: true
     hibernate:
       ddl-auto: none
 

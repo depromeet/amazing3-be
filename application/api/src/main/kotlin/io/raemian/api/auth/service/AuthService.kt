@@ -1,6 +1,7 @@
 package io.raemian.api.auth.service
 
 import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.auth.domain.UserDTO
 import io.raemian.storage.db.core.user.User
 import io.raemian.storage.db.core.user.UserRepository
 import org.springframework.security.core.userdetails.UserDetails
@@ -15,9 +16,9 @@ class AuthService(
     private val userRepository: UserRepository,
 ) : UserDetailsService {
 
-    fun getUserById(id: Long): User {
+    fun getUserById(id: Long): UserDTO {
         val user = userRepository.getById(id)
-        return user
+        return UserDTO.of(user)
     }
 
     fun update(id: Long, nickname: String, birth: LocalDate): User {

@@ -87,8 +87,9 @@ class OAuth2UserService(
                     authority = Authority.ROLE_USER,
                 ),
             )
+            val new = created.updateUsername("BANDIBOODI-${created.id!!}")
 
-            val updated = userRepository.save(created.updateUsername("BANDIBOODI-${created.id!!}"))
+            val updated = userRepository.save(new)
 
             // lifemap
 
