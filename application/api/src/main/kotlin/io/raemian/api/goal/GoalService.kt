@@ -30,17 +30,22 @@ class GoalService(
 
     @Transactional
     fun create(userId: Long, createGoalRequest: CreateGoalRequest): CreateGoalResponse {
-        val (title, yearOfDeadline, monthOfDeadLine, stickerId, tagId, description) = createGoalRequest
-
-        val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadLine)
-        val sticker = stickerService.getById(stickerId)
-        val tag = tagService.getById(tagId)
         val lifeMap = lifeMapRepository.findFirstByUserId(userId)
             .get()
 
-        val goal = Goal(lifeMap, title, deadline, sticker, tag, description!!, emptyList())
-        goalRepository.save(goal)
+        val goal = createGoal(createGoalRequest, lifeMap)
+
+        lifeMap.addGoal(goal)
+        lifeMapRepository.save(lifeMap)
         return CreateGoalResponse(goal)
+    }
+
+    fun createGoal(createGoalRequest: CreateGoalRequest, lifeMap: LifeMap): Goal {
+        val (title, yearOfDeadline, monthOfDeadLine, stickerId, tagId, description) = createGoalRequest
+        val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadLine)
+        val sticker = stickerService.getById(stickerId)
+        val tag = tagService.getById(tagId)
+        return Goal(lifeMap, title, deadline, sticker, tag, description!!, emptyList())
     }
 
     @Transactional

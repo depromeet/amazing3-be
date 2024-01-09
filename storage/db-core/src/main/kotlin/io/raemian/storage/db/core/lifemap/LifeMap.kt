@@ -25,15 +25,23 @@ class LifeMap(
     @Column(nullable = false)
     var isPublic: Boolean = true,
 
-    @OneToMany(mappedBy = "lifeMap", cascade = [CascadeType.REMOVE], fetch = FetchType.EAGER)
-    val goals: List<Goal>,
+    @OneToMany(
+        mappedBy = "lifeMap",
+        cascade = [CascadeType.REMOVE, CascadeType.MERGE],
+        fetch = FetchType.LAZY,
+    )
+    var goals: MutableList<Goal> = ArrayList(),
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 ) : BaseEntity() {
 
-    fun updatePublication(isPublic: Boolean) {
+    fun updatePublic(isPublic: Boolean) {
         this.isPublic = isPublic
+    }
+
+    fun addGoal(goal: Goal) {
+        this.goals.add(goal)
     }
 }
