@@ -31,7 +31,7 @@ class TaskServiceTest {
     companion object {
         val USER_FIXTURE = User(
             email = "dfghcvb111@naver.com",
-            userName = "binaryHoHo",
+            username = "binaryHoHo",
             nickname = "binaryHoHoHo",
             image = "",
             birth = LocalDate.MIN,

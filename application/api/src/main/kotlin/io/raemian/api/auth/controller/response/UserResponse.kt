@@ -16,7 +16,7 @@ data class UserResponse(
             return UserResponse(
                 id = user.id!!,
                 email = user.email,
-                username = user.userName,
+                username = user.username,
                 nickname = user.nickname,
                 birth = user.birth,
                 image = user.image,
