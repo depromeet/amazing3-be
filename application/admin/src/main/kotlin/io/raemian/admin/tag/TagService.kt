@@ -31,7 +31,6 @@ class TagService(
     fun find(tagId: Long): TagResponse =
         TagResponse.from(tagRepository.getById(tagId))
 
-
     @Transactional
     fun update(tagId: Long, updateTagRequest: UpdateTagRequest): TagResponse {
         val tags = tagRepository.getById(tagId)
