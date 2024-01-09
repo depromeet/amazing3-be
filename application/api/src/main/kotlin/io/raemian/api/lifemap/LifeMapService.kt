@@ -38,6 +38,13 @@ class LifeMapService(
         lifeMap.updatePublic(updatePublicRequest.isPublic)
     }
 
+    @Transactional(readOnly = true)
+    fun countDefaultLifeMapGoals(userId: Long): Int {
+        val lifeMap = lifeMapRepository.findFirstByUserId(userId)
+            ?: throw NoSuchElementException("존재하지 않는 유저입니다. $userId")
+        return lifeMap.goals.size
+    }
+
     private fun sortByDeadlineAscendingAndCreatedAtDescending(goals: List<Goal>): List<Goal> =
         goals.sortedWith(
             compareBy<Goal> { it.deadline }
