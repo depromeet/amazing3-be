@@ -30,9 +30,9 @@ class LifeMapController(
     }
 
     @Operation(summary = "UserName으로 인생 지도 조회 API")
-    @GetMapping("/{userName}")
-    fun findAllByUserName(@PathVariable("userName") userName: String): ResponseEntity<ApiResponse<LifeMapResponse>> {
-        val response = lifeMapService.findAllByUserName(userName)
+    @GetMapping("/{username}")
+    fun findAllByUserName(@PathVariable("username") username: String): ResponseEntity<ApiResponse<LifeMapResponse>> {
+        val response = lifeMapService.findAllByUserName(username)
         return ResponseEntity
             .ok(ApiResponse.success(response))
     }

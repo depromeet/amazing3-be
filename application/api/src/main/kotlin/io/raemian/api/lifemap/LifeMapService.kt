@@ -22,9 +22,9 @@ class LifeMapService(
     }
 
     @Transactional(readOnly = true)
-    fun findAllByUserName(userName: String): LifeMapResponse {
-        val lifeMap = lifeMapRepository.findFirstByUserUsername(userName)
-            ?: throw NoSuchElementException("존재하지 않는 유저입니다. $userName")
+    fun findAllByUserName(username: String): LifeMapResponse {
+        val lifeMap = lifeMapRepository.findFirstByUserUsername(username)
+            ?: throw NoSuchElementException("존재하지 않는 유저입니다. $username")
 
         validateLifeMapPublic(lifeMap)
         sortByDeadlineAscendingAndCreatedAtDescending(lifeMap.goals)

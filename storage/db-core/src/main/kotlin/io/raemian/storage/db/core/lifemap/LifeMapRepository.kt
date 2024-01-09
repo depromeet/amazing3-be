@@ -7,5 +7,5 @@ interface LifeMapRepository : JpaRepository<LifeMap, Long> {
 
     fun findFirstByUserId(userId: Long): LifeMap?
 
-    fun findFirstByUserUsername(userName: String): LifeMap?
+    fun findFirstByUserUsername(username: String): LifeMap?
 }

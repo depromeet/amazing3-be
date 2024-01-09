@@ -29,7 +29,7 @@ class LifeMapServiceTest {
     companion object {
         val USER_FIXTURE = User(
             email = "dfghcvb111@naver.com",
-            userName = "binaryHoHo",
+            username = "binaryHoHo",
             nickname = "binaryHoHoHo",
             birth = LocalDate.MIN,
             image = "",
@@ -154,7 +154,7 @@ class LifeMapServiceTest {
         // when
         // then
         assertThatThrownBy {
-            lifeMapService.findAllByUserName(USER_FIXTURE.userName!!)
+            lifeMapService.findAllByUserName(USER_FIXTURE.username!!)
         }.isInstanceOf(SecurityException::class.java)
     }
 
