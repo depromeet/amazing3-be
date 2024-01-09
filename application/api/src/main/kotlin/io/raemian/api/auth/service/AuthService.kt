@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 import kotlin.jvm.optionals.getOrNull
 
@@ -16,6 +17,7 @@ class AuthService(
     private val userRepository: UserRepository,
 ) : UserDetailsService {
 
+    @Transactional(readOnly = true)
     fun getUserById(id: Long): UserDTO {
         val user = userRepository.getById(id)
         return UserDTO.of(user)
