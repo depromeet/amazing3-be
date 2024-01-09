@@ -1,6 +1,6 @@
-package io.raemian.api.lifemap
+package io.raemian.api.lifemap.controller
 
-import io.raemian.api.lifemap.dto.GoalDto
+import io.raemian.api.lifemap.LifeMap
 
 data class LifeMapResponse(
     val isPublic: Boolean,

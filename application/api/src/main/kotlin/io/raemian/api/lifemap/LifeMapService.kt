@@ -1,5 +1,7 @@
 package io.raemian.api.lifemap
 
+import io.raemian.api.lifemap.controller.LifeMapResponse
+import io.raemian.api.lifemap.controller.UpdatePublicRequest
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import org.springframework.stereotype.Service
