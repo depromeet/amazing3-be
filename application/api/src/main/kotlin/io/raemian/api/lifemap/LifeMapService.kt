@@ -15,7 +15,7 @@ class LifeMapService(
     @Transactional(readOnly = true)
     fun findByUserId(userId: Long): LifeMapResponse {
         val lifeMap = lifeMapRepository.findFirstByUserId(userId)
-            .orElseThrow { throw NoSuchElementException("존재하지 않는 유저입니다. $userId") }
+            ?: throw NoSuchElementException("존재하지 않는 유저입니다. $userId")
 
         sortByDeadlineAscendingAndCreatedAtDescending(lifeMap.goals)
         return LifeMapResponse(lifeMap)
@@ -23,8 +23,8 @@ class LifeMapService(
 
     @Transactional(readOnly = true)
     fun findAllByUserName(userName: String): LifeMapResponse {
-        val lifeMap = lifeMapRepository.findFirstByUserUserName(userName)
-            .orElseThrow { throw NoSuchElementException("존재하지 않는 유저입니다. $userName") }
+        val lifeMap = lifeMapRepository.findFirstByUserUsername(userName)
+            ?: throw NoSuchElementException("존재하지 않는 유저입니다. $userName")
 
         validateLifeMapPublic(lifeMap)
         sortByDeadlineAscendingAndCreatedAtDescending(lifeMap.goals)
@@ -34,7 +34,7 @@ class LifeMapService(
     @Transactional
     fun updatePublic(userId: Long, updatePublicRequest: UpdatePublicRequest) {
         val lifeMap = lifeMapRepository.findFirstByUserId(userId)
-            .get()
+            ?: throw NoSuchElementException("존재하지 않는 유저입니다. $userId")
         lifeMap.updatePublic(updatePublicRequest.isPublic)
     }
 
@@ -44,9 +44,7 @@ class LifeMapService(
                 .thenByDescending { it.createdAt },
         )
 
-    private fun validateLifeMapPublic(lifeMap: LifeMap) {
-        if (!lifeMap.isPublic) {
-            throw SecurityException()
-        }
-    }
+    private fun validateLifeMapPublic(lifeMap: LifeMap) =
+        takeUnless { lifeMap.isPublic }
+            .apply { throw SecurityException() }
 }

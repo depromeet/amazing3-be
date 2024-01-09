@@ -10,6 +10,7 @@ import io.raemian.api.tag.TagService
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
+import io.raemian.storage.db.core.user.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 class GoalService(
     private val stickerService: StickerService,
     private val tagService: TagService,
+    private val userRepository: UserRepository,
     private val goalRepository: GoalRepository,
     private val lifeMapRepository: LifeMapRepository,
 ) {
@@ -31,8 +33,7 @@ class GoalService(
     @Transactional
     fun create(userId: Long, createGoalRequest: CreateGoalRequest): CreateGoalResponse {
         val lifeMap = lifeMapRepository.findFirstByUserId(userId)
-            .get()
-
+            ?: createFirstLifeMap(userId)
         val goal = createGoal(createGoalRequest, lifeMap)
 
         lifeMap.addGoal(goal)
@@ -40,19 +41,24 @@ class GoalService(
         return CreateGoalResponse(goal)
     }
 
-    fun createGoal(createGoalRequest: CreateGoalRequest, lifeMap: LifeMap): Goal {
-        val (title, yearOfDeadline, monthOfDeadLine, stickerId, tagId, description) = createGoalRequest
-        val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadLine)
-        val sticker = stickerService.getById(stickerId)
-        val tag = tagService.getById(tagId)
-        return Goal(lifeMap, title, deadline, sticker, tag, description!!, emptyList())
-    }
-
     @Transactional
     fun delete(userId: Long, goalId: Long) {
         val goal = goalRepository.getById(goalId)
         validateGoalIsUsers(userId, goal)
         goalRepository.delete(goal)
+    }
+
+    private fun createFirstLifeMap(userId: Long): LifeMap {
+        val user = userRepository.getById(userId)
+        return LifeMap(user, true, goals = ArrayList())
+    }
+
+    private fun createGoal(createGoalRequest: CreateGoalRequest, lifeMap: LifeMap): Goal {
+        val (title, yearOfDeadline, monthOfDeadLine, stickerId, tagId, description) = createGoalRequest
+        val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadLine)
+        val sticker = stickerService.getById(stickerId)
+        val tag = tagService.getById(tagId)
+        return Goal(lifeMap, title, deadline, sticker, tag, description!!, emptyList())
     }
 
     private fun validateLifeMapPublic(lifeMap: LifeMap) {
