@@ -75,8 +75,9 @@ class OAuth2UserService(
     }
 
     private fun upsert(email: String, image: String, oAuthProvider: OAuthProvider): User {
-        return userRepository.findByEmail(email)
-            ?: return userRepository.save(
+        val user = userRepository.findByEmail(email)
+        if (user == null) {
+            val created = userRepository.save(
                 User(
                     email = email,
                     image = image,
@@ -84,5 +85,13 @@ class OAuth2UserService(
                     authority = Authority.ROLE_USER,
                 ),
             )
+
+            val updated = userRepository.save(created.updateUsername("BANDIBOODI-${created.id!!}"))
+
+            // lifemap
+
+            return updated
+        }
+        return user
     }
 }
