@@ -24,7 +24,7 @@ class LifeMapController(
     fun findAllByCurrentUser(
         @AuthenticationPrincipal currentUser: CurrentUser,
     ): ResponseEntity<ApiResponse<LifeMapResponse>> {
-        val response = lifeMapService.findByUserId(currentUser.id)
+        val response = lifeMapService.findFirstByUserId(currentUser.id)
         return ResponseEntity
             .ok(ApiResponse.success(response))
     }
@@ -32,7 +32,7 @@ class LifeMapController(
     @Operation(summary = "UserName으로 인생 지도 조회 API")
     @GetMapping("/{username}")
     fun findAllByUserName(@PathVariable("username") username: String): ResponseEntity<ApiResponse<LifeMapResponse>> {
-        val response = lifeMapService.findAllByUserName(username)
+        val response = lifeMapService.findFirstByUserName(username)
         return ResponseEntity
             .ok(ApiResponse.success(response))
     }
