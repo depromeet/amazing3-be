@@ -1,8 +1,10 @@
-package io.raemian.api.integration.goal
+package io.raemian.api.integration.lifemap
 
-import io.raemian.api.goal.GoalReadService
+import io.raemian.api.lifemap.LifeMap
+import io.raemian.api.lifemap.LifeMapService
+import io.raemian.api.lifemap.UpdatePublicRequest
 import io.raemian.storage.db.core.goal.Goal
-import io.raemian.storage.db.core.goal.GoalRepository
+import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.sticker.Sticker
 import io.raemian.storage.db.core.tag.Tag
 import io.raemian.storage.db.core.user.Authority
@@ -10,7 +12,6 @@ import io.raemian.storage.db.core.user.User
 import io.raemian.storage.db.core.user.enums.OAuthProvider
 import jakarta.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.BeforeEach
@@ -23,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @SpringBootTest
-class GoalReadServiceTest {
+class LifeMapServiceTest {
 
     companion object {
         val USER_FIXTURE = User(
@@ -34,18 +35,18 @@ class GoalReadServiceTest {
             image = "",
             provider = OAuthProvider.NAVER,
             authority = Authority.ROLE_USER,
-            isGoalsPublic = true,
         )
 
+        val LIFE_MAP_FIXTURE = LifeMap(USER_FIXTURE, true)
         val STICKER_FIXTURE = Sticker("sticker", "image yeah")
         val TAG_FIXTURE = Tag("꿈")
     }
 
     @Autowired
-    private lateinit var goalReadService: GoalReadService
+    private lateinit var lifeMapService: LifeMapService
 
     @Autowired
-    private lateinit var goalRepository: GoalRepository
+    private lateinit var lifeMapRepository: LifeMapRepository
 
     @Autowired
     private lateinit var entityManager: EntityManager
@@ -53,59 +54,9 @@ class GoalReadServiceTest {
     @BeforeEach
     fun saveEntities() {
         entityManager.merge(USER_FIXTURE)
+        entityManager.merge(LIFE_MAP_FIXTURE)
         entityManager.merge(STICKER_FIXTURE)
         entityManager.merge(TAG_FIXTURE)
-    }
-
-    @Test
-    @DisplayName("Goal ID를 통해 Goal을 조회 할 수 있다.")
-    @Transactional
-    fun getByIdTest() {
-        // given
-        val goal = Goal(
-            user = USER_FIXTURE,
-            title = "짱이 될거야",
-            deadline = LocalDate.MAX,
-            sticker = STICKER_FIXTURE,
-            tag = TAG_FIXTURE,
-            description = "열심히, 잘, 최선을 다해 꼭 짱이 된다.",
-            tasks = emptyList(),
-        )
-
-        val savedGoal = goalRepository.save(goal)
-
-        // when
-        // then
-        assertThatCode {
-            goalReadService.getById(savedGoal.id!!)
-        }.doesNotThrowAnyException()
-    }
-
-    @Test
-    @DisplayName("목표 조회시, 목표 주인의 Goals 공개 여부가 false일 때, 예외를 발생시킨다.")
-    @Transactional
-    fun validateUserGoalsPublicTest() {
-        // given
-        val user = entityManager.find(User::class.java, USER_FIXTURE.id)
-        user.updateGoalsPublic(false)
-
-        val goal = Goal(
-            user = user,
-            title = "목표",
-            deadline = LocalDate.MAX,
-            sticker = STICKER_FIXTURE,
-            tag = TAG_FIXTURE,
-            description = "목표 설명.",
-            tasks = emptyList(),
-        )
-
-        val savedGoal = goalRepository.save(goal)
-
-        // when
-        // then
-        assertThatThrownBy {
-            goalReadService.getById(savedGoal.id!!)
-        }.isInstanceOf(SecurityException::class.java)
     }
 
     @Test
@@ -114,9 +65,9 @@ class GoalReadServiceTest {
     fun findAllByUserIdTest() {
         // given
         val goal1 = Goal(
-            user = USER_FIXTURE,
+            lifeMap = LIFE_MAP_FIXTURE,
             title = "제목1",
-            deadline = LocalDate.MAX,
+            deadline = LocalDate.now(),
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
@@ -124,27 +75,28 @@ class GoalReadServiceTest {
         )
 
         val goal2 = Goal(
-            user = USER_FIXTURE,
+            lifeMap = LIFE_MAP_FIXTURE,
             title = "제목2",
-            deadline = LocalDate.MAX,
+            deadline = LocalDate.now(),
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
             tasks = emptyList(),
         )
-
-        goalRepository.save(goal1)
-        goalRepository.save(goal2)
+        val lifeMap = lifeMapRepository.findFirstByUserId(USER_FIXTURE.id!!)
+            .get()
+        lifeMap.addGoal(goal1)
+        lifeMap.addGoal(goal2)
 
         // when
-        val savedGoals = goalReadService.findAllByUserId(USER_FIXTURE.id!!)
+        val savedLifeMap = lifeMapService.findByUserId(USER_FIXTURE.id!!)
 
         // then
         assertAll(
             Executable {
-                assertThat(savedGoals.goalsCount).isEqualTo(2)
-                assertThat(savedGoals.goals[0].tagContent).isEqualTo(goal1.tag.content)
-                assertThat(savedGoals.goals[1].tagContent).isEqualTo(goal2.tag.content)
+                assertThat(savedLifeMap.goalsCount).isEqualTo(2)
+                assertThat(savedLifeMap.goals[0].tagContent).isEqualTo(goal1.tag.content)
+                assertThat(savedLifeMap.goals[1].tagContent).isEqualTo(goal2.tag.content)
             },
         )
     }
@@ -155,7 +107,7 @@ class GoalReadServiceTest {
     fun findAllByUserNameTest() {
         // given
         val goal1 = Goal(
-            user = USER_FIXTURE,
+            lifeMap = LIFE_MAP_FIXTURE,
             title = "제목1",
             deadline = LocalDate.MAX,
             sticker = STICKER_FIXTURE,
@@ -165,7 +117,7 @@ class GoalReadServiceTest {
         )
 
         val goal2 = Goal(
-            user = USER_FIXTURE,
+            lifeMap = LIFE_MAP_FIXTURE,
             title = "제목2",
             deadline = LocalDate.MAX,
             sticker = STICKER_FIXTURE,
@@ -173,19 +125,20 @@ class GoalReadServiceTest {
             description = "",
             tasks = emptyList(),
         )
-
-        goalRepository.save(goal1)
-        goalRepository.save(goal2)
+        val lifeMap = lifeMapRepository.findFirstByUserId(USER_FIXTURE.id!!)
+            .get()
+        lifeMap.addGoal(goal1)
+        lifeMap.addGoal(goal2)
 
         // when
-        val goals = goalReadService.findAllByUserName(USER_FIXTURE.userName!!)
+        val savedLifeMap = lifeMapService.findByUserId(USER_FIXTURE.id!!)
 
         // then
         assertAll(
             Executable {
-                assertThat(goals.goalsCount).isEqualTo(2)
-                assertThat(goals.goals[0].tagContent).isEqualTo(goal1.tag.content)
-                assertThat(goals.goals[1].tagContent).isEqualTo(goal2.tag.content)
+                assertThat(savedLifeMap.goalsCount).isEqualTo(2)
+                assertThat(savedLifeMap.goals[0].tagContent).isEqualTo(goal1.tag.content)
+                assertThat(savedLifeMap.goals[1].tagContent).isEqualTo(goal2.tag.content)
             },
         )
     }
@@ -195,34 +148,24 @@ class GoalReadServiceTest {
     @Transactional
     fun findAllByUserNameValidateUserGoalsPublicTest() {
         // given
-        val user = entityManager.find(User::class.java, USER_FIXTURE.id)
-        user.updateGoalsPublic(false)
-
-        val goal = Goal(
-            user = user,
-            title = "목표1",
-            deadline = LocalDate.MAX,
-            sticker = STICKER_FIXTURE,
-            tag = TAG_FIXTURE,
-            description = "설명1",
-            tasks = emptyList(),
-        )
+        val lifeMap = entityManager.find(LifeMap::class.java, LIFE_MAP_FIXTURE.id)
+        lifeMap.updatePublic(false)
 
         // when
         // then
         assertThatThrownBy {
-            goalReadService.findAllByUserName(USER_FIXTURE.userName!!)
+            lifeMapService.findAllByUserName(USER_FIXTURE.userName!!)
         }.isInstanceOf(SecurityException::class.java)
     }
 
     @Test
-    @DisplayName("GoalsResponse와 GoalResponse의 deadline 포멧은 'YYYY.MM'이다.")
+    @DisplayName("LifeMapResponse의 deadline 포멧은 'YYYY.MM'이다.")
     @Transactional
     fun responseFormattingTest() {
         // given
         val now = LocalDate.now()
         val goal1 = Goal(
-            user = USER_FIXTURE,
+            lifeMap = LIFE_MAP_FIXTURE,
             title = "제목1",
             deadline = now,
             sticker = STICKER_FIXTURE,
@@ -232,7 +175,7 @@ class GoalReadServiceTest {
         )
 
         val goal2 = Goal(
-            user = USER_FIXTURE,
+            lifeMap = LIFE_MAP_FIXTURE,
             title = "제목2",
             deadline = now,
             sticker = STICKER_FIXTURE,
@@ -240,12 +183,13 @@ class GoalReadServiceTest {
             description = "",
             tasks = emptyList(),
         )
-        goalRepository.save(goal1)
-        goalRepository.save(goal2)
+        val lifeMap = lifeMapRepository.findFirstByUserId(USER_FIXTURE.id!!)
+            .get()
+        lifeMap.addGoal(goal1)
+        lifeMap.addGoal(goal2)
 
         // when
-        val savedGoal = goalReadService.getById(goal1.id!!)
-        val savedGoals = goalReadService.findAllByUserId(USER_FIXTURE.id!!)
+        val savedLifeMap = lifeMapService.findByUserId(USER_FIXTURE.id!!)
 
         // then
         var month = (now.monthValue).toString()
@@ -256,21 +200,19 @@ class GoalReadServiceTest {
 
         assertAll(
             Executable {
-                assertThat(savedGoal.deadline).isEqualTo(deadline)
-                assertThat(savedGoals.goals[0].deadline).isEqualTo(deadline)
-                assertThat(savedGoals.goals[1].deadline).isEqualTo(deadline)
+                assertThat(savedLifeMap.goals[0].deadline).isEqualTo(deadline)
+                assertThat(savedLifeMap.goals[1].deadline).isEqualTo(deadline)
             },
         )
     }
 
-    // 정렬 테스트
     @Test
     @DisplayName("Goals 전체 조회시 Deadline 기준 오름차순, CreatedAt 기준 내림차순으로 정렬된다.")
     @Transactional
     fun sortGoalsTest() {
         // given
         val deadline이_내일이고_가장_처음_만들어진_객체 = Goal(
-            user = USER_FIXTURE,
+            lifeMap = LIFE_MAP_FIXTURE,
             title = "제목1",
             deadline = LocalDate.now()
                 .plusDays(1),
@@ -281,7 +223,7 @@ class GoalReadServiceTest {
         )
 
         val deadline이_내일이고_가장_나중에_만들어진_객체 = Goal(
-            user = USER_FIXTURE,
+            lifeMap = LIFE_MAP_FIXTURE,
             title = "제목2",
             deadline = LocalDate.now()
                 .plusDays(1),
@@ -292,7 +234,7 @@ class GoalReadServiceTest {
         )
 
         val deadline이_오늘인_객체 = Goal(
-            user = USER_FIXTURE,
+            lifeMap = LIFE_MAP_FIXTURE,
             title = "제목2",
             deadline = LocalDate.now(),
             sticker = STICKER_FIXTURE,
@@ -301,21 +243,39 @@ class GoalReadServiceTest {
             tasks = emptyList(),
         )
 
-        // 역순으로 저장한다.
-        goalRepository.save(deadline이_내일이고_가장_처음_만들어진_객체)
-        goalRepository.save(deadline이_내일이고_가장_나중에_만들어진_객체)
-        goalRepository.save(deadline이_오늘인_객체)
-
         // when
-        val savedGoals = goalReadService.findAllByUserId(USER_FIXTURE.id!!)
+        val lifeMap = lifeMapRepository.findFirstByUserId(USER_FIXTURE.id!!)
+            .get()
+        lifeMap.addGoal(deadline이_내일이고_가장_처음_만들어진_객체)
+        lifeMap.addGoal(deadline이_내일이고_가장_나중에_만들어진_객체)
+        lifeMap.addGoal(deadline이_오늘인_객체)
 
         // then
         assertAll(
             Executable {
-                assertThat(savedGoals.goals[0].id).isEqualTo(deadline이_오늘인_객체.id)
-                assertThat(savedGoals.goals[1].id).isEqualTo(deadline이_내일이고_가장_나중에_만들어진_객체.id)
-                assertThat(savedGoals.goals[2].id).isEqualTo(deadline이_내일이고_가장_처음_만들어진_객체.id)
+                assertThat(lifeMap.goals[0].id).isEqualTo(deadline이_오늘인_객체.id)
+                assertThat(lifeMap.goals[1].id).isEqualTo(deadline이_내일이고_가장_나중에_만들어진_객체.id)
+                assertThat(lifeMap.goals[2].id).isEqualTo(deadline이_내일이고_가장_처음_만들어진_객체.id)
             },
         )
+    }
+
+    @Test
+    @DisplayName("지도의 공개 여부를 수정할 수 있다.")
+    @Transactional
+    fun updateGoalsPublic() {
+        // given
+        val publication = LIFE_MAP_FIXTURE.isPublic
+        val updateGoalsPublicRequest = UpdatePublicRequest(publication.not())
+
+        // when
+        lifeMapService.updatePublic(
+            userId = USER_FIXTURE.id!!,
+            updateGoalsPublicRequest,
+        )
+
+        // then
+        val lifeMap = entityManager.find(LifeMap::class.java, LIFE_MAP_FIXTURE.id!!)
+        assertThat(publication).isNotEqualTo(lifeMap.isPublic)
     }
 }

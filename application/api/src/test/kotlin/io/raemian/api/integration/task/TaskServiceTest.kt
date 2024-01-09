@@ -1,5 +1,6 @@
 package io.raemian.api.integration.task
 
+import io.raemian.api.lifemap.LifeMap
 import io.raemian.api.task.TaskService
 import io.raemian.api.task.controller.request.CreateTaskRequest
 import io.raemian.api.task.controller.request.RewriteTaskRequest
@@ -38,10 +39,11 @@ class TaskServiceTest {
             authority = Authority.ROLE_USER,
         )
 
+        val LIFE_MAP_FIXTURE = LifeMap(USER_FIXTURE, true)
         val STICKER_FIXTURE = Sticker("sticker", "image yeah")
         val TAG_FIXTURE = Tag("꿈")
         val GOAL_FIXTURE = Goal(
-            user = USER_FIXTURE,
+            lifeMap = LIFE_MAP_FIXTURE,
             title = "title",
             deadline = LocalDate.MAX,
             sticker = STICKER_FIXTURE,
@@ -66,6 +68,7 @@ class TaskServiceTest {
     @BeforeEach
     fun saveEntities() {
         entityManager.merge(USER_FIXTURE)
+        entityManager.merge(LIFE_MAP_FIXTURE)
         entityManager.merge(STICKER_FIXTURE)
         entityManager.merge(TAG_FIXTURE)
         goalRepository.save(GOAL_FIXTURE)
