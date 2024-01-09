@@ -64,7 +64,7 @@ class WebSecurityConfig(
                         AntPathRequestMatcher("/swagger-resources/**"),
                         AntPathRequestMatcher("/webjars/**"),
                     ).permitAll()
-                    .anyRequest().permitAll()
+                    .anyRequest().authenticated()
             }
             .oauth2Login {
                 it.userInfoEndpoint { endpoint -> endpoint.userService(oAuth2UserService) }
