@@ -23,7 +23,7 @@ class LifeMapController(
     fun findAllByCurrentUser(
         @AuthenticationPrincipal currentUser: CurrentUser,
     ): ResponseEntity<ApiResponse<LifeMapResponse>> {
-        val response = lifeMapService.findAllByUserId(currentUser.id)
+        val response = lifeMapService.findByUserId(currentUser.id)
         return ResponseEntity
             .ok(ApiResponse.success(response))
     }

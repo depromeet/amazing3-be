@@ -35,8 +35,8 @@ class GoalService(
         val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadLine)
         val sticker = stickerService.getById(stickerId)
         val tag = tagService.getById(tagId)
-        val lifeMap = lifeMapRepository.findAllByUserId(userId)
-            .first()
+        val lifeMap = lifeMapRepository.findFirstByUserId(userId)
+            .get()
 
         val goal = Goal(lifeMap, title, deadline, sticker, tag, description!!, emptyList())
         goalRepository.save(goal)

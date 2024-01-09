@@ -2,10 +2,11 @@ package io.raemian.storage.db.core.lifemap
 
 import io.raemian.api.lifemap.LifeMap
 import org.springframework.data.jpa.repository.JpaRepository
+import java.util.Optional
 
 interface LifeMapRepository : JpaRepository<LifeMap, Long> {
 
-    fun findAllByUserId(userId: Long): List<LifeMap>
+    fun findFirstByUserId(userId: Long): Optional<LifeMap>
 
-    fun findAllByUserUserName(userName: String): List<LifeMap>
+    fun findFirstByUserUserName(userName: String): Optional<LifeMap>
 }
