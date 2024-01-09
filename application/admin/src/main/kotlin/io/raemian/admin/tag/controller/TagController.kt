@@ -25,8 +25,8 @@ class TagController(
     private val tagService: TagService,
 ) {
 
-    @PostMapping
     @Operation(summary = "태그 생성 API")
+    @PostMapping
     fun create(
         @RequestBody createTagRequest: CreateTagRequest,
     ): ResponseEntity<ApiResponse<TagResponse>> {
@@ -35,21 +35,26 @@ class TagController(
             .body(ApiResponse.success(response))
     }
 
-    @GetMapping
     @Operation(summary = "태그 전체 조회 API")
+    @GetMapping
     fun findAll(): ResponseEntity<ApiResponse<List<TagResponse>>> =
         ResponseEntity.ok(ApiResponse.success(tagService.findAll()))
 
-    @PatchMapping("/{tagId}")
+    @Operation(summary = "태그 단건 조회 API")
+    @GetMapping("/{tagId}")
+    fun find(@PathVariable tagId: Long): ResponseEntity<ApiResponse<TagResponse>> =
+        ResponseEntity.ok(ApiResponse.success(tagService.find(tagId)))
+
     @Operation(summary = "태그 수정 API")
+    @PatchMapping("/{tagId}")
     fun update(
         @PathVariable tagId: Long,
         @RequestBody updateTagRequest: UpdateTagRequest,
     ): ResponseEntity<ApiResponse<TagResponse>> =
         ResponseEntity.ok().body(ApiResponse.success(tagService.update(tagId, updateTagRequest)))
 
-    @DeleteMapping("/{tagId}")
     @Operation(summary = "태그 삭제 API")
+    @DeleteMapping("/{tagId}")
     fun delete(@PathVariable tagId: Long): ResponseEntity<Unit> {
         tagService.delete(tagId)
         return ResponseEntity.ok().build()

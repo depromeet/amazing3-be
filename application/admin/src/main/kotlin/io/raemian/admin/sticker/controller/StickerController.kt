@@ -43,6 +43,11 @@ class StickerController(
     fun findAll(): ResponseEntity<ApiResponse<List<StickerResponse>>> =
         ResponseEntity.ok(ApiResponse.success(stickerService.findAll()))
 
+    @Operation(summary = "스티커 단건 조회 API")
+    @GetMapping("/{stickerId}")
+    fun find(@PathVariable stickerId: Long): ResponseEntity<ApiResponse<StickerResponse>> =
+        ResponseEntity.ok(ApiResponse.success(stickerService.find(stickerId)))
+
     @Operation(summary = "스티커 수정 API")
     @PatchMapping("/{stickerId}", consumes = arrayOf(MediaType.MULTIPART_FORM_DATA_VALUE), produces = arrayOf(MediaType.APPLICATION_JSON_VALUE))
     fun update(

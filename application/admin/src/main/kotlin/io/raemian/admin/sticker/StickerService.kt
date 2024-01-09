@@ -35,6 +35,10 @@ class StickerService(
     fun findAll(): List<StickerResponse> =
         stickerRepository.findAll().map(::StickerResponse)
 
+    @Transactional(readOnly = true)
+    fun find(stickerId: Long): StickerResponse =
+        StickerResponse.from(stickerRepository.getById(stickerId))
+
     @Transactional
     fun update(
         stickerId: Long,
