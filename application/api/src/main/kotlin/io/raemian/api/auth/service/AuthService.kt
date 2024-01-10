@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
-import kotlin.jvm.optionals.getOrNull
 
 @Service
 class AuthService(
@@ -23,13 +22,13 @@ class AuthService(
         return UserDTO.of(user)
     }
 
-    fun update(id: Long, nickname: String, birth: LocalDate): User {
-        val user = userRepository.findById(id)
-            .getOrNull() ?: throw RuntimeException("")
+    fun update(id: Long, nickname: String, birth: LocalDate, username: String): User {
+        val user = userRepository.getById(id)
 
         val updated = user.updateInfo(
             nickname = nickname,
             birth = birth,
+            username = username,
         )
 
         return userRepository.save(updated)
