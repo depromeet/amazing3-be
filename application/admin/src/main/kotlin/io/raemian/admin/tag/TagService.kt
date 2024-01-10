@@ -27,6 +27,10 @@ class TagService(
     fun findAll(): List<TagResponse> =
         tagRepository.findAll().map(::TagResponse)
 
+    @Transactional(readOnly = true)
+    fun find(tagId: Long): TagResponse =
+        TagResponse.from(tagRepository.getById(tagId))
+
     @Transactional
     fun update(tagId: Long, updateTagRequest: UpdateTagRequest): TagResponse {
         val tags = tagRepository.getById(tagId)

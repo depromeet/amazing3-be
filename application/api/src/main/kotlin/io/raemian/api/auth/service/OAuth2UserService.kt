@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class OAuth2UserService(
@@ -74,9 +75,11 @@ class OAuth2UserService(
         }
     }
 
-    private fun upsert(email: String, image: String, oAuthProvider: OAuthProvider): User {
-        return userRepository.findByEmail(email)
-            ?: return userRepository.save(
+    @Transactional
+    fun upsert(email: String, image: String, oAuthProvider: OAuthProvider): User {
+        val user = userRepository.findByEmail(email)
+        if (user == null) {
+            val created = userRepository.save(
                 User(
                     email = email,
                     image = image,
@@ -84,5 +87,14 @@ class OAuth2UserService(
                     authority = Authority.ROLE_USER,
                 ),
             )
+            val new = created.updateUsername("BANDIBOODI-${created.id!!}")
+
+            val updated = userRepository.save(new)
+
+            // lifemap
+
+            return updated
+        }
+        return user
     }
 }
