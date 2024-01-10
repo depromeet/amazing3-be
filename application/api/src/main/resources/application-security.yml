@@ -23,8 +23,8 @@ spring:
             user_name_attribute: id
         registration:
           naver:
-            client-id: aa
-            client-secret: aa
+            client-id: ENC(/qzOXwuIXc/q0hiutk6qaxqy7KEZpTOPnWAXWMOiQlk=)
+            client-secret: ENC(JCO+cy8kcGWUnbzEz5fYPwEgvX9dkxvh)
             redirect-uri: http://localhost:8080/login/oauth2/code/naver
             authorization-grant-type: authorization_code
             scope:
@@ -32,7 +32,7 @@ spring:
               - name
             client-name: naver
           kakao:
-            client-id: aa
+            client-id: ENC(exKGui32ds6bUGVLSDwbMBXK+4SSb4GoFkDUBpzfchrlOQBCym996oRTuXaiqhG7)
             redirect-uri: http://localhost:8080/api/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
             scope:
@@ -40,9 +40,9 @@ spring:
               - profile_image
             client-name: kakao
           google:
-            redirect-uri: ${GOOGLE-REDIRECT-URI}
-            client-id: ${GOOGLE-CLIENT-ID}
-            client-secret: ${GOOGLE-CLIENT-SECRET}
+            redirect-uri: ENC(gPNzZWCUREOBhkgzyIDnZqzofQchy9+DH9EoVoxYz+fpxUUndX0TO+RwIirLdTCXQaATBp/TM/ECxIyez4uZFg==)
+            client-id: ENC(TucLQq2mg5X0ts97rLtncbn0d2OtGal96/sgltZqpq65sd0JLkU2hn74UON+g/NWnRV+CmF+XlOmYLcR9B2mSKcNssPLEo+nT1CvYhSvlh+0cefiMY4HnQ==)
+            client-secret: ENC(rRTLtapxD65ZIfQXx4TFl3/ScyGWmHMYZoDyWygUxQbFS58E3dQHLrrBLuJvKDKH)
             scope:
               - email
               - profile
@@ -74,26 +74,26 @@ spring:
             user_name_attribute: id
         registration:
           naver:
-            client-id: aa
-            client-secret: aa
-            redirect-uri: http://localhost:8080/login/oauth2/code/naver
+            client-id: ENC(/qzOXwuIXc/q0hiutk6qaxqy7KEZpTOPnWAXWMOiQlk=)
+            client-secret: ENC(JCO+cy8kcGWUnbzEz5fYPwEgvX9dkxvh)
+            redirect-uri: ENC(Cw6GxB7zBSF6IVfUp9bKU54Q7gMXDsuQlzmbVXZLWex1rmvfPljgVZZ5oezX7BaObrpKkPNilBUeIhENX95TdoR6znN9o8jU)
             authorization-grant-type: authorization_code
             scope:
               - email
               - name
             client-name: naver
           kakao:
-            client-id: aa
-            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            client-id: ENC(exKGui32ds6bUGVLSDwbMBXK+4SSb4GoFkDUBpzfchrlOQBCym996oRTuXaiqhG7)
+            redirect-uri: ENC(JTUuGtP2xFa4TUcJVlRK0S8Dh7p90pTNoRdWS6jgAtsh0Yv46v5heaNFS6iynM7ujzPT9y0ov8ZOj/2efmktE80XzfySGpO0)
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
               - profile_image
             client-name: kakao
           google:
-            redirect-uri: ${GOOGLE-REDIRECT-URI}
-            client-id: ${GOOGLE-CLIENT-ID}
-            client-secret: ${GOOGLE-CLIENT-SECRET}
+            redirect-uri: ENC(K0htibbNu6hcr/9RyD0O4LM9lzX0q5o4apyH1Ct2lejuEcSi0/1W85SwK6JHEm3XMos3oZ3k/iPzIssnEs6FxOHILa91kimd))
+            client-id: ENC(TucLQq2mg5X0ts97rLtncbn0d2OtGal96/sgltZqpq65sd0JLkU2hn74UON+g/NWnRV+CmF+XlOmYLcR9B2mSKcNssPLEo+nT1CvYhSvlh+0cefiMY4HnQ==)
+            client-secret: ENC(rRTLtapxD65ZIfQXx4TFl3/ScyGWmHMYZoDyWygUxQbFS58E3dQHLrrBLuJvKDKH)
             scope:
               - email
               - profile
@@ -124,26 +124,26 @@ spring:
             user_name_attribute: id
         registration:
           naver:
-            client-id: ${NAVER-CLIENT-ID}
-            client-secret: ${NAVER-CLIENT-SECRET}
-            redirect-uri: ${NAVER-REDIRECT-URI}
+            client-id: ENC(/qzOXwuIXc/q0hiutk6qaxqy7KEZpTOPnWAXWMOiQlk=)
+            client-secret: ENC(JCO+cy8kcGWUnbzEz5fYPwEgvX9dkxvh)
+            redirect-uri: ENC(7mjnpwX/1lXB/8aDVOpbRF/uaR2Wb9MmYKjmGwFzUHaUUJrRwDL17WfCVrYhCyMDDSzPktD5Y7K2KTHq65vvjLpPfmcBrVa+)
             authorization-grant-type: authorization_code
             scope:
               - email
               - name
             client-name: naver
           kakao:
-            client-id: ${KAKAO-CLIENT-ID}
-            redirect-uri: ${KAKAO-REDIRECT-URI}
+            client-id: ENC(exKGui32ds6bUGVLSDwbMBXK+4SSb4GoFkDUBpzfchrlOQBCym996oRTuXaiqhG7)
+            redirect-uri: ENC(EChBZKXGBtXOrm/aHJYBVPaE0xE4yDEje9Hakyd0yadQze4z3lJb/J9U7hdUu7/Ne7LyDE5JleyQPtWY0eq4GamNTLhffVgz)
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
               - profile_image
             client-name: kakao
           google:
-            redirect-uri: ${GOOGLE-REDIRECT-URI}
-            client-id: ${GOOGLE-CLIENT-ID}
-            client-secret: ${GOOGLE-CLIENT-SECRET}
+            redirect-uri: ENC(9+ZtWCwp71Xny9VBtunmmmabG6ACktT43tcVSFSHtI1R/RCLVwLsgG/TgRJ1VN8tqKyYqSF5GOhUKAwYaCprufgbBh7ISod5)
+            client-id: ENC(TucLQq2mg5X0ts97rLtncbn0d2OtGal96/sgltZqpq65sd0JLkU2hn74UON+g/NWnRV+CmF+XlOmYLcR9B2mSKcNssPLEo+nT1CvYhSvlh+0cefiMY4HnQ==)
+            client-secret: ENC(rRTLtapxD65ZIfQXx4TFl3/ScyGWmHMYZoDyWygUxQbFS58E3dQHLrrBLuJvKDKH)
             scope:
               - email
               - profile

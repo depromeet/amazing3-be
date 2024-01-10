@@ -42,6 +42,8 @@ subprojects {
         annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
         implementation("org.springframework:spring-context")
 
+        implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5")
+
         kapt("org.springframework.boot:spring-boot-configuration-processor")
     }
 
