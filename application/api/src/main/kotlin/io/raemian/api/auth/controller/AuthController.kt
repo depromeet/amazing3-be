@@ -40,6 +40,7 @@ class AuthController(
             id = currentUser.id,
             nickname = updateUserRequest.nickname,
             birth = updateUserRequest.birth,
+            username = updateUserRequest.username,
         )
         return ResponseEntity.ok().build()
     }
