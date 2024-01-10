@@ -14,6 +14,7 @@ import jakarta.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -84,12 +85,13 @@ class LifeMapServiceTest {
             tasks = emptyList(),
         )
         val lifeMap = lifeMapRepository.findFirstByUserId(USER_FIXTURE.id!!)
-            .get()
+            ?: fail()
+
         lifeMap.addGoal(goal1)
         lifeMap.addGoal(goal2)
 
         // when
-        val savedLifeMap = lifeMapService.findByUserId(USER_FIXTURE.id!!)
+        val savedLifeMap = lifeMapService.findFirstByUserId(USER_FIXTURE.id!!)
 
         // then
         assertAll(
@@ -126,12 +128,12 @@ class LifeMapServiceTest {
             tasks = emptyList(),
         )
         val lifeMap = lifeMapRepository.findFirstByUserId(USER_FIXTURE.id!!)
-            .get()
+            ?: fail()
         lifeMap.addGoal(goal1)
         lifeMap.addGoal(goal2)
 
         // when
-        val savedLifeMap = lifeMapService.findByUserId(USER_FIXTURE.id!!)
+        val savedLifeMap = lifeMapService.findFirstByUserId(USER_FIXTURE.id!!)
 
         // then
         assertAll(
@@ -154,7 +156,7 @@ class LifeMapServiceTest {
         // when
         // then
         assertThatThrownBy {
-            lifeMapService.findAllByUserName(USER_FIXTURE.username!!)
+            lifeMapService.findFirstByUserName(USER_FIXTURE.username!!)
         }.isInstanceOf(SecurityException::class.java)
     }
 
@@ -184,12 +186,12 @@ class LifeMapServiceTest {
             tasks = emptyList(),
         )
         val lifeMap = lifeMapRepository.findFirstByUserId(USER_FIXTURE.id!!)
-            .get()
+            ?: fail()
         lifeMap.addGoal(goal1)
         lifeMap.addGoal(goal2)
 
         // when
-        val savedLifeMap = lifeMapService.findByUserId(USER_FIXTURE.id!!)
+        val savedLifeMap = lifeMapService.findFirstByUserId(USER_FIXTURE.id!!)
 
         // then
         var month = (now.monthValue).toString()
@@ -245,7 +247,8 @@ class LifeMapServiceTest {
 
         // when
         val lifeMap = lifeMapRepository.findFirstByUserId(USER_FIXTURE.id!!)
-            .get()
+            ?: fail()
+
         lifeMap.addGoal(deadline이_내일이고_가장_처음_만들어진_객체)
         lifeMap.addGoal(deadline이_내일이고_가장_나중에_만들어진_객체)
         lifeMap.addGoal(deadline이_오늘인_객체)
