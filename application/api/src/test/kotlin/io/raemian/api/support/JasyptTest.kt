@@ -8,7 +8,6 @@ class JasyptTest {
     fun jasypt() {
         val input = ""
         val encrypted = jasyptEncrypt(input)
-        // println("encrypted : $encrypted")
 
         // Assertions.assertThat(input).isEqualTo(jasyptDecrypt(encrypted))
     }

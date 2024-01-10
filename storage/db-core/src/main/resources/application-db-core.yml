@@ -11,22 +11,23 @@ spring.config.activate.on-profile: local
 
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:core;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(EuTWOejZ/TVxzVr8BuOraMUtzqHbSrMmVbG8i3sxaegIAOHHfwvm3dLHGDpJMVmQE8GHC9wablsS370aoZEZZg==)
+    username: ENC(y6jFI+0DMaRvoUW962oCyg==)
+    password: ENC(cuWaUt+8bNMAV6aLO4GMaw==)
     hikari:
       pool-name: db-core-pool
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        format_sql: true
-        show_sql: true
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        show_sql: true
 ---
 # dev
 spring.config.activate.on-profile: dev
@@ -34,9 +35,9 @@ spring.config.activate.on-profile: dev
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(wFZhmY8RyHVz3Db0FxA2k8Gy1BT+EEwtBLjUvNv9P9mBOHjrQmgWQAfWb6etj3m6h3jU3K1N+StnAFksnuiihw==)
-    username: ENC(M1f7GXnd/Z8BDDngEIah5g==)
-    password: ENC(JNuIVg3Uiy3nkCJ6cofP2g==)
+    url: ENC(EuTWOejZ/TVxzVr8BuOraMUtzqHbSrMmVbG8i3sxaegIAOHHfwvm3dLHGDpJMVmQE8GHC9wablsS370aoZEZZg==)
+    username: ENC(y6jFI+0DMaRvoUW962oCyg==)
+    password: ENC(cuWaUt+8bNMAV6aLO4GMaw==)
     hikari:
       pool-name: db-core-pool
 
@@ -48,8 +49,8 @@ spring.config.activate.on-profile: live
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(9n6GqejEgPw7JydktZV3dEsvDROGY5/78wy7SX2V+bV3l240rLsBJ+Ifum4azvuM1NJX2NPhxv8H6lXQl9rD5w==)
-    username: ENC(bIViZ1+HmLQh+mwgMrzpNQ==)
-    password: ENC(O5EA7gDiTtoofaZKIjnong==)
+    url: ENC(jnA7eWlf1zdjW5d2Flm/8ZetYCGTR3wkTE7Wk7NdJWJK9XZmcSNO300/VHhHG04tUQlf4nq5sbc6ShvOF1MV+A==)
+    username: ENC(ORiZUOmorrTYkZUUCqHN8g==)
+    password: ENC(A6Ii6Iq/etslKSo3kRcS0g==)
     hikari:
       pool-name: db-core-pool
