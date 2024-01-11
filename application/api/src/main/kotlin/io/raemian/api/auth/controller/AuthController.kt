@@ -24,8 +24,8 @@ class AuthController(
     @GetMapping("/my")
     fun my(@AuthenticationPrincipal currentUser: CurrentUser): ResponseEntity<ApiResponse<UserResponse>> {
         val user = authService.getUserById(currentUser.id)
-        val goalsCount = lifeMapService.countFirstLifeMapGoals(currentUser.id)
-        val response = UserResponse.of(user, goalsCount)
+        val lifeMap = lifeMapService.findFirstByUserId(currentUser.id)
+        val response = UserResponse.of(user, lifeMap)
         return ResponseEntity.ok(ApiResponse.success(response))
     }
 
@@ -39,6 +39,7 @@ class AuthController(
             id = currentUser.id,
             nickname = updateUserRequest.nickname,
             birth = updateUserRequest.birth,
+            username = updateUserRequest.username,
         )
         return ResponseEntity.ok().build()
     }

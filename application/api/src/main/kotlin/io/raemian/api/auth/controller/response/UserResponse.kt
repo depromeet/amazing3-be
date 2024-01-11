@@ -1,6 +1,7 @@
 package io.raemian.api.auth.controller.response
 
-import io.raemian.storage.db.core.user.User
+import io.raemian.api.auth.domain.UserDTO
+import io.raemian.api.lifemap.controller.LifeMapResponse
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -11,20 +12,20 @@ data class UserResponse(
     val nickname: String?,
     val birth: LocalDate?,
     val image: String,
-    val goalCount: Int,
     val createdAt: LocalDateTime?,
+    val lifeMap: LifeMapResponse,
 ) {
     companion object {
-        fun of(user: User, goalCount: Int): UserResponse {
+        fun of(user: UserDTO, lifeMap: LifeMapResponse): UserResponse {
             return UserResponse(
-                id = user.id!!,
+                id = user.id,
                 email = user.email,
                 username = user.username,
                 nickname = user.nickname,
                 birth = user.birth,
                 image = user.image,
-                goalCount = goalCount,
                 createdAt = user.createdAt,
+                lifeMap = lifeMap,
             )
         }
     }

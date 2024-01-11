@@ -43,12 +43,12 @@ class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 ) : BaseEntity() {
-
-    fun updateInfo(nickname: String, birth: LocalDate): User {
+    fun updateInfo(nickname: String, birth: LocalDate, username: String): User {
         return User(
             email = email,
             nickname = nickname,
             birth = birth,
+            username = username,
             image = image,
             provider = provider,
             authority = authority,
