@@ -1,10 +1,10 @@
 package io.raemian.storage.db.core.goal
 
+import io.raemian.api.lifemap.LifeMap
 import io.raemian.storage.db.core.BaseEntity
 import io.raemian.storage.db.core.sticker.Sticker
 import io.raemian.storage.db.core.tag.Tag
 import io.raemian.storage.db.core.task.Task
-import io.raemian.storage.db.core.user.User
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -23,8 +23,8 @@ import java.time.LocalDate
 @Table(name = "GOALS")
 class Goal(
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    val user: User,
+    @JoinColumn(name = "life_map_id", nullable = false)
+    val lifeMap: LifeMap,
 
     @Column(nullable = false)
     @Nationalized

@@ -1,12 +1,10 @@
 package io.raemian.api.goal.controller
 
 import io.raemian.api.auth.domain.CurrentUser
-import io.raemian.api.goal.GoalReadService
 import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
-import io.raemian.api.goal.controller.response.GoalsResponse
 import io.raemian.api.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -26,18 +24,7 @@ fun String.toUri(): URI = URI.create(this)
 @RequestMapping("/goal")
 class GoalController(
     private val goalService: GoalService,
-    private val goalReadService: GoalReadService,
 ) {
-
-    @Operation(summary = "유저 목표 전체 조회 API")
-    @GetMapping
-    fun findAllByUserId(
-        @AuthenticationPrincipal currentUser: CurrentUser,
-    ): ResponseEntity<ApiResponse<GoalsResponse>> {
-        val response = goalReadService.findAllByUserId(currentUser.id)
-        return ResponseEntity
-            .ok(ApiResponse.success(response))
-    }
 
     @Operation(summary = "목표 단건 조회 API")
     @GetMapping("/{goalId}")
@@ -45,7 +32,7 @@ class GoalController(
         @PathVariable("goalId") goalId: Long,
     ): ResponseEntity<ApiResponse<GoalResponse>> =
         ResponseEntity.ok(
-            ApiResponse.success(goalReadService.getById(goalId)),
+            ApiResponse.success(goalService.getById(goalId)),
         )
 
     @Operation(summary = "목표 생성 API")

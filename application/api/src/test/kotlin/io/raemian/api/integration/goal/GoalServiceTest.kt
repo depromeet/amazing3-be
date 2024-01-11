@@ -2,6 +2,7 @@ package io.raemian.api.integration.goal
 
 import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
+import io.raemian.api.lifemap.LifeMap
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.sticker.Sticker
@@ -37,6 +38,7 @@ class GoalServiceTest {
             authority = Authority.ROLE_USER,
         )
 
+        val LIFE_MAP_FIXTURE = LifeMap(USER_FIXTURE, true)
         val STICKER_FIXTURE = Sticker("sticker", "image yeah")
         val TAG_FIXTURE = Tag("꿈")
     }
@@ -53,8 +55,58 @@ class GoalServiceTest {
     @BeforeEach
     fun saveEntities() {
         entityManager.merge(USER_FIXTURE)
+        entityManager.merge(LIFE_MAP_FIXTURE)
         entityManager.merge(STICKER_FIXTURE)
         entityManager.merge(TAG_FIXTURE)
+    }
+
+    @Test
+    @DisplayName("Goal ID를 통해 Goal을 조회 할 수 있다.")
+    @Transactional
+    fun getByIdTest() {
+        // given
+        val goal = Goal(
+            lifeMap = LIFE_MAP_FIXTURE,
+            title = "제목",
+            deadline = LocalDate.MAX,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "내용",
+            tasks = emptyList(),
+        )
+        goalRepository.save(goal)
+
+        // when
+        // then
+        Assertions.assertThatCode {
+            goalService.getById(goal.id!!)
+        }.doesNotThrowAnyException()
+    }
+
+    @Test
+    @DisplayName("목표 조회시, 목표 주인의 Goals 공개 여부가 false일 때, 예외를 발생시킨다.")
+    @Transactional
+    fun validateUserGoalsPublicTest() {
+        // given
+        val lifeMap = entityManager.find(LifeMap::class.java, LIFE_MAP_FIXTURE.id)
+        lifeMap.updatePublic(false)
+
+        val goal = Goal(
+            lifeMap = lifeMap,
+            title = "목표",
+            deadline = LocalDate.MAX,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "목표 설명.",
+            tasks = emptyList(),
+        )
+        goalRepository.save(goal)
+
+        // when
+        // then
+        Assertions.assertThatThrownBy {
+            goalService.getById(goal.id!!)
+        }.isInstanceOf(SecurityException::class.java)
     }
 
     @Test
@@ -70,20 +122,20 @@ class GoalServiceTest {
         )
 
         val createResponse = goalService.create(
-            USER_FIXTURE.id!!,
-            createGoalRequest,
+            userId = USER_FIXTURE.id!!,
+            createGoalRequest = createGoalRequest,
         )
 
         val goal = goalRepository.getById(createResponse.id)
         assertAll(
             Executable {
-                Assertions.assertThat(goal.title).isEqualTo(createGoalRequest.title)
-                Assertions.assertThat(goal.description).isEqualTo(createGoalRequest.description)
-                Assertions.assertThat(goal.sticker.id).isEqualTo(createGoalRequest.stickerId)
-                Assertions.assertThat(goal.tag.id).isEqualTo(createGoalRequest.tagId)
-                Assertions.assertThat(goal.deadline.year.toString())
+                assertThat(goal.title).isEqualTo(createGoalRequest.title)
+                assertThat(goal.description).isEqualTo(createGoalRequest.description)
+                assertThat(goal.sticker.id).isEqualTo(createGoalRequest.stickerId)
+                assertThat(goal.tag.id).isEqualTo(createGoalRequest.tagId)
+                assertThat(goal.deadline.year.toString())
                     .isEqualTo(createGoalRequest.yearOfDeadline)
-                Assertions.assertThat(goal.deadline.monthValue.toString())
+                assertThat(goal.deadline.monthValue.toString())
                     .isEqualTo(createGoalRequest.monthOfDeadline)
             },
         )
@@ -95,7 +147,7 @@ class GoalServiceTest {
     fun deleteGoalTest() {
         // given
         val goal = Goal(
-            user = USER_FIXTURE,
+            lifeMap = LIFE_MAP_FIXTURE,
             title = "title",
             description = "",
             deadline = LocalDate.now(),
