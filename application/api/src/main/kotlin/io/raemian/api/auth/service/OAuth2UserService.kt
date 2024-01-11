@@ -29,8 +29,10 @@ class OAuth2UserService(
             .providerDetails.userInfoEndpoint
             .userNameAttributeName
 
-        return when (val provider =
-            OAuthProvider.valueOf(userRequest.clientRegistration.registrationId.uppercase())) {
+        return when (
+            val provider =
+                OAuthProvider.valueOf(userRequest.clientRegistration.registrationId.uppercase())
+        ) {
             OAuthProvider.GOOGLE -> {
                 val email =
                     oAuth2User.attributes["email"]?.toString() ?: throw RuntimeException("이메일이없음")
