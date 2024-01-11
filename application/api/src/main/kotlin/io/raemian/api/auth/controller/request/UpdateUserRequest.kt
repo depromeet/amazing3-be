@@ -5,4 +5,5 @@ import java.time.LocalDate
 data class UpdateUserRequest(
     val nickname: String,
     val birth: LocalDate,
+    val username: String,
 )

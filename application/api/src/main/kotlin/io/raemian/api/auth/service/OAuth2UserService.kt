@@ -60,7 +60,7 @@ class OAuth2UserService(
                 val profileImage = properties["profile_image"] ?: ""
                 val thumbnailImage = properties["thumbnail_image"]
                 val nickname = properties["nickname"]
-                val email = properties["email"] ?: throw RuntimeException("이메일없음")
+                val email = properties["email"]
                 val user = upsert(
                     email = id,
                     image = profileImage,

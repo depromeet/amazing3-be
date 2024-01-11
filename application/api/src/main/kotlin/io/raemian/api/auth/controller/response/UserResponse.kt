@@ -12,8 +12,9 @@ data class UserResponse(
     val nickname: String?,
     val birth: LocalDate?,
     val image: String,
-    val goalCount: Int,
     val createdAt: LocalDateTime?,
+    val lifeMap: LifeMapSubset,
+    val goal: GoalSubset,
 ) {
     companion object {
         fun of(user: UserDTO, goal: GoalsResponse): UserResponse {
@@ -24,9 +25,19 @@ data class UserResponse(
                 nickname = user.nickname,
                 birth = user.birth,
                 image = user.image,
-                goalCount = goal.goalsCount,
                 createdAt = user.createdAt,
+                goal = GoalSubset(goal.goalsCount),
+                lifeMap = LifeMapSubset(isPublic = true),
             )
         }
     }
+
+    data class LifeMapSubset(
+        val isPublic: Boolean = true,
+        // val id: Long
+    )
+
+    data class GoalSubset(
+        val count: Int,
+    )
 }
