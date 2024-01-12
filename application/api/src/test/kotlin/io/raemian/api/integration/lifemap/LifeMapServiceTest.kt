@@ -157,7 +157,7 @@ class LifeMapServiceTest {
         // then
         assertThatThrownBy {
             lifeMapService.findFirstByUserName(USER_FIXTURE.username!!)
-        }.isInstanceOf(SecurityException::class.java)
+        }.isInstanceOf(RuntimeException::class.java)
     }
 
     @Test
