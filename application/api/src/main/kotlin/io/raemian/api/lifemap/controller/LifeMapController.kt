@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -27,14 +26,6 @@ class LifeMapController(
         @AuthenticationPrincipal currentUser: CurrentUser,
     ): ResponseEntity<ApiResponse<LifeMapResponse>> {
         val response = lifeMapService.findFirstByUserId(currentUser.id)
-        return ResponseEntity
-            .ok(ApiResponse.success(response))
-    }
-
-    @Operation(summary = "UserName으로 인생 지도 조회 API")
-    @GetMapping("/{username}")
-    fun findAllByUserName(@PathVariable("username") username: String): ResponseEntity<ApiResponse<LifeMapResponse>> {
-        val response = lifeMapService.findFirstByUserName(username)
         return ResponseEntity
             .ok(ApiResponse.success(response))
     }
