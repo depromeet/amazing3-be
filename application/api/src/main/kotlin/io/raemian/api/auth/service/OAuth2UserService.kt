@@ -1,6 +1,8 @@
 package io.raemian.api.auth.service
 
 import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.lifemap.LifeMap
+import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.user.Authority
 import io.raemian.storage.db.core.user.User
 import io.raemian.storage.db.core.user.UserRepository
@@ -14,16 +16,26 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class OAuth2UserService(
     private val userRepository: UserRepository,
+    private val lifeMapRepository: LifeMapRepository,
 ) : DefaultOAuth2UserService() {
+
+    companion object {
+        private const val USERNAME_PREFIX = "BANDIBOODI-"
+    }
+
     override fun loadUser(userRequest: OAuth2UserRequest): OAuth2User {
         val oAuth2User = super.loadUser(userRequest)
         val usernameAttributeName = userRequest.clientRegistration
             .providerDetails.userInfoEndpoint
             .userNameAttributeName
 
-        return when (val provider = OAuthProvider.valueOf(userRequest.clientRegistration.registrationId.uppercase())) {
+        return when (
+            val provider =
+                OAuthProvider.valueOf(userRequest.clientRegistration.registrationId.uppercase())
+        ) {
             OAuthProvider.GOOGLE -> {
-                val email = oAuth2User.attributes["email"]?.toString() ?: throw RuntimeException("이메일이없음")
+                val email =
+                    oAuth2User.attributes["email"]?.toString() ?: throw RuntimeException("이메일이없음")
                 val name = oAuth2User.attributes["name"]?.toString()
                 val image = oAuth2User.attributes["picture"]?.toString() ?: ""
                 val user = upsert(
@@ -76,25 +88,31 @@ class OAuth2UserService(
     }
 
     @Transactional
-    fun upsert(email: String, image: String, oAuthProvider: OAuthProvider): User {
-        val user = userRepository.findByEmail(email)
-        if (user == null) {
-            val created = userRepository.save(
-                User(
-                    email = email,
-                    image = image,
-                    provider = oAuthProvider,
-                    authority = Authority.ROLE_USER,
-                ),
-            )
-            val new = created.updateUsername("BANDIBOODI-${created.id!!}")
+    fun upsert(email: String, image: String, oAuthProvider: OAuthProvider): User =
+        userRepository.findByEmail(email)
+            ?: createUser(email, image, oAuthProvider)
 
-            val updated = userRepository.save(new)
+    private fun createUser(email: String, image: String, oAuthProvider: OAuthProvider): User {
+        val user = User(
+            email = email,
+            image = image,
+            provider = oAuthProvider,
+            authority = Authority.ROLE_USER,
+        )
 
-            // lifemap
+        userRepository.save(user)
+        val updateUsername = updateUsername(user)
+        createUserDefaultLifeMap(updateUsername)
+        return updateUsername
+    }
 
-            return updated
-        }
-        return user
+    private fun updateUsername(user: User): User {
+        val updateUsername = user.updateUsername("$USERNAME_PREFIX${user.id!!}")
+        return userRepository.save(updateUsername)
+    }
+
+    private fun createUserDefaultLifeMap(user: User) {
+        val lifeMap = LifeMap(user, true, goals = ArrayList())
+        lifeMapRepository.save(lifeMap)
     }
 }

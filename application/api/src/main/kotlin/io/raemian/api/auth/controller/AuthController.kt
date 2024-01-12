@@ -4,7 +4,7 @@ import io.raemian.api.auth.controller.request.UpdateUserRequest
 import io.raemian.api.auth.controller.response.UserResponse
 import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.auth.service.AuthService
-import io.raemian.api.goal.GoalReadService
+import io.raemian.api.lifemap.LifeMapService
 import io.raemian.api.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -17,16 +17,15 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class AuthController(
     private val authService: AuthService,
-    private val goalReadService: GoalReadService,
+    private val lifeMapService: LifeMapService,
 ) {
 
     @Operation(summary = "토큰 유저 정보 조회 API")
     @GetMapping("/my")
     fun my(@AuthenticationPrincipal currentUser: CurrentUser): ResponseEntity<ApiResponse<UserResponse>> {
         val user = authService.getUserById(currentUser.id)
-        val goals = goalReadService.findAllByUserId(currentUser.id)
-        val response = UserResponse.of(user, goals)
-
+        val lifeMap = lifeMapService.findFirstByUserId(currentUser.id)
+        val response = UserResponse.of(user, lifeMap)
         return ResponseEntity.ok(ApiResponse.success(response))
     }
 
