@@ -44,19 +44,20 @@ class StickerService(
         stickerId: Long,
         updateStickerRequest: UpdateStickerRequest,
     ): StickerResponse {
-        val newFileName = validateFileName(updateStickerRequest.image.originalFilename)
-
         val stickers = stickerRepository.getById(stickerId)
 
+        val newFileName = validateFileName(updateStickerRequest.image.originalFilename)
         val url = imageRepository.update(
             newFileName,
             splitFileNameFromUrl(stickers.url),
             updateStickerRequest.image.inputStream,
         )
 
+        stickers.updateNameAndUrl(updateStickerRequest.name, url)
+
         val updatedStickers = stickerRepository.save(Sticker(updateStickerRequest.name, url))
 
-        return StickerResponse.from(stickers)
+        return StickerResponse.from(updatedStickers)
     }
 
     @Transactional
