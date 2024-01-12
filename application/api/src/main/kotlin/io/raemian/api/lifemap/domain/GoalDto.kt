@@ -1,4 +1,4 @@
-package io.raemian.api.lifemap.controller
+package io.raemian.api.lifemap.domain
 
 import io.raemian.api.support.format
 import io.raemian.storage.db.core.goal.Goal
