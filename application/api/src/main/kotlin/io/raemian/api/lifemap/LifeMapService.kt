@@ -19,7 +19,9 @@ class LifeMapService(
         val lifeMap = lifeMapRepository.findFirstByUserId(userId)
             ?: throw NoSuchElementException("존재하지 않는 유저입니다. $userId")
 
-        sortByDeadlineAscendingAndCreatedAtDescending(lifeMap.goals)
+        // TODO edit immutable
+        lifeMap.goals = lifeMap.sortGoals().toMutableList()
+
         return LifeMapResponse(lifeMap)
     }
 
@@ -29,7 +31,9 @@ class LifeMapService(
             ?: throw NoSuchElementException("존재하지 않는 유저입니다. $username")
 
         validateLifeMapPublic(lifeMap)
-        sortByDeadlineAscendingAndCreatedAtDescending(lifeMap.goals)
+
+        // TODO edit immutable
+        lifeMap.goals = lifeMap.sortGoals().toMutableList()
 
         val user = userRepository.getById(lifeMap.user.id!!)
         return LifeMapResponse(lifeMap, user)

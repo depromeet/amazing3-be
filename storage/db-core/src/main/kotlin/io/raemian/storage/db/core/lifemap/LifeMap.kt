@@ -44,4 +44,11 @@ class LifeMap(
     fun addGoal(goal: Goal) {
         this.goals.add(goal)
     }
+
+    fun sortGoals(): List<Goal> {
+        return goals.sortedWith(
+            compareBy<Goal> { it.deadline }
+                .thenByDescending { it.createdAt },
+        )
+    }
 }
