@@ -61,6 +61,7 @@ class WebSecurityConfig(
                     .requestMatchers(AntPathRequestMatcher("/login/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/one-baily-actuator/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/log/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/open/life-map/**")).permitAll()
                     .requestMatchers(
                         AntPathRequestMatcher("/swagger*/**"),
                         AntPathRequestMatcher("/v3/api-docs/**"),
