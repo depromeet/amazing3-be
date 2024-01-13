@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM --platform=linux/amd64 node:18-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -6,6 +6,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 
 # Install dependencies based on the preferred package manager
+COPY package.json ./
 RUN yarn --frozen-lockfile --production;
 RUN rm -rf ./.next/cache
 
@@ -31,8 +32,8 @@ COPY --from=builder --chown=nextjs:nodejs /usr/src/app/.next/static ./.next/stat
 
 USER nextjs
 
-EXPOSE 3000
-
-ENV PORT 3000
+EXPOSE 3030
+ENV PORT 3030
+ENV HOSTNAME "127.0.0.1"
 
 CMD ["node", "server.js"]
