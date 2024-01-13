@@ -1,0 +1,55 @@
+# default
+spring:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+
+---
+# local
+spring.config.activate.on-profile: local
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:core;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    hikari:
+      pool-name: db-core-pool
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+---
+# dev
+spring.config.activate.on-profile: dev
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB-URL}
+    username: ${DB-USERNAME}
+    password: ${DB-PASSWORD}
+    hikari:
+      pool-name: db-core-pool
+
+
+---
+# live
+spring.config.activate.on-profile: live
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB-URL}
+    username: ${DB-USERNAME}
+    password: ${DB-PASSWORD}
+    hikari:
+      pool-name: db-core-pool

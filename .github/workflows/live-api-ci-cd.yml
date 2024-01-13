@@ -23,12 +23,12 @@ jobs:
           distribution: 'temurin'
 
       - name: build with gradle
-        run: ./gradlew bootJar
+        run: ./backend/gradlew bootJar
 
       - name: push to dockerhub
         run: |
           docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build --no-cache -t ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO_PATH }}:${{secrets.DOCKER_TAG_LIVE}} -f ./application/api/Dockerfile  .
+          docker build --no-cache -t ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO_PATH }}:${{secrets.DOCKER_TAG_LIVE}} -f ./backend/application/api/Dockerfile  .
           docker push ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO_PATH }}:${{secrets.DOCKER_TAG_LIVE}}
       - name: deploy
         uses: appleboy/ssh-action@master
