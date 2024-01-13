@@ -17,7 +17,7 @@ const credentialsProviderOption: CredentialsConfig<{}> = {
       return {
         id: "1",
         login: "admin",
-        name: "관리자",
+        name: "반디부디 어드민",
         email: "",
         image: "",
       };
