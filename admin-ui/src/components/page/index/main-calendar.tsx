@@ -10,6 +10,62 @@ export interface ISchedule {
 const getListData = (value: Dayjs) => {
   let listData: ISchedule[] = [];
 
+  if(value.year() === 2024 && value.month() === 0) {
+    switch (value.date()) {
+      case 6:
+      case 13:
+        listData = [
+          { type: "success", content: "개별 팀 활동" },
+        ];
+        break;
+      case 20:
+      case 21:
+        listData = [
+          { type: "success", content: "강원도 여행!" },
+        ];
+        break;
+      case 27:
+        listData = [
+          { type: "success", content: "QA, 최종 검수" },
+        ];
+        break;
+      case 2:
+      case 9:
+      case 16:
+      case 23:
+      case 30:
+        listData = [
+          { type: "warning", content: "정규 회의" },
+        ];
+        break;
+    }
+  }
+
+  if(value.year() === 2024 && value.month() === 1) {
+    switch (value.date()) {
+      case 3:
+        listData = [
+          { type: "success", content: "런칭 데이" },
+        ];
+        break;
+      case 10:
+        listData = [
+          { type: "success", content: "개별 팀 활동" },
+        ];
+        break;
+      case 17:
+        listData = [
+          { type: "success", content: "최종 발표" },
+        ];
+        break;
+      case 6:
+      case 13:
+        listData = [
+          { type: "warning", content: "정규 회의" },
+        ];
+        break;
+    }
+  }
   return listData || [];
 };
 
