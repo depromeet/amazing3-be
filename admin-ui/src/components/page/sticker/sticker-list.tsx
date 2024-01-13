@@ -35,6 +35,8 @@ const StickerList = () => {
           messageApi.success("삭제되었습니다.")
       } catch (e) {
           messageApi.error("에러가 발생하였습니다.")
+      } finally {
+          router.push("/sticker/list")
       }
   }
 

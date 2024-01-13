@@ -6,6 +6,7 @@ import { useForm } from "antd/lib/form/Form";
 import React, { useState } from "react";
 import {IStickerFormValue, updateSticker, createSticker} from "@/client/sticker";
 import {UploadOutlined} from "@ant-design/icons";
+import {useRouter} from "next/router";
 
 interface IStickerFormProps {
   id?: string;
