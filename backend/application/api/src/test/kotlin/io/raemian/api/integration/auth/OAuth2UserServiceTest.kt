@@ -1,7 +1,7 @@
 package io.raemian.api.integration.auth
 
 import io.raemian.api.auth.service.OAuth2UserService
-import io.raemian.api.lifemap.LifeMap
+import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.sticker.Sticker
 import io.raemian.storage.db.core.tag.Tag

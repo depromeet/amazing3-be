@@ -1,12 +1,12 @@
 package io.raemian.api.integration.task
 
-import io.raemian.api.lifemap.LifeMap
 import io.raemian.api.task.TaskService
 import io.raemian.api.task.controller.request.CreateTaskRequest
 import io.raemian.api.task.controller.request.RewriteTaskRequest
 import io.raemian.api.task.controller.request.UpdateTaskCompletionRequest
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
+import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.sticker.Sticker
 import io.raemian.storage.db.core.tag.Tag
 import io.raemian.storage.db.core.task.Task

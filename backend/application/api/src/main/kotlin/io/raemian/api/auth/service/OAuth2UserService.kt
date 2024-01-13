@@ -1,7 +1,7 @@
 package io.raemian.api.auth.service
 
 import io.raemian.api.auth.domain.CurrentUser
-import io.raemian.api.lifemap.LifeMap
+import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.user.Authority
 import io.raemian.storage.db.core.user.User
@@ -35,7 +35,7 @@ class OAuth2UserService(
         ) {
             OAuthProvider.GOOGLE -> {
                 val email =
-                    oAuth2User.attributes["email"]?.toString() ?: throw RuntimeException("이메일이없음")
+                    oAuth2User.attributes["email"]?.toString() ?: throw RuntimeException("구글 이메일이없음")
                 val name = oAuth2User.attributes["name"]?.toString()
                 val image = oAuth2User.attributes["picture"]?.toString() ?: ""
                 val user = upsert(
@@ -52,7 +52,7 @@ class OAuth2UserService(
 
             OAuthProvider.NAVER -> {
                 val userInfo = oAuth2User.attributes[usernameAttributeName] as Map<String, String>
-                val email = userInfo["email"] ?: throw RuntimeException("이메일없음")
+                val email = userInfo["email"] ?: throw RuntimeException("네이버 이메일없음")
                 val image = userInfo["profile_image"] ?: ""
                 val user = upsert(
                     email = email,
@@ -69,12 +69,14 @@ class OAuth2UserService(
             OAuthProvider.KAKAO -> {
                 val id = oAuth2User.attributes["id"]?.toString() ?: ""
                 val properties = oAuth2User.attributes["properties"] as Map<String, String>
+                val account = oAuth2User.attributes["kakao_account"] as Map<String, String>
+
                 val profileImage = properties["profile_image"] ?: ""
                 val thumbnailImage = properties["thumbnail_image"]
                 val nickname = properties["nickname"]
-                val email = properties["email"]
+                val email = account["email"] ?: throw RuntimeException("카카오 이메일없음")
                 val user = upsert(
-                    email = id,
+                    email = email,
                     image = profileImage,
                     oAuthProvider = provider,
                 )
@@ -89,7 +91,7 @@ class OAuth2UserService(
 
     @Transactional
     fun upsert(email: String, image: String, oAuthProvider: OAuthProvider): User =
-        userRepository.findByEmail(email)
+        userRepository.findByEmailAndProvider(email, oAuthProvider)
             ?: createUser(email, image, oAuthProvider)
 
     private fun createUser(email: String, image: String, oAuthProvider: OAuthProvider): User {

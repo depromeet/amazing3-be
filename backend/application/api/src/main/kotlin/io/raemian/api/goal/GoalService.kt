@@ -3,12 +3,12 @@ package io.raemian.api.goal
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
-import io.raemian.api.lifemap.LifeMap
 import io.raemian.api.sticker.StickerService
 import io.raemian.api.support.RaemianLocalDate
 import io.raemian.api.tag.TagService
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
+import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.user.UserRepository
 import org.springframework.stereotype.Service

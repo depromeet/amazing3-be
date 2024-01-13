@@ -1,9 +1,9 @@
 package io.raemian.api.integration.lifemap
 
-import io.raemian.api.lifemap.LifeMap
 import io.raemian.api.lifemap.LifeMapService
-import io.raemian.api.lifemap.controller.UpdatePublicRequest
+import io.raemian.api.lifemap.domain.UpdatePublicRequest
 import io.raemian.storage.db.core.goal.Goal
+import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.sticker.Sticker
 import io.raemian.storage.db.core.tag.Tag
@@ -157,7 +157,7 @@ class LifeMapServiceTest {
         // then
         assertThatThrownBy {
             lifeMapService.findFirstByUserName(USER_FIXTURE.username!!)
-        }.isInstanceOf(SecurityException::class.java)
+        }.isInstanceOf(RuntimeException::class.java)
     }
 
     @Test

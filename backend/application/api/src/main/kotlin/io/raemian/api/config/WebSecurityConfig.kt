@@ -5,6 +5,7 @@ import io.raemian.api.auth.service.OAuth2UserService
 import io.raemian.api.support.TokenProvider
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
@@ -30,6 +31,8 @@ class WebSecurityConfig(
     private val corsFilter: CorsFilter,
     private val tokenProvider: TokenProvider,
     private val oAuth2UserService: OAuth2UserService,
+    @Value("\${spring.profiles.active:local}")
+    private val profile: String,
 ) : SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -58,6 +61,7 @@ class WebSecurityConfig(
                     .requestMatchers(AntPathRequestMatcher("/login/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/one-baily-actuator/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/log/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/open/life-map/**")).permitAll()
                     .requestMatchers(
                         AntPathRequestMatcher("/swagger*/**"),
                         AntPathRequestMatcher("/v3/api-docs/**"),
@@ -77,7 +81,8 @@ class WebSecurityConfig(
                     response.setHeader("x-token", tokenDTO.accessToken)
                     log.info("x-token access ${tokenDTO.accessToken}")
                     // TODO edit redirect url
-                    val redirectUrl = "https://bandiboodi.com/oauth2/token"
+                    val redirectUrl =
+                        if (profile == "live") "https://bandiboodi.com/oauth2/token" else "http://localhost:3000/oauth2/token"
                     response.sendRedirect("$redirectUrl?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
                 }
                 it.failureHandler { request, response, exception ->

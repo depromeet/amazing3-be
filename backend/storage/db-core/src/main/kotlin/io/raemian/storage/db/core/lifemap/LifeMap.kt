@@ -1,4 +1,4 @@
-package io.raemian.api.lifemap
+package io.raemian.storage.db.core.lifemap
 
 import io.raemian.storage.db.core.BaseEntity
 import io.raemian.storage.db.core.goal.Goal
@@ -43,5 +43,12 @@ class LifeMap(
 
     fun addGoal(goal: Goal) {
         this.goals.add(goal)
+    }
+
+    fun sortGoals(): List<Goal> {
+        return goals.sortedWith(
+            compareBy<Goal> { it.deadline }
+                .thenByDescending { it.createdAt },
+        )
     }
 }

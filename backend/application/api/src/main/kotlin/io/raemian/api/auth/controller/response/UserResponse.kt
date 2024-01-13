@@ -1,7 +1,7 @@
 package io.raemian.api.auth.controller.response
 
 import io.raemian.api.auth.domain.UserDTO
-import io.raemian.api.lifemap.controller.LifeMapResponse
+import io.raemian.api.lifemap.domain.LifeMapResponse
 import java.time.LocalDate
 import java.time.LocalDateTime
 

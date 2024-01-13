@@ -1,9 +1,12 @@
 package io.raemian.storage.db.core.user
 
+import io.raemian.storage.db.core.user.enums.OAuthProvider
 import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDateTime
 
 interface UserRepository : JpaRepository<User, Long> {
+
+    fun findByEmailAndProvider(email: String, provider: OAuthProvider): User?
 
     fun findByEmail(email: String): User?
 

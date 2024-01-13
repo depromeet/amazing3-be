@@ -1,15 +1,18 @@
 package io.raemian.api.lifemap
 
-import io.raemian.api.lifemap.controller.LifeMapResponse
-import io.raemian.api.lifemap.controller.UpdatePublicRequest
+import io.raemian.api.lifemap.domain.LifeMapResponse
+import io.raemian.api.lifemap.domain.UpdatePublicRequest
 import io.raemian.storage.db.core.goal.Goal
+import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
+import io.raemian.storage.db.core.user.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class LifeMapService(
     private val lifeMapRepository: LifeMapRepository,
+    private val userRepository: UserRepository,
 ) {
 
     @Transactional(readOnly = true)
@@ -17,7 +20,9 @@ class LifeMapService(
         val lifeMap = lifeMapRepository.findFirstByUserId(userId)
             ?: throw NoSuchElementException("존재하지 않는 유저입니다. $userId")
 
-        sortByDeadlineAscendingAndCreatedAtDescending(lifeMap.goals)
+        // TODO edit immutable
+        lifeMap.goals = lifeMap.sortGoals().toMutableList()
+
         return LifeMapResponse(lifeMap)
     }
 
@@ -27,8 +32,12 @@ class LifeMapService(
             ?: throw NoSuchElementException("존재하지 않는 유저입니다. $username")
 
         validateLifeMapPublic(lifeMap)
-        sortByDeadlineAscendingAndCreatedAtDescending(lifeMap.goals)
-        return LifeMapResponse(lifeMap)
+
+        // TODO edit immutable
+        lifeMap.goals = lifeMap.sortGoals().toMutableList()
+
+        val user = userRepository.getById(lifeMap.user.id!!)
+        return LifeMapResponse(lifeMap, user)
     }
 
     @Transactional
@@ -45,6 +54,5 @@ class LifeMapService(
         )
 
     private fun validateLifeMapPublic(lifeMap: LifeMap) =
-        takeUnless { lifeMap.isPublic }
-            .apply { throw SecurityException() }
+        takeIf { lifeMap.isPublic } ?: throw RuntimeException("life map is private")
 }

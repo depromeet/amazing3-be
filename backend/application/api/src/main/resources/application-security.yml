@@ -23,24 +23,24 @@ spring:
             user_name_attribute: id
         registration:
           naver:
-            client-id: aa
-            client-secret: aa
-            redirect-uri: http://localhost:8080/login/oauth2/code/naver
+            redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/naver
+            client-id: ${NAVER-CLIENT-ID}
+            client-secret: ${NAVER-CLIENT-SECRET}
             authorization-grant-type: authorization_code
             scope:
               - email
               - name
             client-name: naver
           kakao:
-            client-id: aa
-            redirect-uri: http://localhost:8080/api/login/oauth2/code/kakao
+            redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/kakao
+            client-id: ${KAKAO-CLIENT-ID}
             authorization-grant-type: authorization_code
             scope:
-              - profile_nickname
+              - account_email
               - profile_image
             client-name: kakao
           google:
-            redirect-uri: ${GOOGLE-REDIRECT-URI}
+            redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/google
             client-id: ${GOOGLE-CLIENT-ID}
             client-secret: ${GOOGLE-CLIENT-SECRET}
             scope:
@@ -74,20 +74,20 @@ spring:
             user_name_attribute: id
         registration:
           naver:
-            client-id: aa
-            client-secret: aa
-            redirect-uri: http://localhost:8080/login/oauth2/code/naver
+            redirect-uri: ${NAVER-REDIRECT-URI}
+            client-id: ${NAVER-CLIENT-ID}
+            client-secret: ${NAVER-CLIENT-SECRET}
             authorization-grant-type: authorization_code
             scope:
               - email
               - name
             client-name: naver
           kakao:
-            client-id: aa
-            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            redirect-uri: ${KAKAO-REDIRECT-URI}
+            client-id: ${KAKAO-CLIENT-ID}
             authorization-grant-type: authorization_code
             scope:
-              - profile_nickname
+              - account_email
               - profile_image
             client-name: kakao
           google:
@@ -133,8 +133,8 @@ spring:
               - name
             client-name: naver
           kakao:
-            client-id: ${KAKAO-CLIENT-ID}
             redirect-uri: ${KAKAO-REDIRECT-URI}
+            client-id: ${KAKAO-CLIENT-ID}
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
