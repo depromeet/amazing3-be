@@ -2,7 +2,6 @@ import DefaultTable from "@/components/shared/ui/default-table";
 import DefaultTableBtn from "@/components/shared/ui/default-table-btn";
 import {Alert, Button, Dropdown, MenuProps, message, Popconfirm} from "antd";
 import { ColumnsType } from "antd/es/table";
-import { Download } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useCallback, useMemo, useState } from "react";
@@ -39,16 +38,6 @@ const StickerList = () => {
           router.push("/sticker/list")
       }
   }
-
-  const modifyDropdownItems: MenuProps["items"] = useMemo(
-    () => [
-      {
-        key: "statusUpdate",
-        label: <a onClick={() => console.log(selectedRowKeys)}>상태수정</a>,
-      },
-    ],
-    [selectedRowKeys]
-  );
 
   const rowSelection = {
     selectedRowKeys,
@@ -135,17 +124,10 @@ const StickerList = () => {
       {contextHolder}
       <DefaultTableBtn className="justify-between">
         <div>
-          <Dropdown disabled={!hasSelected} menu={{ items: modifyDropdownItems }} trigger={["click"]}>
-            <Button>일괄수정</Button>
-          </Dropdown>
-
           <span style={{ marginLeft: 8 }}>{hasSelected ? `${selectedRowKeys.length}건 선택` : ""}</span>
         </div>
 
         <div className="flex-item-list">
-          <Button className="btn-with-icon" icon={<Download />}>
-            엑셀 다운로드
-          </Button>
           <Button type="primary" onClick={() => router.push("/sticker/new")}>
             스티커등록
           </Button>

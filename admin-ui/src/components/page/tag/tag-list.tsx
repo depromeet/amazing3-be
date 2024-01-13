@@ -41,16 +41,6 @@ const TagList = () => {
       }
   }
 
-  const modifyDropdownItems: MenuProps["items"] = useMemo(
-    () => [
-      {
-        key: "statusUpdate",
-        label: <a onClick={() => console.log(selectedRowKeys)}>상태수정</a>,
-      },
-    ],
-    [selectedRowKeys]
-  );
-
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
@@ -114,17 +104,10 @@ const TagList = () => {
       {contextHolder}
       <DefaultTableBtn className="justify-between">
         <div>
-          <Dropdown disabled={!hasSelected} menu={{ items: modifyDropdownItems }} trigger={["click"]}>
-            <Button>일괄수정</Button>
-          </Dropdown>
-
           <span style={{ marginLeft: 8 }}>{hasSelected ? `${selectedRowKeys.length}건 선택` : ""}</span>
         </div>
 
         <div className="flex-item-list">
-          <Button className="btn-with-icon" icon={<Download />}>
-            엑셀 다운로드
-          </Button>
           <Button type="primary" onClick={() => router.push("/tag/new")}>
             태그등록
           </Button>
