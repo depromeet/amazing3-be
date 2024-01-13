@@ -23,7 +23,7 @@ jobs:
           distribution: 'temurin'
 
       - name: build with gradle
-        run: ./gradlew bootJar
+        run: ./backend/gradlew bootJar
 
       - name: push to dockerhub
         run: |
