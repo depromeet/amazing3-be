@@ -2,44 +2,22 @@ import { Badge, BadgeProps, Calendar, CalendarProps } from "antd";
 import { Dayjs } from "dayjs";
 import React from "react";
 
+export interface ISchedule {
+  type: string;
+  content: string;
+}
+
 const getListData = (value: Dayjs) => {
-  let listData;
-  switch (value.date()) {
-    case 8:
-      listData = [
-        { type: "warning", content: "외부 미팅" },
-        { type: "success", content: "내부 미팅" },
-      ];
-      break;
-    case 10:
-      listData = [
-        { type: "warning", content: "외부 미팅" },
-        { type: "success", content: "내부 미팅" },
-        { type: "error", content: "미팅 1" },
-      ];
-      break;
-    case 15:
-      listData = [
-        { type: "warning", content: "외부 미팅" },
-        { type: "success", content: "내부 미팅" },
-        { type: "error", content: "미팅 1." },
-        { type: "error", content: "미팅 2." },
-        { type: "error", content: "미팅 3." },
-        { type: "error", content: "미팅 4." },
-      ];
-      break;
-    default:
-  }
+  let listData: ISchedule[] = [];
+
   return listData || [];
 };
 
 const getMonthData = (value: Dayjs) => {
-  if (value.month() === 8) {
-    return 1394;
-  }
+  return null
 };
 
-const CalendarSample = () => {
+const MainCalendar = () => {
   const monthCellRender = (value: Dayjs) => {
     const num = getMonthData(value);
     return num ? (
@@ -72,4 +50,4 @@ const CalendarSample = () => {
   return <Calendar cellRender={cellRender} />;
 };
 
-export default React.memo(CalendarSample);
+export default React.memo(MainCalendar);

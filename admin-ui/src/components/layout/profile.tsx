@@ -15,20 +15,12 @@ const Profile = () => {
   const items: MenuProps["items"] = [
     {
       label: (
-        <Link href="/sample/profile" className="min-w-[8rem] link-with-icon">
-          <User width={16} height={16} />내 프로필
-        </Link>
-      ),
-      key: "0",
-    },
-    {
-      label: (
         <a onClick={handleLogoutClick} className="link-with-icon">
           <LogOut width={16} height={16} />
           로그아웃
         </a>
       ),
-      key: "1",
+      key: "0",
     },
   ];
 
