@@ -56,7 +56,7 @@ const StickerList = () => {
               수정
             </Link>
             <Popconfirm
-              title="태그을 삭제하시겠습니까?"
+              title="스티커를 삭제하시겠습니까?"
               onConfirm={() => deleteSticker(record.id)}
               okText="예"
               cancelText="아니오"
