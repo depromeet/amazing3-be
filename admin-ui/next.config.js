@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["antd"],
+  output: 'standalone'
 };
 
 module.exports = nextConfig;
