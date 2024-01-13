@@ -36,30 +36,33 @@ const TagForm = ({ id, initialValues }: ITagFormProps) => {
   };
 
   return (
-      <DefaultForm<ITagFormValue>
-          form={form}
-          initialValues={{
-            id: id,
-            content: initialValues?.content
-          }}
-          onFinish={handleFinish}
-      >
-        <FormSection title="태그 수정 폼" description="목표에 설정 가능한 태그 수정 기능">
-          <FormGroup title="태그 이름">
-            <Form.Item name="content">
-              <Input.TextArea placeholder="태그 이름을 적어주세요." rows={1} />
-            </Form.Item>
-          </FormGroup>
+      <>
+        {contextHolder}
+        <DefaultForm<ITagFormValue>
+            form={form}
+            initialValues={{
+              id: id,
+              content: initialValues?.content
+            }}
+            onFinish={handleFinish}
+        >
+          <FormSection title="태그 수정 폼" description="목표에 설정 가능한 태그 수정 기능">
+            <FormGroup title="태그 이름">
+              <Form.Item name="content">
+                <Input.TextArea placeholder="태그 이름을 적어주세요." rows={1} />
+              </Form.Item>
+            </FormGroup>
 
 
-        </FormSection>
+          </FormSection>
 
-        <div className="text-center">
-          <Button htmlType="submit" type="primary">
-            제출
-          </Button>
-        </div>
-      </DefaultForm>
+          <div className="text-center">
+            <Button htmlType="submit" type="primary">
+              제출
+            </Button>
+          </div>
+        </DefaultForm>
+      </>
   );
 };
 

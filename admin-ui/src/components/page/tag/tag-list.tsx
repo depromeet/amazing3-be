@@ -1,6 +1,6 @@
 import DefaultTable from "@/components/shared/ui/default-table";
 import DefaultTableBtn from "@/components/shared/ui/default-table-btn";
-import { Alert, Button, Dropdown, MenuProps, Popconfirm } from "antd";
+import {Alert, Button, Dropdown, MenuProps, message, Popconfirm} from "antd";
 import { ColumnsType } from "antd/es/table";
 import { Download } from "lucide-react";
 import Link from "next/link";
@@ -10,7 +10,9 @@ import {deleteTag, ITag, useTags} from "@/client/tag";
 
 const TagList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
+
 
   const { data, error, isLoading } = useTags();
 
@@ -27,6 +29,15 @@ const TagList = () => {
   const onSelectChange = useCallback((newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   }, []);
+
+  const onDelete = (record: ITag) => {
+      try{
+          deleteTag(record.id)
+          messageApi.success("삭제되었습니다.")
+      } catch (e) {
+          messageApi.error("에러가 발생하였습니다.")
+      }
+  }
 
   const modifyDropdownItems: MenuProps["items"] = useMemo(
     () => [
@@ -57,7 +68,7 @@ const TagList = () => {
             </Link>
             <Popconfirm
               title="태그을 삭제하시겠습니까?"
-              onConfirm={() => deleteTag(record.id)}
+              onConfirm={() => onDelete(record)}
               okText="예"
               cancelText="아니오"
             >
@@ -98,6 +109,7 @@ const TagList = () => {
 
   return (
     <>
+      {contextHolder}
       <DefaultTableBtn className="justify-between">
         <div>
           <Dropdown disabled={!hasSelected} menu={{ items: modifyDropdownItems }} trigger={["click"]}>

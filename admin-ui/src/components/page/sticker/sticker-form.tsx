@@ -53,37 +53,40 @@ const StickerForm = ({ id, initialValues }: IStickerFormProps) => {
 
 
   return (
-      <DefaultForm<IStickerFormValue>
-          form={form}
-          initialValues={{
-            id: id,
-            name: initialValues?.name
-          }}
-          onFinish={handleFinish}
-      >
-        <FormSection title="스티커 수정 폼" description="목표에 설정 가능한 스티커 수정 기능">
-          <FormGroup title="스티커 이름">
-            <Form.Item name="name">
-              <Input.TextArea placeholder="태그 이름을 적어주세요." rows={1} />
-            </Form.Item>
-          </FormGroup>
+      <>
+        {contextHolder}
+        <DefaultForm<IStickerFormValue>
+            form={form}
+            initialValues={{
+              id: id,
+              name: initialValues?.name
+            }}
+            onFinish={handleFinish}
+        >
+          <FormSection title="스티커 수정 폼" description="목표에 설정 가능한 스티커 수정 기능">
+            <FormGroup title="스티커 이름">
+              <Form.Item name="name">
+                <Input.TextArea placeholder="태그 이름을 적어주세요." rows={1} />
+              </Form.Item>
+            </FormGroup>
 
-          <FormGroup title="PNG 파일">
-            <Form.Item name="image">
-              <Upload action={'/wow/wow'} {...props}>
-                <Button icon={<UploadOutlined />}>Upload png only</Button>
-              </Upload>
-            </Form.Item>
-          </FormGroup>
+            <FormGroup title="PNG 파일">
+              <Form.Item name="image">
+                <Upload action={'/wow/wow'} {...props}>
+                  <Button icon={<UploadOutlined />}>Upload png only</Button>
+                </Upload>
+              </Form.Item>
+            </FormGroup>
 
-        </FormSection>
+          </FormSection>
 
-        <div className="text-center">
-          <Button htmlType="submit" type="primary">
-            제출
-          </Button>
-        </div>
-      </DefaultForm>
+          <div className="text-center">
+            <Button htmlType="submit" type="primary">
+              제출
+            </Button>
+          </div>
+        </DefaultForm>
+      </>
   );
 };
 

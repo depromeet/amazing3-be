@@ -1,6 +1,6 @@
 import DefaultTable from "@/components/shared/ui/default-table";
 import DefaultTableBtn from "@/components/shared/ui/default-table-btn";
-import { Alert, Button, Dropdown, MenuProps, Popconfirm } from "antd";
+import {Alert, Button, Dropdown, MenuProps, message, Popconfirm} from "antd";
 import { ColumnsType } from "antd/es/table";
 import { Download } from "lucide-react";
 import Link from "next/link";
@@ -10,6 +10,7 @@ import {deleteSticker, ISticker, useStickers} from "@/client/sticker";
 
 const StickerList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
 
   const { data, error, isLoading } = useStickers();
@@ -27,6 +28,15 @@ const StickerList = () => {
   const onSelectChange = useCallback((newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   }, []);
+
+  const onDelete = (record: ISticker) => {
+      try{
+          deleteSticker(record.id)
+          messageApi.success("삭제되었습니다.")
+      } catch (e) {
+          messageApi.error("에러가 발생하였습니다.")
+      }
+  }
 
   const modifyDropdownItems: MenuProps["items"] = useMemo(
     () => [
@@ -57,7 +67,7 @@ const StickerList = () => {
             </Link>
             <Popconfirm
               title="스티커를 삭제하시겠습니까?"
-              onConfirm={() => deleteSticker(record.id)}
+              onConfirm={() => onDelete(record)}
               okText="예"
               cancelText="아니오"
             >
@@ -120,6 +130,7 @@ const StickerList = () => {
 
   return (
     <>
+      {contextHolder}
       <DefaultTableBtn className="justify-between">
         <div>
           <Dropdown disabled={!hasSelected} menu={{ items: modifyDropdownItems }} trigger={["click"]}>
