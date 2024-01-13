@@ -1,7 +1,7 @@
 server:
   image:
     url: ${IMAGE-SERVER-URL:http://localhost:8080}
-    file-path: ${IMAGE-FILE-PATH:/Users/wkwon/Desktop}
+    file-path: ${IMAGE-FILE-PATH:/Users/{username}}/Desktop}
 
 ---
 # local
