@@ -42,28 +42,6 @@ const mainMenuData: IMenu[] = [
   }
 ];
 
-const devMenuData: IMenu[] = [
-  {
-    id: "dev",
-    name: "사용 가이드",
-    icon: <Monitor className="w-5 h-5" />,
-    submenu: [
-      {
-        name: "폼",
-        link: {
-          path: "/sample/form",
-        },
-      },
-      {
-        name: "반디부디 폼",
-        link: {
-          path: "/sample/bandiboodi-form",
-        },
-      }
-    ],
-  },
-];
-
 const MainMenu = () => {
   return (
     <>
@@ -73,13 +51,6 @@ const MainMenu = () => {
         </Divider>
 
         <Menu data={mainMenuData} />
-      </>
-      <>
-        <Divider orientation="left" plain>
-          개발
-        </Divider>
-
-        <Menu data={devMenuData} />
       </>
     </>
   );
