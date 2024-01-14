@@ -2,15 +2,3 @@ server:
   image:
     url: ${IMAGE-SERVER-URL:http://localhost:8080}
     file-path: ${IMAGE-FILE-PATH:/Users/{username}}/Desktop}
-
----
-# local
-spring.config.activate.on-profile: local
-
----
-# dev
-spring.config.activate.on-profile: dev
-
----
-# live
-spring.config.activate.on-profile: live
