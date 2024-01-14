@@ -22,5 +22,5 @@ spring:
   profiles:
     group:
       test:
-        - db-core
+        - db-core-test
         - image

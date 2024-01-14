@@ -22,7 +22,7 @@ spring:
   profiles:
     group:
       local:
-        - db-core
+        - db-core-local
         - image
 
 ---
@@ -31,7 +31,7 @@ spring:
   profiles:
     group:
       dev:
-        - db-core
+        - db-core-dev
         - image
 
 ---
@@ -40,5 +40,5 @@ spring:
   profiles:
     group:
       live:
-        - db-core
+        - db-core-live
         - image
