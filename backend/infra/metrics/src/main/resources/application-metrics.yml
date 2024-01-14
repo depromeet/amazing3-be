@@ -1,3 +1,25 @@
+# test
+spring.config.activate.on-profile: test
+
+management: # Actuator
+  endpoints:
+    enabled-by-default: false # default 사용하지 않을 것
+    jmx: # JMX 형태 사용 불가 처리
+      exposure:
+        exclude: '*'
+    web:
+      base-path: /one-baily-actuator # Actuator 경로 변경
+      exposure:
+        include: metrics, prometheus
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  # actuator 포트 변경
+  server:
+    port: ${MANAGEMENT_PORT:7463}
+---
 # local
 spring.config.activate.on-profile: local
 

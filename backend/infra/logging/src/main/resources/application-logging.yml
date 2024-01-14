@@ -1,3 +1,11 @@
+# test
+spring.config.activate.on-profile: test
+logging.config: classpath:logback/logback-local.xml
+
+slack:
+  webhook:
+    url: ${SLACK-WEBHOOK-URL:EMPTY}
+---
 # local
 spring.config.activate.on-profile: local
 logging.config: classpath:logback/logback-local.xml

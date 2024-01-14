@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB-URL}
+    username: ${DB-USERNAME}
+    password: ${DB-PASSWORD}
+    hikari:
+      pool-name: db-core-pool
