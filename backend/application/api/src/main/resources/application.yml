@@ -21,8 +21,8 @@ spring:
   profiles:
     group:
       local:
-        - security
-        - db-core
+        - security-local
+        - db-core-local
         - logging
         - metrics
 
@@ -32,8 +32,8 @@ spring:
   profiles:
     group:
       dev:
-        - security
-        - db-core
+        - security-dev
+        - db-core-dev
         - logging
         - metrics
 ---
@@ -42,7 +42,7 @@ spring:
   profiles:
     group:
       live:
-        - security
-        - db-core
+        - security-live
+        - db-core-live
         - logging
         - metrics
