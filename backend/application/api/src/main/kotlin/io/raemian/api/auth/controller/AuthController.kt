@@ -9,6 +9,7 @@ import io.raemian.api.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -41,6 +42,13 @@ class AuthController(
             birth = updateUserRequest.birth,
             username = updateUserRequest.username,
         )
+        return ResponseEntity.ok().build()
+    }
+
+    @Operation(summary = "유저 삭제")
+    @DeleteMapping("/my")
+    fun delete(@AuthenticationPrincipal currentUser: CurrentUser): ResponseEntity<Void> {
+        authService.delete(currentUser.id)
         return ResponseEntity.ok().build()
     }
 }
