@@ -1,8 +1,8 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB-URL}
-    username: ${DB-USERNAME}
-    password: ${DB-PASSWORD}
+    url: ENC(jnA7eWlf1zdjW5d2Flm/8ZetYCGTR3wkTE7Wk7NdJWJK9XZmcSNO300/VHhHG04tUQlf4nq5sbc6ShvOF1MV+A==)
+    username: ENC(ORiZUOmorrTYkZUUCqHN8g==)
+    password: ENC(A6Ii6Iq/etslKSo3kRcS0g==)
     hikari:
       pool-name: db-core-pool

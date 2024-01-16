@@ -1,4 +1,5 @@
 # local
+spring.config.activate.on-profile: local
 server:
   port: 8080
   servlet:
@@ -22,8 +23,8 @@ spring:
         registration:
           naver:
             redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/naver
-            client-id: ${NAVER-CLIENT-ID}
-            client-secret: ${NAVER-CLIENT-SECRET}
+            client-id: ENC(qFYukOWHaCGpavvnBwIIe5MfIbMaETjo8ABJPEvKL1o=)
+            client-secret: ENC(sJK/TYU3PJj1+d6mB1OXjZTrmUFdALuC)
             authorization-grant-type: authorization_code
             scope:
               - email
@@ -31,16 +32,16 @@ spring:
             client-name: naver
           kakao:
             redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/kakao
-            client-id: ${KAKAO-CLIENT-ID}
+            client-id: ENC(LzuIWpuN7JG7pwbU87S4DvColRj57LtcnRb0qfDdyGpnNUpI2+FHgCyJs0p2Wn7/)
             authorization-grant-type: authorization_code
             scope:
-              - account_email
+              - profile_nickname
               - profile_image
             client-name: kakao
           google:
             redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/google
-            client-id: ${GOOGLE-CLIENT-ID}
-            client-secret: ${GOOGLE-CLIENT-SECRET}
+            client-id: ENC(v6CCXncJwOS8W6YizTBkDskIbDrBV/DM+1WpJvERtF6YUahSyevhaoxPQxkdy3DXK++9NZMP7OeqRi7qhgRizQNjXD+u2hNIxIcWu6B71fATnGojMqiDEg==)
+            client-secret: ENC(Sv6L3GpxMxJA7s93BGorm6DclzLwJYSg8rezWXhkAi0PY85zzA/d7ulKspstKMY/)
             scope:
               - email
               - profile
