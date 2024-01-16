@@ -39,4 +39,4 @@ jobs:
         working-directory: ./backend
         if: steps.changes.outputs.application == 'true'
         run: |
-          ./backend/gradlew build --no-build-cache
+          ./gradlew build --no-build-cache
