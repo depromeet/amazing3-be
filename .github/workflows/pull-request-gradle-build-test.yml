@@ -36,6 +36,7 @@ jobs:
         run: chmod +x ./backend/gradlew
         
       - name: Gradle Build
+        working-directory: ./backend
         if: steps.changes.outputs.application == 'true'
         run: |
           ./backend/gradlew build --no-build-cache
