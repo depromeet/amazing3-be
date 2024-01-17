@@ -1,5 +1,5 @@
 package io.raemian.api.support.error
 
 open class CoreApiException(
-    errorInfo: ErrorInfo,
+    val errorInfo: ErrorInfo,
 ) : RuntimeException(errorInfo.message)

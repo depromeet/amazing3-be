@@ -1,6 +1,7 @@
 package io.raemian.api.config
 
 import io.raemian.api.log.LogService
+import io.raemian.api.support.error.CoreApiException
 import io.raemian.api.support.error.ErrorInfo
 import io.raemian.api.support.response.ApiResponse
 import org.slf4j.Logger
@@ -15,10 +16,19 @@ class GlobalExceptionHandler(
 ) {
     private val log: Logger = LoggerFactory.getLogger(javaClass)
 
+    @ExceptionHandler(CoreApiException::class)
+    fun handleCoreApiException(e: CoreApiException): ResponseEntity<ApiResponse<Any>> {
+        log.error("Exception : {}", e.message, e)
+        return ResponseEntity(ApiResponse.error(e.errorInfo), e.errorInfo.status)
+    }
+
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception): ResponseEntity<ApiResponse<Any>> {
         log.error("Exception : {}", e.message, e)
         logService.createSlackErrorLog(e)
-        return ResponseEntity(ApiResponse.error(ErrorInfo.DEFAULT_ERROR), ErrorInfo.DEFAULT_ERROR.status)
+        return ResponseEntity(
+            ApiResponse.error(ErrorInfo.DEFAULT_ERROR),
+            ErrorInfo.DEFAULT_ERROR.status,
+        )
     }
 }
