@@ -48,12 +48,6 @@ class LifeMapService(
         lifeMap.updatePublic(updatePublicRequest.isPublic)
     }
 
-    private fun sortByDeadlineAscendingAndCreatedAtDescending(goals: List<Goal>): List<Goal> =
-        goals.sortedWith(
-            compareBy<Goal> { it.deadline }
-                .thenByDescending { it.createdAt },
-        )
-
     private fun validateLifeMapPublic(lifeMap: LifeMap) =
         takeIf { lifeMap.isPublic } ?: throw PrivateLifeMapException()
 }
