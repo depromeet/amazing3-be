@@ -3,7 +3,6 @@ package io.raemian.api.lifemap
 import io.raemian.api.lifemap.domain.LifeMapResponse
 import io.raemian.api.lifemap.domain.UpdatePublicRequest
 import io.raemian.api.support.error.PrivateLifeMapException
-import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.user.UserRepository
