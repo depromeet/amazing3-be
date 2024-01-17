@@ -5,6 +5,7 @@ import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.sticker.StickerService
 import io.raemian.api.support.RaemianLocalDate
+import io.raemian.api.support.error.PrivateLifeMapException
 import io.raemian.api.tag.TagService
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
@@ -63,7 +64,7 @@ class GoalService(
 
     private fun validateLifeMapPublic(lifeMap: LifeMap) {
         if (!lifeMap.isPublic) {
-            throw SecurityException()
+            throw PrivateLifeMapException()
         }
     }
 

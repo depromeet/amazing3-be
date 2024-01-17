@@ -15,4 +15,11 @@ enum class ErrorInfo(
         "An Unexpected Error Has Occurred.",
         LogLevel.ERROR,
     ),
+
+    PRIVATE_LIFE_MAP_EXCEPTION(
+        HttpStatus.FORBIDDEN,
+        1001,
+        "유저의 인생 지도가 비공개 상태입니다.",
+        LogLevel.INFO,
+    ),
 }
