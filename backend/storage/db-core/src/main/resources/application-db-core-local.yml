@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(EuTWOejZ/TVxzVr8BuOraMUtzqHbSrMmVbG8i3sxaegIAOHHfwvm3dLHGDpJMVmQE8GHC9wablsS370aoZEZZg==)
+    username: ENC(y6jFI+0DMaRvoUW962oCyg==)
+    password: ENC(cuWaUt+8bNMAV6aLO4GMaw==)
+    hikari:
+      pool-name: db-core-pool

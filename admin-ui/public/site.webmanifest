@@ -1,0 +1,14 @@
+{
+  "name": "Admin UI",
+  "short_name": "Admin UI",
+  "icons": [
+    {
+      "src": "/bandiboodi.png",
+      "sizes": "1080x1080",
+      "type": "image/png"
+    },
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

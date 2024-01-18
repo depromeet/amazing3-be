@@ -33,9 +33,10 @@ jobs:
           cache: 'gradle'
 
       - name: gradlew 권한 부여
-        run: chmod +x ./gradlew
+        run: chmod +x ./backend/gradlew
         
       - name: Gradle Build
+        working-directory: ./backend
         if: steps.changes.outputs.application == 'true'
         run: |
           ./gradlew build --no-build-cache
