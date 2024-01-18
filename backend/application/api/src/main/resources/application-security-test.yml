@@ -24,8 +24,8 @@ spring:
         registration:
           naver:
             redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/naver
-            client-id: ${NAVER-CLIENT-ID}
-            client-secret: ${NAVER-CLIENT-SECRET}
+            client-id: EMPTY-VALUE
+            client-secret: EMPTY-VALUE
             authorization-grant-type: authorization_code
             scope:
               - email
@@ -33,16 +33,16 @@ spring:
             client-name: naver
           kakao:
             redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/kakao
-            client-id: ${KAKAO-CLIENT-ID}
+            client-id: EMPTY-VALUE
             authorization-grant-type: authorization_code
             scope:
-              - account_email
+              - profile_nickname
               - profile_image
             client-name: kakao
           google:
             redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/google
-            client-id: ${GOOGLE-CLIENT-ID}
-            client-secret: ${GOOGLE-CLIENT-SECRET}
+            client-id: EMPTY-VALUE
+            client-secret: EMPTY-VALUE
             scope:
               - email
               - profile

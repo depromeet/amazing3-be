@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDateTime
 
 interface GoalRepository : JpaRepository<Goal, Long> {
-
     fun findUserByCreatedAtGreaterThanEqual(createdAt: LocalDateTime): List<Goal>
 
     override fun getById(id: Long): Goal =

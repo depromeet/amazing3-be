@@ -36,6 +36,7 @@ class OAuth2UserService(
             OAuthProvider.GOOGLE -> {
                 val email =
                     oAuth2User.attributes["email"]?.toString() ?: throw RuntimeException("구글 이메일이없음")
+
                 val name = oAuth2User.attributes["name"]?.toString()
                 val image = oAuth2User.attributes["picture"]?.toString() ?: ""
                 val user = upsert(

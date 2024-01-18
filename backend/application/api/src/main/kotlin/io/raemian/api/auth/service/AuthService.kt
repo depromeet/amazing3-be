@@ -34,6 +34,10 @@ class AuthService(
         return userRepository.save(updated)
     }
 
+    fun delete(id: Long) {
+        userRepository.deleteById(id)
+    }
+
     override fun loadUserByUsername(username: String): UserDetails {
         val user = userRepository.findByEmail(username) ?: throw UsernameNotFoundException("not found $username")
         return CurrentUser(

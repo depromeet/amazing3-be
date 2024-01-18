@@ -22,26 +22,26 @@ spring:
             user_name_attribute: id
         registration:
           naver:
-            client-id: ${NAVER-CLIENT-ID}
-            client-secret: ${NAVER-CLIENT-SECRET}
-            redirect-uri: ${NAVER-REDIRECT-URI}
+            redirect-uri: ENC(MQq1obaTDXs7LryM3+BOdHMrQcs/zibSLKHoPst/H6swX8Dpvl7Wo+XBW+SGaMq37aJZyQ9+pqcyYuUIPABg4l/4I2JBKQ4V)
+            client-id: ENC(hArDuXel6XL2BYuka4j5o+PuFa9OYb1kIs9ZWjiRCYs=)
+            client-secret: ENC(eJBwzFm1mur/BHJjlPHw2Gh9vLP/6RY4)
             authorization-grant-type: authorization_code
             scope:
               - email
               - name
             client-name: naver
           kakao:
-            redirect-uri: ${KAKAO-REDIRECT-URI}
-            client-id: ${KAKAO-CLIENT-ID}
+            redirect-uri: ENC(ZWbt0nXnT8j9h3IkHegdUWlFq/4ar6fxHgcNbZc616y/XE6mxkk5c3uLI7/1SaeRQzvwrauIQHXFat/u/juy6AfRQ9fMqQMP)
+            client-id: ENC(LrGVNrjoOZPgrTU6Kva5mxPqJp1yGblEy8myObS2ePs+hebnve6u+l+Xrm1YavEo)
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
               - profile_image
             client-name: kakao
           google:
-            redirect-uri: ${GOOGLE-REDIRECT-URI}
-            client-id: ${GOOGLE-CLIENT-ID}
-            client-secret: ${GOOGLE-CLIENT-SECRET}
+            redirect-uri: ENC(S1UGPrXcnpwpjOsa4copqhtLQFReKF9JvPhh3PqImrWxj7BRS6DBAvwkhv80pJrW6NK+nGVGLcZC4sdCPqvdn7dhgXHegEwn)
+            client-id: ENC(KNctPOIqjyR4vPOkN2pJtdu4P70tiAnOHndfQp9HC+qZLx/XdBXLMNNKvjlLBJ4Yh0D6UI5z7RFP83MsfLW16o0K5LFDDmchCsyW2ShmQiAoeNN29W7Ptw==)
+            client-secret: ENC(3+GdJBjiGpBabKBY1/Ipw57ddI30By/3LYMoQzjbDbnp3dsiTsvvndEJRZXRQpTk)
             scope:
               - email
               - profile
