@@ -16,28 +16,6 @@ class AuthService(
     private val userRepository: UserRepository,
 ) : UserDetailsService {
 
-    @Transactional(readOnly = true)
-    fun getUserById(id: Long): UserDTO {
-        val user = userRepository.getById(id)
-        return UserDTO.of(user)
-    }
-
-    fun update(id: Long, nickname: String, birth: LocalDate, username: String): User {
-        val user = userRepository.getById(id)
-
-        val updated = user.updateInfo(
-            nickname = nickname,
-            birth = birth,
-            username = username,
-        )
-
-        return userRepository.save(updated)
-    }
-
-    fun delete(id: Long) {
-        userRepository.deleteById(id)
-    }
-
     override fun loadUserByUsername(username: String): UserDetails {
         val user = userRepository.findByEmail(username) ?: throw UsernameNotFoundException("not found $username")
         return CurrentUser(

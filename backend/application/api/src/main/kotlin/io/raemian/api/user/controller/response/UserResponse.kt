@@ -1,4 +1,4 @@
-package io.raemian.api.auth.controller.response
+package io.raemian.api.user.controller.response
 
 import io.raemian.api.auth.domain.UserDTO
 import io.raemian.api.lifemap.domain.LifeMapResponse
