@@ -5,7 +5,7 @@ import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.lifemap.LifeMapService
 import io.raemian.api.support.response.ApiResponse
 import io.raemian.api.user.controller.response.UserResponse
-import io.raemian.api.user.controller.service.UserService
+import io.raemian.api.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -35,12 +35,18 @@ class UserController(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @RequestBody updateUserRequest: UpdateUserRequest,
     ): ResponseEntity<Void> {
+        val isDuplicated = userService.isDuplicatedUsername(updateUserRequest.username)
+        if (isDuplicated) {
+            return ResponseEntity.status(409).build()
+        }
+
         userService.update(
             id = currentUser.id,
             nickname = updateUserRequest.nickname,
             birth = updateUserRequest.birth,
             username = updateUserRequest.username,
         )
+
         return ResponseEntity.ok().build()
     }
 

@@ -1,4 +1,4 @@
-package io.raemian.api.user.controller.service
+package io.raemian.api.user.service
 
 import io.raemian.api.auth.domain.UserDTO
 import io.raemian.storage.db.core.user.User
@@ -18,7 +18,9 @@ class UserService(
         return UserDTO.of(user)
     }
 
-    fun update(id: Long, nickname: String, birth: LocalDate, username: String): User {
+
+
+    fun update(id: Long, nickname: String, birth: LocalDate, username: String): UserDTO {
         val user = userRepository.getById(id)
 
         val updated = user.updateInfo(
@@ -27,10 +29,16 @@ class UserService(
             username = username,
         )
 
-        return userRepository.save(updated)
+        return UserDTO.of(userRepository.save(updated))
     }
 
     fun delete(id: Long) {
         userRepository.deleteById(id)
+    }
+
+    @Transactional(readOnly = true)
+    fun isDuplicatedUsername(username: String): Boolean {
+        userRepository.findByUsername(username) ?: return false
+        return true
     }
 }

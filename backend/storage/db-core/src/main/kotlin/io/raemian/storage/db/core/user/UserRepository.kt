@@ -14,6 +14,8 @@ interface UserRepository : JpaRepository<User, Long> {
 
     fun findUserByCreatedAtGreaterThanEqual(createdAt: LocalDateTime): List<User>
 
+    fun findByUsername(username: String): User?
+
     override fun getById(id: Long): User =
         findById(id).orElseThrow { NoSuchElementException("존재하지 않는 유저입니다. $id") }
 }
