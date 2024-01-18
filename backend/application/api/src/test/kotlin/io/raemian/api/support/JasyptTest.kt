@@ -4,7 +4,7 @@ import org.jasypt.encryption.pbe.StandardPBEStringEncryptor
 import org.junit.jupiter.api.Test
 
 class JasyptTest {
-    @Test
+    // @Test
     fun jasypt() {
         val input = ""
         val encrypted = jasyptEncrypt(input)

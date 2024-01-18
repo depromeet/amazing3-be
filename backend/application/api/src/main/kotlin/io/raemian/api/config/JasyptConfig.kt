@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @EnableEncryptableProperties
 class JasyptConfig(
-    @Value("\${JASYPT_ENCRYPTION_PASSWORD}") val password: String,
+    @Value("\${JASYPT_ENCRYPTION_PASSWORD: ''}") val password: String,
 ) {
 
     @Bean

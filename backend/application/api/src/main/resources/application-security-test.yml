@@ -24,8 +24,8 @@ spring:
         registration:
           naver:
             redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/naver
-            client-id: ENC(qFYukOWHaCGpavvnBwIIe5MfIbMaETjo8ABJPEvKL1o=)
-            client-secret: ENC(sJK/TYU3PJj1+d6mB1OXjZTrmUFdALuC)
+            client-id: a
+            client-secret: a
             authorization-grant-type: authorization_code
             scope:
               - email
@@ -33,7 +33,7 @@ spring:
             client-name: naver
           kakao:
             redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/kakao
-            client-id: ENC(LzuIWpuN7JG7pwbU87S4DvColRj57LtcnRb0qfDdyGpnNUpI2+FHgCyJs0p2Wn7/)
+            client-id: a
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
@@ -41,8 +41,8 @@ spring:
             client-name: kakao
           google:
             redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/google
-            client-id: ENC(v6CCXncJwOS8W6YizTBkDskIbDrBV/DM+1WpJvERtF6YUahSyevhaoxPQxkdy3DXK++9NZMP7OeqRi7qhgRizQNjXD+u2hNIxIcWu6B71fATnGojMqiDEg==)
-            client-secret: ENC(Sv6L3GpxMxJA7s93BGorm6DclzLwJYSg8rezWXhkAi0PY85zzA/d7ulKspstKMY/)
+            client-id: a
+            client-secret: a
             scope:
               - email
               - profile
