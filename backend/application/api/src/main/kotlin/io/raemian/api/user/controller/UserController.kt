@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class UserController(
     private val userService: UserService,
-    private val lifeMapService: LifeMapService
+    private val lifeMapService: LifeMapService,
 ) {
     @Operation(summary = "토큰 유저 정보 조회 API")
     @GetMapping("/my")
