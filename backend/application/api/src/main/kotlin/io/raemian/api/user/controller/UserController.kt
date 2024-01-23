@@ -49,16 +49,14 @@ class UserController(
     @PutMapping("/users")
     fun updateFromMy(
         @AuthenticationPrincipal currentUser: CurrentUser,
-        @RequestBody updateUserInfoRequest: UpdateUserInfoRequest
+        @RequestBody updateUserInfoRequest: UpdateUserInfoRequest,
     ): ResponseEntity<Void> {
-
         val user = userService.getUserById(currentUser.id)
-
         if (user.username == updateUserInfoRequest.username) {
             userService.updateBaseInfo(
                 id = currentUser.id,
                 nickname = updateUserInfoRequest.nickname,
-                birth = updateUserInfoRequest.birth
+                birth = updateUserInfoRequest.birth,
             )
             return ResponseEntity.ok().build()
         }

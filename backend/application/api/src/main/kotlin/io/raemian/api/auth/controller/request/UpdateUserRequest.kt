@@ -7,9 +7,8 @@ data class UpdateUserRequest(
     val birth: LocalDate,
 )
 
-
 data class UpdateUserInfoRequest(
     val nickname: String,
     val birth: LocalDate,
-    val username: String
+    val username: String,
 )
