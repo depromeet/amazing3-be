@@ -32,7 +32,7 @@ spring:
             client-name: naver
           kakao:
             redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/kakao
-            client-id: ENC(LzuIWpuN7JG7pwbU87S4DvColRj57LtcnRb0qfDdyGpnNUpI2+FHgCyJs0p2Wn7/)
+            client-id: ENC(nUuzK5Tc/0XQDn0AWm3DlNjzZaLxUPzh9ujSdPot9wrOnA1Cmgl1eLyWMyIpI/P0)
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
