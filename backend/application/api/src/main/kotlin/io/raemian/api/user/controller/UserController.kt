@@ -1,5 +1,6 @@
 package io.raemian.api.user.controller
 
+import io.raemian.api.auth.controller.request.UpdateUserInfoRequest
 import io.raemian.api.auth.controller.request.UpdateUserRequest
 import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.lifemap.LifeMapService
@@ -31,20 +32,47 @@ class UserController(
 
     @Operation(summary = "유저 온보딩 이후 정보 업데이트 API")
     @PutMapping("/my")
-    fun update(
+    fun updateBaseInfo(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @RequestBody updateUserRequest: UpdateUserRequest,
     ): ResponseEntity<Void> {
-        val isDuplicated = userService.isDuplicatedUsername(updateUserRequest.username)
+        userService.updateBaseInfo(
+            id = currentUser.id,
+            nickname = updateUserRequest.nickname,
+            birth = updateUserRequest.birth,
+        )
+
+        return ResponseEntity.ok().build()
+    }
+
+    @Operation(summary = "마이페이지 정보 업데이트 API")
+    @PutMapping("/users")
+    fun updateFromMy(
+        @AuthenticationPrincipal currentUser: CurrentUser,
+        @RequestBody updateUserInfoRequest: UpdateUserInfoRequest
+    ): ResponseEntity<Void> {
+
+        val user = userService.getUserById(currentUser.id)
+
+        if (user.username == updateUserInfoRequest.username) {
+            userService.updateBaseInfo(
+                id = currentUser.id,
+                nickname = updateUserInfoRequest.nickname,
+                birth = updateUserInfoRequest.birth
+            )
+            return ResponseEntity.ok().build()
+        }
+
+        val isDuplicated = userService.isDuplicatedUsername(updateUserInfoRequest.username)
         if (isDuplicated) {
             return ResponseEntity.status(409).build()
         }
 
         userService.update(
             id = currentUser.id,
-            nickname = updateUserRequest.nickname,
-            birth = updateUserRequest.birth,
-            username = updateUserRequest.username,
+            nickname = updateUserInfoRequest.nickname,
+            birth = updateUserInfoRequest.birth,
+            username = updateUserInfoRequest.username,
         )
 
         return ResponseEntity.ok().build()
