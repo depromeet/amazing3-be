@@ -71,6 +71,7 @@ class UserController(
             nickname = updateUserInfoRequest.nickname,
             birth = updateUserInfoRequest.birth,
             username = updateUserInfoRequest.username,
+            image = updateUserInfoRequest.image
         )
 
         return ResponseEntity.ok().build()

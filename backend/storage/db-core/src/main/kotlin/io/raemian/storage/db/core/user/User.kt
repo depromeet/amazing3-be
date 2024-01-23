@@ -68,6 +68,19 @@ class User(
             id = id,
         )
     }
+
+    fun updateImage(image: String): User {
+        return User(
+            email = email,
+            nickname = nickname,
+            username = username,
+            birth = birth,
+            image = image,
+            provider = provider,
+            authority = authority,
+            id = id,
+        )
+    }
 }
 
 enum class Authority {

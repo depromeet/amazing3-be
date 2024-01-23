@@ -28,7 +28,7 @@ class UserService(
         return UserDTO.of(userRepository.save(updated))
     }
 
-    fun update(id: Long, nickname: String, birth: LocalDate, username: String): UserDTO {
+    fun update(id: Long, nickname: String, birth: LocalDate, username: String, image: String): UserDTO {
         val user = userRepository.getById(id)
 
         val updated = user
@@ -37,6 +37,7 @@ class UserService(
                 birth = birth,
             )
             .updateUsername(username)
+            .updateImage(image)
 
         return UserDTO.of(userRepository.save(updated))
     }
