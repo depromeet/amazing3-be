@@ -11,4 +11,5 @@ data class UpdateUserInfoRequest(
     val nickname: String,
     val birth: LocalDate,
     val username: String,
+    val image: String
 )
