@@ -35,7 +35,6 @@ spring:
             client-id: ENC(lIcfHpo3GIbcbbX+iPBUAGxsVQxlTLyxZi9q4AQ3ugdGKPy/gqvi5hpCE4tIsZ76)
             authorization-grant-type: authorization_code
             scope:
-              - profile_nickname
               - profile_image
             client-name: kakao
           google:
