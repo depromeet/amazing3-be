@@ -8,7 +8,7 @@ const pageHeader: IPageHeader = {
   title: "태그 수정",
 };
 
-const ProductEditPage: IDefaultLayoutPage = () => {
+const TagEditPage: IDefaultLayoutPage = () => {
   const router = useRouter();
   const { data, error, isLoading, isValidating } = useTag(router.query.id as string);
 
@@ -23,7 +23,7 @@ const ProductEditPage: IDefaultLayoutPage = () => {
   return <TagForm id={router.query.id as string} initialValues={data.body} />;
 };
 
-ProductEditPage.getLayout = getDefaultLayout;
-ProductEditPage.pageHeader = pageHeader;
+TagEditPage.getLayout = getDefaultLayout;
+TagEditPage.pageHeader = pageHeader;
 
-export default ProductEditPage;
+export default TagEditPage;

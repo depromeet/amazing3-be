@@ -5,7 +5,7 @@ const pageHeader: IPageHeader = {
   title: "스티커 목록",
 };
 
-const ProductListPage: IDefaultLayoutPage = () => {
+const StickerListPage: IDefaultLayoutPage = () => {
   return (
     <>
       <StickerList />
@@ -13,7 +13,7 @@ const ProductListPage: IDefaultLayoutPage = () => {
   );
 };
 
-ProductListPage.getLayout = getDefaultLayout;
-ProductListPage.pageHeader = pageHeader;
+StickerListPage.getLayout = getDefaultLayout;
+StickerListPage.pageHeader = pageHeader;
 
-export default ProductListPage;
+export default StickerListPage;

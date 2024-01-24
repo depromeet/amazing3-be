@@ -8,7 +8,7 @@ const pageHeader: IPageHeader = {
   title: "태그 수정",
 };
 
-const ProductEditPage: IDefaultLayoutPage = () => {
+const StickerEditPage: IDefaultLayoutPage = () => {
   const router = useRouter();
   const { data, error, isLoading, isValidating } = useSticker(router.query.id as string);
 
@@ -23,7 +23,7 @@ const ProductEditPage: IDefaultLayoutPage = () => {
   return <StickerForm id={router.query.id as string} initialValues={data.body} />;
 };
 
-ProductEditPage.getLayout = getDefaultLayout;
-ProductEditPage.pageHeader = pageHeader;
+StickerEditPage.getLayout = getDefaultLayout;
+StickerEditPage.pageHeader = pageHeader;
 
-export default ProductEditPage;
+export default StickerEditPage;

@@ -39,6 +39,20 @@ const mainMenuData: IMenu[] = [
         },
       },
     ],
+  },
+  {
+    id: "defaultProfile",
+    name: "기본 프로필 관리",
+    icon: <Package2 className="w-5 h-5" />,
+    submenu: [
+      {
+        id: "defaultProfileList",
+        name: "기본 프로필 목록",
+        link: {
+          path: "/default-profile/list",
+        },
+      },
+    ],
   }
 ];
 
