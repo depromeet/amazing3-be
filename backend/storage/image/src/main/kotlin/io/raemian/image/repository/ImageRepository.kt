@@ -16,50 +16,54 @@ class ImageRepository {
     private lateinit var path: String
 
     fun upload(
+        finalPath: String,
         fileName: String,
         inputStream: InputStream,
     ): String {
-        if (isExist(fileName)) {
+        if (isExist(finalPath, fileName)) {
             throw IllegalStateException("이미 동일한 이름의 이미지가 존재합니다.")
         }
 
-        Files.copy(inputStream, File(createPath(fileName)).toPath())
+        Files.copy(inputStream, File(createPath(finalPath, fileName)).toPath())
 
-        return createUrl(fileName)
+        return createUrl(finalPath, fileName)
     }
 
     fun update(
+        finalPath: String,
         newFileName: String,
         oldFileName: String,
         inputStream: InputStream,
     ): String {
         // 파일이 존재하면 삭제
-        if (isExist(oldFileName)) {
-            File(createPath(oldFileName)).delete()
+        if (isExist(finalPath, oldFileName)) {
+            File(createPath(finalPath, oldFileName)).delete()
         }
 
-        Files.copy(inputStream, File(createPath(newFileName)).toPath())
+        Files.copy(inputStream, File(createPath(finalPath, newFileName)).toPath())
 
-        return createUrl(newFileName)
+        return createUrl(finalPath, newFileName)
     }
 
     fun delete(
+        finalPath: String,
         fileName: String,
     ) {
         // 파일이 존재하지 않는다면 생략
-        if (!isExist(fileName)) {
+        if (!isExist(finalPath, fileName)) {
             return
         }
 
-        val file: File = File(createPath(fileName))
+        val file: File = File(createPath(finalPath, fileName))
 
         file.delete()
     }
 
     fun isExist(
+        finalPath: String,
         fileName: String,
     ): Boolean {
-        val file: File = File(createPath(fileName))
+        val file: File = File(createPath(finalPath, fileName))
 
         if (file.exists()) {
             return true
@@ -68,9 +72,15 @@ class ImageRepository {
         return false
     }
 
-    private fun createPath(fileName: String): String =
-        "%s/$fileName".format(path)
+    private fun createPath(
+        finalPath: String,
+        fileName: String,
+    ): String =
+        "%s$finalPath/$fileName".format(path)
 
-    private fun createUrl(fileName: String): String =
-        "%s/$fileName".format(url)
+    private fun createUrl(
+        finalPath: String,
+        fileName: String,
+    ): String =
+        "%s$finalPath/$fileName".format(url)
 }

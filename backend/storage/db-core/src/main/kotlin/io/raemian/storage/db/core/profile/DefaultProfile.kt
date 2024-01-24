@@ -22,4 +22,12 @@ class DefaultProfile(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-) : BaseEntity()
+) : BaseEntity() {
+    fun updateNameAndUrl(
+        name: String,
+        url: String,
+    ) {
+        this.name = name
+        this.url = url
+    }
+}
