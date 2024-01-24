@@ -3,7 +3,7 @@ spring.config.activate.on-profile: local
 server:
   port: 8080
   servlet:
-    context-path: /dev/api
+    context-path: /api
 
 spring:
   security:
