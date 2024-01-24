@@ -4,29 +4,29 @@ import FormSection from "@/components/shared/form/ui/form-section";
 import {Button, Form, Input, message, Upload, UploadProps} from "antd";
 import { useForm } from "antd/lib/form/Form";
 import React, { useState } from "react";
-import {IStickerFormValue, updateSticker, createSticker} from "@/client/sticker";
 import {UploadOutlined} from "@ant-design/icons";
+import {createDefaultProfile, IDefaultProfileFormValue, updateDefaultProfile} from "@/client/default-profile";
 
-interface IStickerFormProps {
+interface IDefaultProfileFormProps {
   id?: string;
-  initialValues?: Partial<IStickerFormValue>;
+  initialValues?: Partial<IDefaultProfileFormValue>;
 }
 
-const StickerForm = ({ id, initialValues }: IStickerFormProps) => {
+const DefaultProfileForm = ({ id, initialValues }: IDefaultProfileFormProps) => {
   const [form] = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
 
 
-  const handleFinish = async (formValue: IStickerFormValue) => {
+  const handleFinish = async (formValue: IDefaultProfileFormValue) => {
     try {
       setIsLoading(true);
 
       if (id) {
-        await updateSticker(id, formValue);
+        await updateDefaultProfile(id, formValue);
         messageApi.success("수정되었습니다");
       } else {
-        await createSticker(formValue);
+        await createDefaultProfile(formValue);
         messageApi.success("생성되었습니다");
       }
     } catch (e: unknown) {
@@ -55,7 +55,7 @@ const StickerForm = ({ id, initialValues }: IStickerFormProps) => {
   return (
       <>
         {contextHolder}
-        <DefaultForm<IStickerFormValue>
+        <DefaultForm<IDefaultProfileFormValue>
             form={form}
             initialValues={{
               id: id,
@@ -63,10 +63,10 @@ const StickerForm = ({ id, initialValues }: IStickerFormProps) => {
             }}
             onFinish={handleFinish}
         >
-          <FormSection title="스티커 수정 폼" description="목표에 설정 가능한 스티커 수정 기능">
-            <FormGroup title="스티커 이름">
+          <FormSection title="기본 프로필 수정 폼" description="기본 프로필 수정 기능">
+            <FormGroup title="기본 프로필 이름">
               <Form.Item name="name">
-                <Input.TextArea placeholder="스티커 이름을 적어주세요." rows={1} />
+                <Input.TextArea placeholder="기본 프로필 이름을 적어주세요." rows={1} />
               </Form.Item>
             </FormGroup>
 
@@ -90,4 +90,4 @@ const StickerForm = ({ id, initialValues }: IStickerFormProps) => {
   );
 };
 
-export default React.memo(StickerForm);
+export default React.memo(DefaultProfileForm);

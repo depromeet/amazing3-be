@@ -5,11 +5,11 @@ const pageHeader: IPageHeader = {
   title: "태그 등록",
 };
 
-const ProductNewPage: IDefaultLayoutPage = () => {
+const TagNewPage: IDefaultLayoutPage = () => {
   return <TagForm  />;
 };
 
-ProductNewPage.getLayout = getDefaultLayout;
-ProductNewPage.pageHeader = pageHeader;
+TagNewPage.getLayout = getDefaultLayout;
+TagNewPage.pageHeader = pageHeader;
 
-export default ProductNewPage;
+export default TagNewPage;
