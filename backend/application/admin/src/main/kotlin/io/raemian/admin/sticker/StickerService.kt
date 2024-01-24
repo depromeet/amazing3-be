@@ -17,6 +17,7 @@ class StickerService(
     private val stickerRepository: StickerRepository,
     private val imageRepository: ImageRepository,
 ) {
+    private val STICKER_FINAL_PATH = "/sticker"
 
     @Transactional
     fun create(
@@ -24,11 +25,15 @@ class StickerService(
     ): StickerResponse {
         val fileName = validateFileName(createStickerRequest.image.originalFilename)
 
-        val url = imageRepository.upload(fileName, createStickerRequest.image.inputStream)
+        val url = imageRepository.upload(
+            STICKER_FINAL_PATH,
+            fileName,
+            createStickerRequest.image.inputStream,
+        )
 
-        val stickers = stickerRepository.save(Sticker(createStickerRequest.name, url))
+        val sticker = stickerRepository.save(Sticker(createStickerRequest.name, url))
 
-        return StickerResponse.from(stickers)
+        return StickerResponse.from(sticker)
     }
 
     @Transactional(readOnly = true)
@@ -44,31 +49,35 @@ class StickerService(
         stickerId: Long,
         updateStickerRequest: UpdateStickerRequest,
     ): StickerResponse {
-        val stickers = stickerRepository.getById(stickerId)
+        val sticker = stickerRepository.getById(stickerId)
 
         val newFileName = validateFileName(updateStickerRequest.image.originalFilename)
         val url = imageRepository.update(
+            STICKER_FINAL_PATH,
             newFileName,
-            splitFileNameFromUrl(stickers.url),
+            splitFileNameFromUrl(sticker.url),
             updateStickerRequest.image.inputStream,
         )
 
-        stickers.updateNameAndUrl(updateStickerRequest.name, url)
+        sticker.updateNameAndUrl(updateStickerRequest.name, url)
 
-        val updatedStickers = stickerRepository.save(Sticker(updateStickerRequest.name, url))
+        val updatedSticker = stickerRepository.save(sticker)
 
-        return StickerResponse.from(updatedStickers)
+        return StickerResponse.from(updatedSticker)
     }
 
     @Transactional
     fun delete(
         stickerId: Long,
     ) {
-        val stickers = stickerRepository.getById(stickerId)
+        val sticker = stickerRepository.getById(stickerId)
 
-        imageRepository.delete(splitFileNameFromUrl(stickers.url))
+        imageRepository.delete(
+            STICKER_FINAL_PATH,
+            splitFileNameFromUrl(sticker.url),
+        )
 
-        stickerRepository.delete(stickers)
+        stickerRepository.delete(sticker)
     }
 
     private fun splitFileNameFromUrl(url: String): String {
