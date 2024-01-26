@@ -36,8 +36,8 @@ spring:
             client-id: EMPTY-VALUE
             authorization-grant-type: authorization_code
             scope:
-              - profile_nickname
               - profile_image
+              - account_email
             client-name: kakao
           google:
             redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/google

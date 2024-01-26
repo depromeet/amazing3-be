@@ -32,10 +32,11 @@ spring:
             client-name: naver
           kakao:
             redirect-uri: ENC(ZWbt0nXnT8j9h3IkHegdUWlFq/4ar6fxHgcNbZc616y/XE6mxkk5c3uLI7/1SaeRQzvwrauIQHXFat/u/juy6AfRQ9fMqQMP)
-            client-id: ENC(nUuzK5Tc/0XQDn0AWm3DlNjzZaLxUPzh9ujSdPot9wrOnA1Cmgl1eLyWMyIpI/P0)
+            client-id: ENC(BYrtro2a1mPMV3yGyXZL03KEbrk6XhKG4oz9c4oX88TJzPNlzpAmSwC6xBLVl9aZ)
             authorization-grant-type: authorization_code
             scope:
               - profile_image
+              - account_email
             client-name: kakao
           google:
             redirect-uri: ENC(S1UGPrXcnpwpjOsa4copqhtLQFReKF9JvPhh3PqImrWxj7BRS6DBAvwkhv80pJrW6NK+nGVGLcZC4sdCPqvdn7dhgXHegEwn)

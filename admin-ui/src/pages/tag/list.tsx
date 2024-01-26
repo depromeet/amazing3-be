@@ -5,7 +5,7 @@ const pageHeader: IPageHeader = {
   title: "태그 목록",
 };
 
-const ProductListPage: IDefaultLayoutPage = () => {
+const TagListPage: IDefaultLayoutPage = () => {
   return (
     <>
       <TagList />
@@ -13,7 +13,7 @@ const ProductListPage: IDefaultLayoutPage = () => {
   );
 };
 
-ProductListPage.getLayout = getDefaultLayout;
-ProductListPage.pageHeader = pageHeader;
+TagListPage.getLayout = getDefaultLayout;
+TagListPage.pageHeader = pageHeader;
 
-export default ProductListPage;
+export default TagListPage;

@@ -5,11 +5,11 @@ const pageHeader: IPageHeader = {
   title: "스티커 등록",
 };
 
-const ProductNewPage: IDefaultLayoutPage = () => {
+const StickerNewPage: IDefaultLayoutPage = () => {
   return <StickerForm  />;
 };
 
-ProductNewPage.getLayout = getDefaultLayout;
-ProductNewPage.pageHeader = pageHeader;
+StickerNewPage.getLayout = getDefaultLayout;
+StickerNewPage.pageHeader = pageHeader;
 
-export default ProductNewPage;
+export default StickerNewPage;

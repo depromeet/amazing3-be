@@ -5,14 +5,14 @@ import { ColumnsType } from "antd/es/table";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
-import {deleteSticker, ISticker, useStickers} from "@/client/sticker";
+import {deleteDefaultProfile, IDefaultProfile, useDefaultProfiles} from "@/client/default-profile";
 
-const StickerList = () => {
+const DefaultProfileList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
 
-  const { data, error, isLoading } = useStickers();
+  const { data, error, isLoading } = useDefaultProfiles();
 
   const handleChangePage = useCallback(
     (pageNumber: number) => {
@@ -28,14 +28,14 @@ const StickerList = () => {
     setSelectedRowKeys(newSelectedRowKeys);
   }, []);
 
-  const onDelete = (record: ISticker) => {
+  const onDelete = (record: IDefaultProfile) => {
       try{
-          deleteSticker(record.id)
+          deleteDefaultProfile(record.id)
           messageApi.success("삭제되었습니다.")
       } catch (e) {
           messageApi.error("에러가 발생하였습니다.")
       } finally {
-          router.push("/sticker/list")
+          router.push("/default-profile/list")
       }
   }
 
@@ -45,19 +45,19 @@ const StickerList = () => {
   };
   const hasSelected = selectedRowKeys.length > 0;
 
-  const columns: ColumnsType<ISticker> = [
+  const columns: ColumnsType<IDefaultProfile> = [
     {
       key: "action",
       width: 120,
       align: "center",
-      render: (_value: unknown, record: ISticker) => {
+      render: (_value: unknown, record: IDefaultProfile) => {
         return (
           <span className="flex justify-center gap-2">
-            <Link href={`/sticker/edit/${record.id}`} className="px-2 py-1 text-sm btn">
+            <Link href={`/default-profile/edit/${record.id}`} className="px-2 py-1 text-sm btn">
               수정
             </Link>
             <Popconfirm
-              title="스티커를 삭제하시겠습니까?"
+              title="기본 프로필을 삭제하시겠습니까?"
               onConfirm={() => onDelete(record)}
               okText="예"
               cancelText="아니오"
@@ -69,10 +69,10 @@ const StickerList = () => {
       },
     },
     {
-      title: "스티커 ID",
+      title: "기본 프로필 ID",
       dataIndex: "id",
       width: 100,
-        render: (value: string, record: ISticker) => {
+        render: (value: string, record: IDefaultProfile) => {
             return (
                 <span>
             <span className="px-2 py-1 mr-1 bg-gray-100 rounded">{record.id}</span>
@@ -81,9 +81,9 @@ const StickerList = () => {
         },
     },
     {
-      title: "스티커 이름",
+      title: "기본 프로필 이름",
       dataIndex: "name",
-      render: (value: string, record: ISticker) => {
+      render: (value: string, record: IDefaultProfile) => {
         return (
           <span>
             <span className="px-2 py-1 mr-1 bg-gray-100 rounded">{record.name}</span>
@@ -92,9 +92,9 @@ const StickerList = () => {
       },
     },
     {
-      title: "스티커 URL",
+      title: "기본 프로필 URL",
       dataIndex: "url",
-      render: (value: string, record: ISticker) => {
+      render: (value: string, record: IDefaultProfile) => {
           return (
               <span>
                 <span className="px-2 py-1 mr-1 bg-gray-100 rounded">{record.url}</span>
@@ -103,9 +103,9 @@ const StickerList = () => {
       },
     },
     {
-      title: "스티커 이미지",
+      title: "기본 프로필 이미지",
       dataIndex: "name",
-      render: (value: string, record: ISticker) => {
+      render: (value: string, record: IDefaultProfile) => {
           return (
               <span>
                 <img src={record.url} height={100} width={100} className="px-2 py-1 mr-1 bg-gray-100 rounded" />
@@ -128,13 +128,13 @@ const StickerList = () => {
         </div>
 
         <div className="flex-item-list">
-          <Button type="primary" onClick={() => router.push("/sticker/new")}>
-            스티커등록
+          <Button type="primary" onClick={() => router.push("/default-profile/new")}>
+            기본 프로필 등록
           </Button>
         </div>
       </DefaultTableBtn>
 
-      <DefaultTable<ISticker>
+      <DefaultTable<IDefaultProfile>
         rowSelection={rowSelection}
         columns={columns}
         dataSource={data?.body || []}
@@ -153,4 +153,4 @@ const StickerList = () => {
   );
 };
 
-export default React.memo(StickerList);
+export default React.memo(DefaultProfileList);

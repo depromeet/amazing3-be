@@ -37,6 +37,7 @@ spring:
             authorization-grant-type: authorization_code
             scope:
               - profile_image
+              - account_email
             client-name: kakao
           google:
             redirect-uri: ENC(+n1rnKqq7yRkybeNRGFstgM1rZcE84mn/3eHn86kNkjcZYmOtHO4h0CYCAsnIeA1aw8TaGRpqAIDSKx0F0ah7PeiUD+Shkr9)
