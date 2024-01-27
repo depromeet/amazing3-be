@@ -3,6 +3,7 @@ package io.raemian.api.user.controller
 import io.raemian.api.auth.controller.request.UpdateUserInfoRequest
 import io.raemian.api.auth.controller.request.UpdateUserRequest
 import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.auth.domain.UserDTO
 import io.raemian.api.lifemap.LifeMapService
 import io.raemian.api.support.response.ApiResponse
 import io.raemian.api.user.controller.response.UserResponse
@@ -35,14 +36,14 @@ class UserController(
     fun updateBaseInfo(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @RequestBody updateUserRequest: UpdateUserRequest,
-    ): ResponseEntity<Void> {
-        userService.updateNicknameAndBirth(
+    ): ResponseEntity<UserDTO> {
+        val updated = userService.updateNicknameAndBirth(
             id = currentUser.id,
             nickname = updateUserRequest.nickname,
             birth = updateUserRequest.birth,
         )
 
-        return ResponseEntity.ok().build()
+        return ResponseEntity.ok().body(updated)
     }
 
     @Operation(summary = "마이페이지 정보 업데이트 API")
@@ -50,16 +51,16 @@ class UserController(
     fun updateFromMy(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @RequestBody updateUserInfoRequest: UpdateUserInfoRequest,
-    ): ResponseEntity<Void> {
+    ): ResponseEntity<UserDTO> {
         val user = userService.getUserById(currentUser.id)
         if (user.username == updateUserInfoRequest.username) {
-            userService.updateBaseInfo(
+            val updated = userService.updateBaseInfo(
                 id = currentUser.id,
                 nickname = updateUserInfoRequest.nickname,
                 birth = updateUserInfoRequest.birth,
                 image = updateUserInfoRequest.image,
             )
-            return ResponseEntity.ok().build()
+            return ResponseEntity.ok().body(updated)
         }
 
         val isDuplicated = userService.isDuplicatedUsername(updateUserInfoRequest.username)
@@ -67,7 +68,7 @@ class UserController(
             return ResponseEntity.status(409).build()
         }
 
-        userService.update(
+        val updated = userService.update(
             id = currentUser.id,
             nickname = updateUserInfoRequest.nickname,
             birth = updateUserInfoRequest.birth,
@@ -75,7 +76,7 @@ class UserController(
             image = updateUserInfoRequest.image,
         )
 
-        return ResponseEntity.ok().build()
+        return ResponseEntity.ok().body(updated)
     }
 
     @Operation(summary = "유저 삭제")
