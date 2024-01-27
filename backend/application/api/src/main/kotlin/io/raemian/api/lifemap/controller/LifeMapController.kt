@@ -26,7 +26,7 @@ class LifeMapController(
         @AuthenticationPrincipal currentUser: CurrentUser,
     ): ResponseEntity<ApiResponse<LifeMapResponse>> {
         val lifeMap = lifeMapService.findFirstByUserId(currentUser.id)
-        val count = lifeMapService.getCount(lifeMap.lifeMapId)
+        val count = lifeMapService.getLifeMapCount(lifeMap.lifeMapId)
         return ResponseEntity
             .ok(ApiResponse.success(LifeMapResponse(lifeMap, count)))
     }
