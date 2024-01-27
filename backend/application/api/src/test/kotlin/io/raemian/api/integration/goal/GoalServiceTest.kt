@@ -2,16 +2,19 @@ package io.raemian.api.integration.goal
 
 import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
+import io.raemian.api.support.error.MaxGoalCountExceededException
 import io.raemian.api.support.error.PrivateLifeMapException
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.lifemap.LifeMap
+import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.sticker.Sticker
 import io.raemian.storage.db.core.tag.Tag
 import io.raemian.storage.db.core.user.Authority
 import io.raemian.storage.db.core.user.User
 import io.raemian.storage.db.core.user.enums.OAuthProvider
 import jakarta.persistence.EntityManager
+import org.antlr.v4.runtime.IntStream
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
@@ -49,6 +52,9 @@ class GoalServiceTest {
 
     @Autowired
     private lateinit var goalRepository: GoalRepository
+
+    @Autowired
+    private lateinit var lifeMapRepository: LifeMapRepository
 
     @Autowired
     private lateinit var entityManager: EntityManager
@@ -111,6 +117,42 @@ class GoalServiceTest {
     }
 
     @Test
+    @DisplayName("목표 생성시 LifeMap의 목표가 50개 이상이라면 예외를 발생시킨다.")
+    @Transactional
+    fun validateMaxGoalCountTest() {
+        // given
+//        val lifeMap = LifeMap(USER_FIXTURE, true)
+        val lifeMap = entityManager.find(LifeMap::class.java, LIFE_MAP_FIXTURE.id)
+        val createGoalRequest = CreateGoalRequest(
+            title = "title",
+            description = "description",
+            stickerId = STICKER_FIXTURE.id!!,
+            tagId = TAG_FIXTURE.id!!,
+            yearOfDeadline = "2023",
+            monthOfDeadline = "12",
+        )
+
+        // when
+        // Goal 50개 추가
+        repeat(49) {
+            addNewGoalToLifeMap(lifeMap)
+        }
+        entityManager.merge(lifeMap)
+
+        // when
+        // then
+        // 49개일 떄는 통과한다.
+        Assertions.assertThatCode {
+            goalService.create(USER_FIXTURE.id!!, createGoalRequest)
+        }.doesNotThrowAnyException()
+
+        // 50개일 때는 실패한다.
+        Assertions.assertThatThrownBy {
+            goalService.create(USER_FIXTURE.id!!, createGoalRequest)
+        }.isInstanceOf(MaxGoalCountExceededException::class.java)
+    }
+
+    @Test
     @DisplayName("Goal을 생성할 수 있다.")
     fun createGoalTest() {
         val createGoalRequest = CreateGoalRequest(
@@ -164,5 +206,19 @@ class GoalServiceTest {
 
         // then
         assertThat(goalRepository.findById(goal.id!!).isEmpty).isTrue()
+    }
+
+    private fun addNewGoalToLifeMap(lifeMap: LifeMap) {
+        val goal = Goal(
+            lifeMap = lifeMap,
+            title = "목표",
+            deadline = LocalDate.MAX,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "목표 설명",
+            tasks = emptyList(),
+        )
+
+        lifeMap.addGoal(goal)
     }
 }

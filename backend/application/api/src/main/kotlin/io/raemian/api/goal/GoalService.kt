@@ -61,6 +61,7 @@ class GoalService(
     }
 
     private fun validateMaxGoalCount(lifeMap: LifeMap) {
+        println(lifeMap.goals.size)
         if (lifeMap.goals.size >= MAX_GOAL_COUNT) {
             throw MaxGoalCountExceededException()
         }
