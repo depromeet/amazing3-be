@@ -1,33 +1,25 @@
 package io.raemian.api.lifemap.domain
 
-import io.raemian.storage.db.core.lifemap.LifeMap
-import io.raemian.storage.db.core.user.User
+import io.raemian.api.user.domain.UserSubset
 
 data class LifeMapResponse(
+    val lifeMapId: Long,
     val isPublic: Boolean,
     val goals: List<GoalDto>,
     val goalsCount: Int,
     val user: UserSubset? = null,
+    val view: ViewResponse,
 ) {
-
-    constructor(lifeMap: LifeMap) : this(
-        isPublic = lifeMap.isPublic,
-        goals = lifeMap.goals.map(::GoalDto),
-        goalsCount = lifeMap.goals.size,
+    constructor(lifeMapDTO: LifeMapDTO, count: Long) : this(
+        lifeMapId = lifeMapDTO.lifeMapId,
+        isPublic = lifeMapDTO.isPublic,
+        goals = lifeMapDTO.goals,
+        goalsCount = lifeMapDTO.goalsCount,
+        user = lifeMapDTO.user,
+        view = ViewResponse(count),
     )
 
-    constructor(lifeMap: LifeMap, user: User) : this(
-        isPublic = lifeMap.isPublic,
-        goals = lifeMap.goals.map(::GoalDto),
-        goalsCount = lifeMap.goals.size,
-        user = UserSubset(
-            nickname = user.nickname!!,
-            image = user.image,
-        ),
-    )
-
-    data class UserSubset(
-        val nickname: String,
-        val image: String,
+    data class ViewResponse(
+        val count: Long,
     )
 }
