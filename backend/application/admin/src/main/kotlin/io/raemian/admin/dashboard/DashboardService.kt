@@ -15,7 +15,6 @@ import io.raemian.storage.db.core.user.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
-import java.time.LocalDateTime
 import kotlin.math.round
 
 @Service
@@ -80,7 +79,7 @@ class DashboardService(
     }
 
     private fun calculatePercent(numerator: Long, denominator: Long): Double {
-        if(denominator == 0L) {
+        if (denominator == 0L) {
             return 0.0
         }
 

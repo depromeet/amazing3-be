@@ -13,6 +13,11 @@ export interface IDashboard {
     total: number;
     todayIncrease: number;
   };
+  activeUserStatics: {
+    perTodayPercent: number;
+    perWeekPercent: number;
+    perMonthPercent: number;
+  }
 }
 
 export interface IDashboardResponse {
