@@ -2,7 +2,7 @@ package io.raemian.api.lifemap
 
 import io.raemian.api.lifemap.domain.LifeMapResponse
 import io.raemian.api.lifemap.domain.UpdatePublicRequest
-import io.raemian.storage.db.core.goal.Goal
+import io.raemian.api.support.error.PrivateLifeMapException
 import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.user.UserRepository
@@ -47,12 +47,6 @@ class LifeMapService(
         lifeMap.updatePublic(updatePublicRequest.isPublic)
     }
 
-    private fun sortByDeadlineAscendingAndCreatedAtDescending(goals: List<Goal>): List<Goal> =
-        goals.sortedWith(
-            compareBy<Goal> { it.deadline }
-                .thenByDescending { it.createdAt },
-        )
-
     private fun validateLifeMapPublic(lifeMap: LifeMap) =
-        takeIf { lifeMap.isPublic } ?: throw RuntimeException("life map is private")
+        takeIf { lifeMap.isPublic } ?: throw PrivateLifeMapException()
 }

@@ -2,6 +2,7 @@ package io.raemian.api.integration.goal
 
 import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
+import io.raemian.api.support.error.PrivateLifeMapException
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.lifemap.LifeMap
@@ -106,7 +107,7 @@ class GoalServiceTest {
         // then
         Assertions.assertThatThrownBy {
             goalService.getById(goal.id!!)
-        }.isInstanceOf(SecurityException::class.java)
+        }.isInstanceOf(PrivateLifeMapException::class.java)
     }
 
     @Test
