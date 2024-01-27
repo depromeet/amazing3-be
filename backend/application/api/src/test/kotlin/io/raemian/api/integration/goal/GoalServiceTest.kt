@@ -2,10 +2,8 @@ package io.raemian.api.integration.goal
 
 import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
-import io.raemian.api.integration.task.TaskServiceTest
 import io.raemian.api.support.error.MaxGoalCountExceededException
 import io.raemian.api.support.error.PrivateLifeMapException
-import io.raemian.api.task.controller.request.CreateTaskRequest
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.lifemap.LifeMap
