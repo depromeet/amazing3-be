@@ -36,7 +36,7 @@ class UserController(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @RequestBody updateUserRequest: UpdateUserRequest,
     ): ResponseEntity<Void> {
-        userService.updateBaseInfo(
+        userService.updateNicknameAndBirth(
             id = currentUser.id,
             nickname = updateUserRequest.nickname,
             birth = updateUserRequest.birth,
@@ -57,6 +57,7 @@ class UserController(
                 id = currentUser.id,
                 nickname = updateUserInfoRequest.nickname,
                 birth = updateUserInfoRequest.birth,
+                image = updateUserInfoRequest.image,
             )
             return ResponseEntity.ok().build()
         }
