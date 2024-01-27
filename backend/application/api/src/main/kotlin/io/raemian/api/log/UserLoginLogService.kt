@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class UserLoginLogService (
-    private val userLoginLogRepository: UserLoginLogRepository
+class UserLoginLogService(
+    private val userLoginLogRepository: UserLoginLogRepository,
 ) {
     @Async
     fun upsertLatestLogin(userId: Long?) {
-        if(userId == null) {
-            return;
+        if (userId == null) {
+            return
         }
 
         val userLoginLog = userLoginLogRepository.findByUserId(userId)
