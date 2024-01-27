@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class LogService(
-    val slackLogger: SlackLogger,
+    private val slackLogger: SlackLogger,
 ) {
 
     private final val EMPTY_VALUE: String = "EMPTY VALUE"
