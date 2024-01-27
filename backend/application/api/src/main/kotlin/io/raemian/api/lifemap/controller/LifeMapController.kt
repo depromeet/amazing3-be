@@ -25,9 +25,10 @@ class LifeMapController(
     fun findAllByCurrentUser(
         @AuthenticationPrincipal currentUser: CurrentUser,
     ): ResponseEntity<ApiResponse<LifeMapResponse>> {
-        val response = lifeMapService.findFirstByUserId(currentUser.id)
+        val lifeMap = lifeMapService.findFirstByUserId(currentUser.id)
+        val count = lifeMapService.getLifeMapCount(lifeMap.lifeMapId)
         return ResponseEntity
-            .ok(ApiResponse.success(response))
+            .ok(ApiResponse.success(LifeMapResponse(lifeMap, count)))
     }
 
     @Operation(summary = "인생 지도 공개 여부를 수정하는 API")

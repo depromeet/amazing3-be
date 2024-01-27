@@ -44,10 +44,27 @@ class Goal(
     @Nationalized
     val description: String = "",
 
-    @OneToMany(mappedBy = "goal", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
-    val tasks: List<Task>,
+    @OneToMany(
+        mappedBy = "goal",
+        cascade = [CascadeType.REMOVE, CascadeType.MERGE],
+        fetch = FetchType.LAZY,
+    )
+    val tasks: MutableList<Task> = ArrayList(),
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-) : BaseEntity()
+) : BaseEntity() {
+
+    companion object {
+        private const val MAX_TASK_COUNT = 50
+    }
+
+    fun addTask(task: Task) {
+        validateMaxTaskCount()
+        tasks.add(task)
+    }
+
+    private fun validateMaxTaskCount() =
+        require(tasks.size < MAX_TASK_COUNT)
+}

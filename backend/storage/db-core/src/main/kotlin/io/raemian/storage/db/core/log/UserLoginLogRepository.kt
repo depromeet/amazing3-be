@@ -6,5 +6,6 @@ import java.time.LocalDateTime
 interface UserLoginLogRepository : JpaRepository<UserLoginLog, Long> {
 
     fun findByUserId(userId: Long): UserLoginLog?
+  
     fun countUserLoginLogByLatestLoginAtGreaterThanEqual(latestLoginAt: LocalDateTime): Long
 }
