@@ -20,7 +20,7 @@ class OpenLifeMapController(
     @GetMapping("/open/life-map/{username}")
     fun findAllByUserName(
         @AuthenticationPrincipal currentUser: CurrentUser?,
-        @PathVariable("username") username: String
+        @PathVariable("username") username: String,
     ): ResponseEntity<ApiResponse<LifeMapResponse>> {
         val lifeMap = lifeMapService.findFirstByUserName(username)
         val count = lifeMapService.addViewCount(lifeMap.lifeMapId)

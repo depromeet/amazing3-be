@@ -20,7 +20,7 @@ class LifeMapHistory(
         fun of(lifeMapId: Long, userId: Long): LifeMapHistory {
             return LifeMapHistory(
                 lifeMapId = lifeMapId,
-                userId = userId
+                userId = userId,
             )
         }
     }

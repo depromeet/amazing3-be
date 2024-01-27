@@ -110,7 +110,6 @@ class LifeMapService(
         return saved.historyCount
     }
 
-
     private fun validateLifeMapPublic(lifeMap: LifeMap) =
         takeIf { lifeMap.isPublic } ?: throw PrivateLifeMapException()
 }
