@@ -36,14 +36,14 @@ class UserController(
     fun updateBaseInfo(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @RequestBody updateUserRequest: UpdateUserRequest,
-    ): ResponseEntity<UserDTO> {
+    ): ResponseEntity<ApiResponse<UserDTO>> {
         val updated = userService.updateNicknameAndBirth(
             id = currentUser.id,
             nickname = updateUserRequest.nickname,
             birth = updateUserRequest.birth,
         )
 
-        return ResponseEntity.ok().body(updated)
+        return ResponseEntity.ok().body(ApiResponse.success(updated))
     }
 
     @Operation(summary = "마이페이지 정보 업데이트 API")
@@ -51,7 +51,7 @@ class UserController(
     fun updateFromMy(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @RequestBody updateUserInfoRequest: UpdateUserInfoRequest,
-    ): ResponseEntity<UserDTO> {
+    ): ResponseEntity<ApiResponse<UserDTO>> {
         val user = userService.getUserById(currentUser.id)
         if (user.username == updateUserInfoRequest.username) {
             val updated = userService.updateBaseInfo(
@@ -60,7 +60,7 @@ class UserController(
                 birth = updateUserInfoRequest.birth,
                 image = updateUserInfoRequest.image,
             )
-            return ResponseEntity.ok().body(updated)
+            return ResponseEntity.ok().body(ApiResponse.success(updated))
         }
 
         val isDuplicated = userService.isDuplicatedUsername(updateUserInfoRequest.username)
@@ -76,7 +76,7 @@ class UserController(
             image = updateUserInfoRequest.image,
         )
 
-        return ResponseEntity.ok().body(updated)
+        return ResponseEntity.ok().body(ApiResponse.success(updated))
     }
 
     @Operation(summary = "유저 삭제")
