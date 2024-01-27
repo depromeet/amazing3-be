@@ -78,7 +78,6 @@ class GoalServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "내용",
-            tasks = emptyList(),
         )
         goalRepository.save(goal)
 
@@ -104,7 +103,6 @@ class GoalServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "목표 설명.",
-            tasks = emptyList(),
         )
         goalRepository.save(goal)
 
@@ -195,7 +193,6 @@ class GoalServiceTest {
             deadline = LocalDate.now(),
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
-            tasks = emptyList(),
         )
 
         goalRepository.save(goal)
@@ -215,7 +212,6 @@ class GoalServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "목표 설명",
-            tasks = emptyList(),
         )
 
         lifeMap.addGoal(goal)

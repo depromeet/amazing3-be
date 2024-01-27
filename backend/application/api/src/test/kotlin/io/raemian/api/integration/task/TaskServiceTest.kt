@@ -49,7 +49,6 @@ class TaskServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "description",
-            tasks = emptyList(),
         )
     }
 

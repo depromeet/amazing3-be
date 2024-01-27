@@ -44,10 +44,18 @@ class Goal(
     @Nationalized
     val description: String = "",
 
-    @OneToMany(mappedBy = "goal", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
-    val tasks: List<Task>,
+    @OneToMany(
+        mappedBy = "goal", cascade = [CascadeType.REMOVE, CascadeType.MERGE],
+        fetch = FetchType.LAZY,
+    )
+    val tasks: MutableList<Task> = ArrayList(),
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-) : BaseEntity()
+) : BaseEntity() {
+
+    fun addTask(task: Task) {
+        tasks.add(task)
+    }
+}
