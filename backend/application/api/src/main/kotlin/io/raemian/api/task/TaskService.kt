@@ -1,5 +1,7 @@
 package io.raemian.api.task
 
+import io.raemian.api.support.error.MaxGoalCountExceededException
+import io.raemian.api.support.error.MaxTaskCountExceededException
 import io.raemian.api.task.controller.request.CreateTaskRequest
 import io.raemian.api.task.controller.request.RewriteTaskRequest
 import io.raemian.api.task.controller.request.UpdateTaskCompletionRequest
@@ -23,6 +25,7 @@ class TaskService(
         validateCurrentUserIsGoalOwner(currentUserId, goal)
 
         val task = Task.createTask(goal, createTaskRequest.description)
+        addNewTask(goal, task)
         taskRepository.save(task)
         return CreateTaskResponse(task.id!!, task.description)
     }
@@ -60,6 +63,14 @@ class TaskService(
     private fun validateCurrentUserIsGoalOwner(currentUserId: Long, goal: Goal) {
         if (currentUserId != goal.lifeMap.user.id) {
             throw SecurityException()
+        }
+    }
+
+    private fun addNewTask(goal: Goal, task: Task) {
+        try {
+            goal.addTask(task)
+        } catch (exception: IllegalArgumentException) {
+            throw MaxTaskCountExceededException()
         }
     }
 }

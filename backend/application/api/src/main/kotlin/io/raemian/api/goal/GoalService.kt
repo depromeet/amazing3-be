@@ -61,7 +61,7 @@ class GoalService(
         val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadLine)
         val sticker = stickerService.getById(stickerId)
         val tag = tagService.getById(tagId)
-        return Goal(lifeMap, title, deadline, sticker, tag, description!!, emptyList())
+        return Goal(lifeMap, title, deadline, sticker, tag, description!!)
     }
 
     private fun validateLifeMapPublic(lifeMap: LifeMap) {
