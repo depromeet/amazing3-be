@@ -16,9 +16,15 @@ class UserLoginLog(
     val userId: Long,
 
     @Column
-    val latestLoginAt: LocalDateTime,
+    var latestLoginAt: LocalDateTime,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-)
+) {
+    fun updateLatestLogin(): UserLoginLog {
+        this.latestLoginAt = LocalDateTime.now()
+
+        return this
+    }
+}
