@@ -7,7 +7,6 @@ import io.raemian.api.support.error.PrivateLifeMapException
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.lifemap.LifeMap
-import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.sticker.Sticker
 import io.raemian.storage.db.core.tag.Tag
 import io.raemian.storage.db.core.user.Authority
@@ -52,9 +51,6 @@ class GoalServiceTest {
     private lateinit var goalRepository: GoalRepository
 
     @Autowired
-    private lateinit var lifeMapRepository: LifeMapRepository
-
-    @Autowired
     private lateinit var entityManager: EntityManager
 
     @BeforeEach
@@ -83,14 +79,14 @@ class GoalServiceTest {
         // when
         // then
         Assertions.assertThatCode {
-            goalService.getById(goal.id!!)
+            goalService.getById(goal.id!!, USER_FIXTURE.id!!)
         }.doesNotThrowAnyException()
     }
 
     @Test
-    @DisplayName("목표 조회시, 목표 주인의 Goals 공개 여부가 false일 때, 예외를 발생시킨다.")
+    @DisplayName("목표 조회시, 목표가 다른 유저의 목표이고, Goals 공개 여부가 false일 때, 예외를 발생시킨다.")
     @Transactional
-    fun validateUserGoalsPublicTest() {
+    fun validateAnotherUserLifeMapPublicTest() {
         // given
         val lifeMap = entityManager.find(LifeMap::class.java, LIFE_MAP_FIXTURE.id)
         lifeMap.updatePublic(false)
@@ -108,8 +104,33 @@ class GoalServiceTest {
         // when
         // then
         Assertions.assertThatThrownBy {
-            goalService.getById(goal.id!!)
+            goalService.getById(goal.id!!, USER_FIXTURE.id!! + 1)
         }.isInstanceOf(PrivateLifeMapException::class.java)
+    }
+
+    @Test
+    @DisplayName("목표 조회시, 목표가 자신의 목표이면, Goals 공개 여부가 false여도 예외를 발생시키지 않는다.")
+    @Transactional
+    fun validateAnotherUserLifeMapPublicTest2() {
+        // given
+        val lifeMap = entityManager.find(LifeMap::class.java, LIFE_MAP_FIXTURE.id)
+        lifeMap.updatePublic(false)
+
+        val goal = Goal(
+            lifeMap = lifeMap,
+            title = "목표",
+            deadline = LocalDate.MAX,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "목표 설명.",
+        )
+        goalRepository.save(goal)
+
+        // when
+        // then
+        Assertions.assertThatCode {
+            goalService.getById(goal.id!!, USER_FIXTURE.id!!)
+        }.doesNotThrowAnyException()
     }
 
     @Test

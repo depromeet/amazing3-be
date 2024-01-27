@@ -26,9 +26,9 @@ class GoalService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getById(id: Long): GoalResponse {
+    fun getById(id: Long, userId: Long): GoalResponse {
         val goal = goalRepository.getById(id)
-        validateLifeMapPublic(goal.lifeMap)
+        validateAnotherUserLifeMapPublic(userId, goal.lifeMap)
         return GoalResponse(goal)
     }
 
@@ -64,8 +64,8 @@ class GoalService(
         return Goal(lifeMap, title, deadline, sticker, tag, description!!)
     }
 
-    private fun validateLifeMapPublic(lifeMap: LifeMap) {
-        if (!lifeMap.isPublic) {
+    private fun validateAnotherUserLifeMapPublic(userId: Long, lifeMap: LifeMap) {
+        if (lifeMap.user.id != userId && !lifeMap.isPublic) {
             throw PrivateLifeMapException()
         }
     }
