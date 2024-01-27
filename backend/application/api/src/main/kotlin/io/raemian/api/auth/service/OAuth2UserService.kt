@@ -1,6 +1,7 @@
 package io.raemian.api.auth.service
 
 import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.log.UserLoginLogService
 import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.user.Authority
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 class OAuth2UserService(
     private val userRepository: UserRepository,
     private val lifeMapRepository: LifeMapRepository,
+    private val userLoginLogService: UserLoginLogService
 ) : DefaultOAuth2UserService() {
 
     companion object {
@@ -91,9 +93,14 @@ class OAuth2UserService(
     }
 
     @Transactional
-    fun upsert(email: String, image: String, oAuthProvider: OAuthProvider): User =
-        userRepository.findByEmailAndProvider(email, oAuthProvider)
+    fun upsert(email: String, image: String, oAuthProvider: OAuthProvider): User {
+        val user = userRepository.findByEmailAndProvider(email, oAuthProvider)
             ?: createUser(email, image, oAuthProvider)
+
+        userLoginLogService.upsertLatestLogin(user.id)
+
+        return user;
+    }
 
     private fun createUser(email: String, image: String, oAuthProvider: OAuthProvider): User {
         val user = User(
