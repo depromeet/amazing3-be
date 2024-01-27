@@ -29,4 +29,11 @@ enum class ErrorInfo(
         "목표 최대 갯수를 초과했습니다.",
         LogLevel.INFO,
     ),
+
+    MAX_TASK_COUNT_EXCEEDED_EXCEPTION(
+        HttpStatus.BAD_REQUEST,
+        1003,
+        "세부 목표의 최대 갯수를 초과했습니다.",
+        LogLevel.INFO,
+    ),
 }

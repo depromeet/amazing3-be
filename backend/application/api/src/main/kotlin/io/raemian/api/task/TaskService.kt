@@ -26,6 +26,7 @@ class TaskService(
 
         val task = Task.createTask(goal, createTaskRequest.description)
         addNewTask(goal, task)
+
         taskRepository.save(task)
         return CreateTaskResponse(task.id!!, task.description)
     }

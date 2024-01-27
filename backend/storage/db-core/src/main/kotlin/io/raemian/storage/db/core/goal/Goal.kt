@@ -55,7 +55,15 @@ class Goal(
     val id: Long? = null,
 ) : BaseEntity() {
 
+    companion object {
+        private const val MAX_TASK_COUNT = 50
+    }
+
     fun addTask(task: Task) {
+        validateMaxTaskCount()
         tasks.add(task)
     }
+
+    private fun validateMaxTaskCount() =
+        require(tasks.size < MAX_TASK_COUNT)
 }
