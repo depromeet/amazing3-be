@@ -25,6 +25,7 @@ data class LifeMapDTO(
         goals = lifeMap.goals.map(::GoalDto),
         goalsCount = lifeMap.goals.size,
         user = UserSubset(
+            id = user.id ?: 0,
             nickname = user.nickname!!,
             image = user.image,
         ),
