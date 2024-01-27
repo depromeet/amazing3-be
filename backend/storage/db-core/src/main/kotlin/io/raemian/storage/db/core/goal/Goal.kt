@@ -45,7 +45,8 @@ class Goal(
     val description: String = "",
 
     @OneToMany(
-        mappedBy = "goal", cascade = [CascadeType.REMOVE, CascadeType.MERGE],
+        mappedBy = "goal",
+        cascade = [CascadeType.REMOVE, CascadeType.MERGE],
         fetch = FetchType.LAZY,
     )
     val tasks: MutableList<Task> = ArrayList(),

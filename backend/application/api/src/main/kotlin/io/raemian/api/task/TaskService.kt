@@ -1,6 +1,5 @@
 package io.raemian.api.task
 
-import io.raemian.api.support.error.MaxGoalCountExceededException
 import io.raemian.api.support.error.MaxTaskCountExceededException
 import io.raemian.api.task.controller.request.CreateTaskRequest
 import io.raemian.api.task.controller.request.RewriteTaskRequest
