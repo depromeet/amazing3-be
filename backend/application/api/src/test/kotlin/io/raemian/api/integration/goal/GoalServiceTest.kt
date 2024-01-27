@@ -28,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @SpringBootTest
-@Transactional
 class GoalServiceTest {
 
     companion object {
@@ -121,7 +120,6 @@ class GoalServiceTest {
     @Transactional
     fun validateMaxGoalCountTest() {
         // given
-//        val lifeMap = LifeMap(USER_FIXTURE, true)
         val lifeMap = entityManager.find(LifeMap::class.java, LIFE_MAP_FIXTURE.id)
         val createGoalRequest = CreateGoalRequest(
             title = "title",
@@ -154,6 +152,7 @@ class GoalServiceTest {
 
     @Test
     @DisplayName("Goal을 생성할 수 있다.")
+    @Transactional
     fun createGoalTest() {
         val createGoalRequest = CreateGoalRequest(
             title = "title",

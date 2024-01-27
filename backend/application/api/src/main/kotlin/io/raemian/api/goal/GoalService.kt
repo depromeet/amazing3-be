@@ -25,10 +25,6 @@ class GoalService(
     private val lifeMapRepository: LifeMapRepository,
 ) {
 
-    companion object {
-        private const val MAX_GOAL_COUNT = 50
-    }
-
     @Transactional(readOnly = true)
     fun getById(id: Long): GoalResponse {
         val goal = goalRepository.getById(id)
@@ -40,10 +36,10 @@ class GoalService(
     fun create(userId: Long, createGoalRequest: CreateGoalRequest): CreateGoalResponse {
         val lifeMap = lifeMapRepository.findFirstByUserId(userId)
             ?: createFirstLifeMap(userId)
-        validateMaxGoalCount(lifeMap)
 
         val goal = createGoal(createGoalRequest, lifeMap)
-        lifeMap.addGoal(goal)
+        addNewGoal(lifeMap, goal)
+
         lifeMapRepository.save(lifeMap)
         return CreateGoalResponse(goal)
     }
@@ -58,13 +54,6 @@ class GoalService(
     private fun createFirstLifeMap(userId: Long): LifeMap {
         val user = userRepository.getById(userId)
         return LifeMap(user, true, goals = ArrayList())
-    }
-
-    private fun validateMaxGoalCount(lifeMap: LifeMap) {
-        println(lifeMap.goals.size)
-        if (lifeMap.goals.size >= MAX_GOAL_COUNT) {
-            throw MaxGoalCountExceededException()
-        }
     }
 
     private fun createGoal(createGoalRequest: CreateGoalRequest, lifeMap: LifeMap): Goal {
@@ -84,6 +73,14 @@ class GoalService(
     private fun validateGoalIsUsers(userId: Long, goal: Goal) {
         if (userId != goal.lifeMap.user.id) {
             throw SecurityException()
+        }
+    }
+
+    private fun addNewGoal(lifeMap: LifeMap, goal: Goal) {
+        try {
+            lifeMap.addGoal(goal)
+        } catch (exception: IllegalArgumentException) {
+            throw MaxGoalCountExceededException()
         }
     }
 }
