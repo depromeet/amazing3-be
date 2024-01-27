@@ -5,6 +5,7 @@ import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.sticker.StickerService
 import io.raemian.api.support.RaemianLocalDate
+import io.raemian.api.support.error.MaxGoalCountExceededException
 import io.raemian.api.support.error.PrivateLifeMapException
 import io.raemian.api.tag.TagService
 import io.raemian.storage.db.core.goal.Goal
@@ -24,6 +25,10 @@ class GoalService(
     private val lifeMapRepository: LifeMapRepository,
 ) {
 
+    companion object {
+        private const val MAX_GOAL_COUNT = 50
+    }
+
     @Transactional(readOnly = true)
     fun getById(id: Long): GoalResponse {
         val goal = goalRepository.getById(id)
@@ -35,8 +40,9 @@ class GoalService(
     fun create(userId: Long, createGoalRequest: CreateGoalRequest): CreateGoalResponse {
         val lifeMap = lifeMapRepository.findFirstByUserId(userId)
             ?: createFirstLifeMap(userId)
-        val goal = createGoal(createGoalRequest, lifeMap)
+        validateMaxGoalCount(lifeMap)
 
+        val goal = createGoal(createGoalRequest, lifeMap)
         lifeMap.addGoal(goal)
         lifeMapRepository.save(lifeMap)
         return CreateGoalResponse(goal)
@@ -52,6 +58,12 @@ class GoalService(
     private fun createFirstLifeMap(userId: Long): LifeMap {
         val user = userRepository.getById(userId)
         return LifeMap(user, true, goals = ArrayList())
+    }
+
+    private fun validateMaxGoalCount(lifeMap: LifeMap) {
+        if (lifeMap.goals.size >= MAX_GOAL_COUNT) {
+            throw MaxGoalCountExceededException()
+        }
     }
 
     private fun createGoal(createGoalRequest: CreateGoalRequest, lifeMap: LifeMap): Goal {

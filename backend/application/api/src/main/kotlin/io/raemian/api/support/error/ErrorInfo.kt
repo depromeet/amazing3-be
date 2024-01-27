@@ -22,4 +22,11 @@ enum class ErrorInfo(
         "유저의 인생 지도가 비공개 상태입니다.",
         LogLevel.INFO,
     ),
+
+    MAX_GOAL_COUNT_EXCEEDED_EXCEPTION(
+        HttpStatus.BAD_REQUEST,
+        1002,
+        "목표 최대 갯수를 초과했습니다.",
+        LogLevel.INFO,
+    ),
 }
