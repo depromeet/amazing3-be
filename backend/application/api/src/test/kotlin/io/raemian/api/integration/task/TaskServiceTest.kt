@@ -1,5 +1,6 @@
 package io.raemian.api.integration.task
 
+import io.raemian.api.support.error.MaxTaskCountExceededException
 import io.raemian.api.task.TaskService
 import io.raemian.api.task.controller.request.CreateTaskRequest
 import io.raemian.api.task.controller.request.RewriteTaskRequest
@@ -15,6 +16,7 @@ import io.raemian.storage.db.core.user.Authority
 import io.raemian.storage.db.core.user.User
 import io.raemian.storage.db.core.user.enums.OAuthProvider
 import jakarta.persistence.EntityManager
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -106,6 +108,39 @@ class TaskServiceTest {
     }
 
     @Test
+    @DisplayName("Task 생성시 Goal의 Task가 50개 이상이라면 예외를 발생시킨다.")
+    @Transactional
+    fun validateMaxTaskCountTest() {
+        // given
+        val goal = entityManager.find(Goal::class.java, GOAL_FIXTURE.id)
+
+        // when
+        // Task 50개 추가
+        repeat(49) {
+            addNewTaskToGoal(goal)
+        }
+        entityManager.merge(goal)
+
+        // when
+        // then
+        // 49개일 떄는 통과한다.
+        Assertions.assertThatCode {
+            taskService.create(
+                currentUserId = USER_FIXTURE.id!!,
+                CreateTaskRequest(GOAL_FIXTURE.id!!, "description"),
+            )
+        }.doesNotThrowAnyException()
+
+        // 50개일 때는 실패한다.
+        Assertions.assertThatThrownBy {
+            taskService.create(
+                currentUserId = USER_FIXTURE.id!!,
+                CreateTaskRequest(GOAL_FIXTURE.id!!, "description"),
+            )
+        }.isInstanceOf(MaxTaskCountExceededException::class.java)
+    }
+
+    @Test
     @DisplayName("Task의 Description을 수정할 수 있다.")
     fun rewriteTest() {
         // given
@@ -158,5 +193,10 @@ class TaskServiceTest {
         // then
         val task = taskRepository.findById(newTask.id!!)
         assertThat(task.isEmpty).isTrue()
+    }
+
+    private fun addNewTaskToGoal(goal: Goal) {
+        val task = Task.createTask(GOAL_FIXTURE, "")
+        goal.addTask(task)
     }
 }

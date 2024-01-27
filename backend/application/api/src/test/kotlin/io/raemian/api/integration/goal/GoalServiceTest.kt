@@ -14,7 +14,6 @@ import io.raemian.storage.db.core.user.Authority
 import io.raemian.storage.db.core.user.User
 import io.raemian.storage.db.core.user.enums.OAuthProvider
 import jakarta.persistence.EntityManager
-import org.antlr.v4.runtime.IntStream
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
@@ -114,6 +113,39 @@ class GoalServiceTest {
     }
 
     @Test
+    @DisplayName("Goal을 생성할 수 있다.")
+    @Transactional
+    fun createGoalTest() {
+        val createGoalRequest = CreateGoalRequest(
+            title = "title",
+            description = "description",
+            stickerId = STICKER_FIXTURE.id!!,
+            tagId = TAG_FIXTURE.id!!,
+            yearOfDeadline = "2023",
+            monthOfDeadline = "12",
+        )
+
+        val createResponse = goalService.create(
+            userId = USER_FIXTURE.id!!,
+            createGoalRequest = createGoalRequest,
+        )
+
+        val goal = goalRepository.getById(createResponse.id)
+        assertAll(
+            Executable {
+                assertThat(goal.title).isEqualTo(createGoalRequest.title)
+                assertThat(goal.description).isEqualTo(createGoalRequest.description)
+                assertThat(goal.sticker.id).isEqualTo(createGoalRequest.stickerId)
+                assertThat(goal.tag.id).isEqualTo(createGoalRequest.tagId)
+                assertThat(goal.deadline.year.toString())
+                    .isEqualTo(createGoalRequest.yearOfDeadline)
+                assertThat(goal.deadline.monthValue.toString())
+                    .isEqualTo(createGoalRequest.monthOfDeadline)
+            },
+        )
+    }
+
+    @Test
     @DisplayName("목표 생성시 LifeMap의 목표가 50개 이상이라면 예외를 발생시킨다.")
     @Transactional
     fun validateMaxGoalCountTest() {
@@ -146,39 +178,6 @@ class GoalServiceTest {
         Assertions.assertThatThrownBy {
             goalService.create(USER_FIXTURE.id!!, createGoalRequest)
         }.isInstanceOf(MaxGoalCountExceededException::class.java)
-    }
-
-    @Test
-    @DisplayName("Goal을 생성할 수 있다.")
-    @Transactional
-    fun createGoalTest() {
-        val createGoalRequest = CreateGoalRequest(
-            title = "title",
-            description = "description",
-            stickerId = STICKER_FIXTURE.id!!,
-            tagId = TAG_FIXTURE.id!!,
-            yearOfDeadline = "2023",
-            monthOfDeadline = "12",
-        )
-
-        val createResponse = goalService.create(
-            userId = USER_FIXTURE.id!!,
-            createGoalRequest = createGoalRequest,
-        )
-
-        val goal = goalRepository.getById(createResponse.id)
-        assertAll(
-            Executable {
-                assertThat(goal.title).isEqualTo(createGoalRequest.title)
-                assertThat(goal.description).isEqualTo(createGoalRequest.description)
-                assertThat(goal.sticker.id).isEqualTo(createGoalRequest.stickerId)
-                assertThat(goal.tag.id).isEqualTo(createGoalRequest.tagId)
-                assertThat(goal.deadline.year.toString())
-                    .isEqualTo(createGoalRequest.yearOfDeadline)
-                assertThat(goal.deadline.monthValue.toString())
-                    .isEqualTo(createGoalRequest.monthOfDeadline)
-            },
-        )
     }
 
     @Test
