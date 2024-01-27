@@ -66,7 +66,7 @@ const DashboardStatistics = ({ data }: IDashboardStaticsProps) => {
             </div>
           </div>
           <div className="p-5 border rounded-lg ">
-            <div>이번 주 접속 유저 비율</div>
+            <div>최근 1주 접속 유저 비율</div>
             <div className="flex items-center mt-3">
               <div className="text-2xl font-semibold grow">
                 {data.body.activeUserStatics.perWeekPercent}%
@@ -74,7 +74,7 @@ const DashboardStatistics = ({ data }: IDashboardStaticsProps) => {
             </div>
           </div>
           <div className="p-5 border rounded-lg ">
-            <div>이번 달 접속 유저 비율</div>
+            <div>최근 1달 접속 유저 비율</div>
             <div className="flex items-center mt-3">
               <div className="text-2xl font-semibold grow">
                 {data.body.activeUserStatics.perMonthPercent}%
