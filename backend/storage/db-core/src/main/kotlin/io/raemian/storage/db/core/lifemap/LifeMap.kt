@@ -37,11 +37,16 @@ class LifeMap(
     val id: Long? = null,
 ) : BaseEntity() {
 
+    companion object {
+        private const val MAX_GOAL_COUNT = 50
+    }
+
     fun updatePublic(isPublic: Boolean) {
         this.isPublic = isPublic
     }
 
     fun addGoal(goal: Goal) {
+        validateMaxGoalCount()
         this.goals.add(goal)
     }
 
@@ -51,4 +56,7 @@ class LifeMap(
                 .thenByDescending { it.createdAt },
         )
     }
+
+    private fun validateMaxGoalCount() =
+        require(goals.size < MAX_GOAL_COUNT)
 }
