@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 class OAuth2UserService(
     private val userRepository: UserRepository,
     private val lifeMapRepository: LifeMapRepository,
-    private val userLoginLogService: UserLoginLogService
+    private val userLoginLogService: UserLoginLogService,
 ) : DefaultOAuth2UserService() {
 
     companion object {
@@ -99,7 +99,7 @@ class OAuth2UserService(
 
         userLoginLogService.upsertLatestLogin(user.id)
 
-        return user;
+        return user
     }
 
     private fun createUser(email: String, image: String, oAuthProvider: OAuthProvider): User {

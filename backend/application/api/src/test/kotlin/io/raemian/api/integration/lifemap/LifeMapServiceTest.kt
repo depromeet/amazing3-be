@@ -72,7 +72,6 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
-            tasks = emptyList(),
         )
 
         val goal2 = Goal(
@@ -82,7 +81,6 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
-            tasks = emptyList(),
         )
         val lifeMap = lifeMapRepository.findFirstByUserId(USER_FIXTURE.id!!)
             ?: fail()
@@ -115,7 +113,6 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
-            tasks = emptyList(),
         )
 
         val goal2 = Goal(
@@ -125,7 +122,6 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
-            tasks = emptyList(),
         )
         val lifeMap = lifeMapRepository.findFirstByUserId(USER_FIXTURE.id!!)
             ?: fail()
@@ -173,7 +169,6 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
-            tasks = emptyList(),
         )
 
         val goal2 = Goal(
@@ -183,7 +178,6 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
-            tasks = emptyList(),
         )
         val lifeMap = lifeMapRepository.findFirstByUserId(USER_FIXTURE.id!!)
             ?: fail()
@@ -221,7 +215,6 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
-            tasks = emptyList(),
         )
 
         val deadline이_내일이고_가장_나중에_만들어진_객체 = Goal(
@@ -232,7 +225,6 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
-            tasks = emptyList(),
         )
 
         val deadline이_오늘인_객체 = Goal(
@@ -242,7 +234,6 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
-            tasks = emptyList(),
         )
 
         // when

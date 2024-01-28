@@ -5,6 +5,7 @@ import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.sticker.StickerService
 import io.raemian.api.support.RaemianLocalDate
+import io.raemian.api.support.error.MaxGoalCountExceededException
 import io.raemian.api.support.error.PrivateLifeMapException
 import io.raemian.api.tag.TagService
 import io.raemian.storage.db.core.goal.Goal
@@ -25,9 +26,9 @@ class GoalService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getById(id: Long): GoalResponse {
+    fun getById(id: Long, userId: Long): GoalResponse {
         val goal = goalRepository.getById(id)
-        validateLifeMapPublic(goal.lifeMap)
+        validateAnotherUserLifeMapPublic(userId, goal.lifeMap)
         return GoalResponse(goal)
     }
 
@@ -35,9 +36,10 @@ class GoalService(
     fun create(userId: Long, createGoalRequest: CreateGoalRequest): CreateGoalResponse {
         val lifeMap = lifeMapRepository.findFirstByUserId(userId)
             ?: createFirstLifeMap(userId)
-        val goal = createGoal(createGoalRequest, lifeMap)
 
-        lifeMap.addGoal(goal)
+        val goal = createGoal(createGoalRequest, lifeMap)
+        addNewGoal(lifeMap, goal)
+
         lifeMapRepository.save(lifeMap)
         return CreateGoalResponse(goal)
     }
@@ -59,11 +61,11 @@ class GoalService(
         val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadLine)
         val sticker = stickerService.getById(stickerId)
         val tag = tagService.getById(tagId)
-        return Goal(lifeMap, title, deadline, sticker, tag, description!!, emptyList())
+        return Goal(lifeMap, title, deadline, sticker, tag, description!!)
     }
 
-    private fun validateLifeMapPublic(lifeMap: LifeMap) {
-        if (!lifeMap.isPublic) {
+    private fun validateAnotherUserLifeMapPublic(userId: Long, lifeMap: LifeMap) {
+        if (lifeMap.user.id != userId && !lifeMap.isPublic) {
             throw PrivateLifeMapException()
         }
     }
@@ -71,6 +73,14 @@ class GoalService(
     private fun validateGoalIsUsers(userId: Long, goal: Goal) {
         if (userId != goal.lifeMap.user.id) {
             throw SecurityException()
+        }
+    }
+
+    private fun addNewGoal(lifeMap: LifeMap, goal: Goal) {
+        try {
+            lifeMap.addGoal(goal)
+        } catch (exception: IllegalArgumentException) {
+            throw MaxGoalCountExceededException()
         }
     }
 }
