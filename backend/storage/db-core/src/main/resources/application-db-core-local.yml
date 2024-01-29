@@ -6,3 +6,10 @@ spring:
     password: ENC(cuWaUt+8bNMAV6aLO4GMaw==)
     hikari:
       pool-name: db-core-pool
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+        default_batch_fetch_size: 100

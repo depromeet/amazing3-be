@@ -22,11 +22,12 @@ class CheeringServcie(
 
     @Transactional(readOnly = true)
     fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPagingRequest): PageResult<CheererResponse> {
-        val cheeringSquad = findCheeringSquadPage(lifeMapId, request.lastCursorAt, Pageable.ofSize(request.pageSize))
+        val cheeringSquad =
+            cheererRepository.findAll()
 
-        val isLastPage = isLastPage(cheeringSquad.isEmpty(), lifeMapId, request.lastCursorAt, cheeringSquad)
+        val isLastPage = isLastPage(cheeringSquad.size, request.pageSize, lifeMapId, cheeringSquad)
 
-        return PageResult.of(cheeringSquad.map(::CheererResponse), isLastPage)
+        return PageResult.of(cheeringSquad.map(CheererResponse::from), isLastPage)
     }
 
     @Transactional(readOnly = true)
@@ -39,11 +40,25 @@ class CheeringServcie(
         return CheeringCountResponse.from(cheering)
     }
 
-    private fun isLastPage(isEmptyContents: Boolean, lifeMapId: Long, lastCursorAt: LocalDateTime?, cheeringSquad: List<Cheerer>): Boolean {
-        return if (isEmptyContents) {
+    @Transactional(readOnly = true)
+    fun getCheeringCount(userId: Long): Long {
+        val lifeMap = lifeMapRepository.findFirstByUserId(userId)
+            ?: throw NoSuchElementException("존재하지 않는 유저입니다. $userId")
+
+        val cheering = cheeringRepository.findByLifeMapId(lifeMap.id!!)
+
+        return if (cheering == null) {
+            0
+        } else {
+            cheering.count
+        }
+    }
+
+    private fun isLastPage(contentSize: Int, pageSize: Int, lifeMapId: Long, cheeringSquad: List<Cheerer>): Boolean {
+        return if (contentSize < pageSize) {
             true
         } else {
-            !cheererRepository.existsByLifeMapIdAndCheeringAtGreaterThan(lifeMapId, lastCursorAt ?: cheeringSquad.last().cheeringAt)
+            !cheererRepository.existsByLifeMapIdAndCheeringAtGreaterThan(lifeMapId, cheeringSquad.last().cheeringAt)
         }
     }
 

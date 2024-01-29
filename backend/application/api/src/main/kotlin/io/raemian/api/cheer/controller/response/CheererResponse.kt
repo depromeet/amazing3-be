@@ -9,10 +9,13 @@ data class CheererResponse(
     val userImageUrl: String,
     val cheeringAt: LocalDateTime?,
 ) {
-    constructor(cheerer: Cheerer) : this(
-        cheerer.userId,
-        cheerer.username,
-        cheerer.userImage,
-        cheerer.cheeringAt,
-    )
+    companion object {
+        fun from(cheerer: Cheerer): CheererResponse {
+            return if (cheerer.user == null) {
+                CheererResponse(-1, "", "", cheerer.cheeringAt)
+            } else {
+                CheererResponse(cheerer.user!!.id!!, cheerer.user!!.username!!, cheerer.user!!.image, cheerer.cheeringAt)
+            }
+        }
+    }
 }
