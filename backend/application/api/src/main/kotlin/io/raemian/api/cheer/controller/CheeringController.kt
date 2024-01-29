@@ -3,6 +3,7 @@ package io.raemian.api.cheer.controller
 import io.raemian.api.cheer.CheeringServcie
 import io.raemian.api.cheer.controller.request.CheeringSquadPagingRequest
 import io.raemian.api.cheer.controller.response.CheererResponse
+import io.raemian.api.cheer.controller.response.CheeringCountResponse
 import io.raemian.api.support.response.ApiResponse
 import io.raemian.api.support.response.PageResult
 import org.springframework.http.ResponseEntity
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/cheering")
 class CheeringController(
-    private val cheeringServcie: CheeringServcie
+    private val cheeringServcie: CheeringServcie,
 ) {
 
     @GetMapping("/squad/{lifeMapId}")
@@ -23,4 +24,8 @@ class CheeringController(
 
         return ResponseEntity.ok().body(ApiResponse.success(response))
     }
+
+    @GetMapping("/count/{userName}")
+    fun getCheeringCount(@PathVariable("userName") userName: String): ResponseEntity<ApiResponse<CheeringCountResponse>> =
+        ResponseEntity.ok().body(ApiResponse.success(cheeringServcie.getCheeringCount(userName)))
 }

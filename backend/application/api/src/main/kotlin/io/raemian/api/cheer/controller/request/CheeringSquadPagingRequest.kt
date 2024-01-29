@@ -4,5 +4,5 @@ import java.time.LocalDateTime
 
 data class CheeringSquadPagingRequest(
     val pageSize: Int,
-    val lastCursorAt: LocalDateTime?
+    val lastCursorAt: LocalDateTime?,
 )

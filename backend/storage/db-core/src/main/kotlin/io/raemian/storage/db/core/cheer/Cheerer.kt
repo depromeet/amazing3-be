@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "CHEERER", indexes = [Index(name = "IDX_LIFE_MAP_ID_AND_CHEERING_AT", columnList = "lifeMapId, cheeringAt")])
-class Cheerer (
+class Cheerer(
     @Column
     val lifeMapId: Long,
 
@@ -31,4 +31,4 @@ class Cheerer (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-): BaseEntity()
+) : BaseEntity()

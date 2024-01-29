@@ -9,7 +9,7 @@ data class CheererResponse(
     val userImageUrl: String,
     val cheeringAt: LocalDateTime?,
 ) {
-    constructor(cheerer: Cheerer): this(
+    constructor(cheerer: Cheerer) : this(
         cheerer.userId,
         cheerer.username,
         cheerer.userImage,

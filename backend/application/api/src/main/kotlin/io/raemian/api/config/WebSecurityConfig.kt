@@ -69,7 +69,8 @@ class WebSecurityConfig(
                         AntPathRequestMatcher("/webjars/**"),
                     ).permitAll()
                     .requestMatchers(
-                        AntPathRequestMatcher("/cheering/squad"),
+                        AntPathRequestMatcher("/cheering/squad/**"),
+                        AntPathRequestMatcher("/cheering/count/**"),
                     ).permitAll()
                     .anyRequest().authenticated()
             }

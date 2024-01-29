@@ -2,18 +2,25 @@ package io.raemian.api.cheer
 
 import io.raemian.api.cheer.controller.request.CheeringSquadPagingRequest
 import io.raemian.api.cheer.controller.response.CheererResponse
+import io.raemian.api.cheer.controller.response.CheeringCountResponse
 import io.raemian.api.support.response.PageResult
 import io.raemian.storage.db.core.cheer.Cheerer
 import io.raemian.storage.db.core.cheer.CheererRepository
+import io.raemian.storage.db.core.cheer.CheeringRepository
+import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
 class CheeringServcie(
     private val cheererRepository: CheererRepository,
+    private val cheeringRepository: CheeringRepository,
+    private val lifeMapRepository: LifeMapRepository,
 ) {
 
+    @Transactional(readOnly = true)
     fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPagingRequest): PageResult<CheererResponse> {
         val cheeringSquad = findCheeringSquadPage(lifeMapId, request.lastCursorAt, Pageable.ofSize(request.pageSize))
 
@@ -22,7 +29,17 @@ class CheeringServcie(
         return PageResult.of(cheeringSquad.map(::CheererResponse), isLastPage)
     }
 
-    fun isLastPage(isEmptyContents: Boolean, lifeMapId: Long, lastCursorAt: LocalDateTime?, cheeringSquad: List<Cheerer>): Boolean {
+    @Transactional(readOnly = true)
+    fun getCheeringCount(userName: String): CheeringCountResponse {
+        val lifeMap = lifeMapRepository.findFirstByUserUsername(userName)
+            ?: throw NoSuchElementException("존재하지 않는 유저명입니다. $userName")
+
+        val cheering = cheeringRepository.findByLifeMapId(lifeMap.id!!)
+
+        return CheeringCountResponse.from(cheering)
+    }
+
+    private fun isLastPage(isEmptyContents: Boolean, lifeMapId: Long, lastCursorAt: LocalDateTime?, cheeringSquad: List<Cheerer>): Boolean {
         return if (isEmptyContents) {
             true
         } else {
@@ -30,11 +47,11 @@ class CheeringServcie(
         }
     }
 
-    fun findCheeringSquadPage(lifeMapId: Long, cheeringAt: LocalDateTime?, pageable: Pageable): List<Cheerer> {
+    private fun findCheeringSquadPage(lifeMapId: Long, cheeringAt: LocalDateTime?, pageable: Pageable): List<Cheerer> {
         return if (cheeringAt == null) {
             cheererRepository.findByLifeMapIdOrderByCheeringAtDesc(lifeMapId, pageable)
         } else {
-            cheererRepository.findByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAtDesc(lifeMapId, cheeringAt, pageable);
+            cheererRepository.findByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAtDesc(lifeMapId, cheeringAt, pageable)
         }
     }
 }

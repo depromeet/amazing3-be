@@ -6,13 +6,11 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.Index
 import jakarta.persistence.Table
-import java.time.LocalDateTime
 
 @Entity
 @Table(name = "CHEERING")
-class Cheering (
+class Cheering(
     @Column
     val count: Long,
 
@@ -22,4 +20,4 @@ class Cheering (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-): BaseEntity()
+) : BaseEntity()
