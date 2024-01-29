@@ -11,7 +11,7 @@ import jakarta.persistence.Table
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "\"CHEERER\"", indexes = [Index(name = "IDX_LIFE_MAP_ID_AND_CHEERING_AT", columnList = "lifeMapId, cheeringAt")])
+@Table(name = "CHEERER", indexes = [Index(name = "IDX_LIFE_MAP_ID_AND_CHEERING_AT", columnList = "lifeMapId, cheeringAt")])
 class Cheerer (
     @Column
     val lifeMapId: Long,
