@@ -6,3 +6,6 @@ spring:
     password: ENC(A6Ii6Iq/etslKSo3kRcS0g==)
     hikari:
       pool-name: db-core-pool
+  jpa:
+    properties:
+      default_batch_fetch_size: 100

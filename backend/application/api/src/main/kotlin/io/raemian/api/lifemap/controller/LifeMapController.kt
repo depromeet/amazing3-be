@@ -1,6 +1,7 @@
 package io.raemian.api.lifemap.controller
 
 import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.cheer.CheeringServcie
 import io.raemian.api.lifemap.LifeMapService
 import io.raemian.api.lifemap.domain.LifeMapResponse
 import io.raemian.api.lifemap.domain.UpdatePublicRequest
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/life-map")
 class LifeMapController(
     private val lifeMapService: LifeMapService,
+    private val cheeringServcie: CheeringServcie,
 ) {
 
     @Operation(summary = "로그인한 유저의 인생 지도 조회 API")
@@ -27,8 +29,10 @@ class LifeMapController(
     ): ResponseEntity<ApiResponse<LifeMapResponse>> {
         val lifeMap = lifeMapService.findFirstByUserId(currentUser.id)
         val count = lifeMapService.getLifeMapCount(lifeMap.lifeMapId)
+        val cheeringCount = cheeringServcie.getCheeringCount(currentUser.id)
+
         return ResponseEntity
-            .ok(ApiResponse.success(LifeMapResponse(lifeMap, count)))
+            .ok(ApiResponse.success(LifeMapResponse(lifeMap, count, cheeringCount)))
     }
 
     @Operation(summary = "인생 지도 공개 여부를 수정하는 API")

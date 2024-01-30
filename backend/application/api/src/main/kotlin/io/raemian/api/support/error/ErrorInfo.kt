@@ -36,4 +36,10 @@ enum class ErrorInfo(
         "세부 목표의 최대 갯수를 초과했습니다.",
         LogLevel.INFO,
     ),
+    TOO_MANY_CHEERING(
+        HttpStatus.TOO_MANY_REQUESTS,
+        1004,
+        "같은 인생 지도는 1분에 1번만 응원할 수 있습니다.",
+        LogLevel.INFO,
+    ),
 }
