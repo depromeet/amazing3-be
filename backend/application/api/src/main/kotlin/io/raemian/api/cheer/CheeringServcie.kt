@@ -1,13 +1,19 @@
 package io.raemian.api.cheer
 
+import io.raemian.api.cheer.controller.request.CheeringRequest
 import io.raemian.api.cheer.controller.request.CheeringSquadPagingRequest
 import io.raemian.api.cheer.controller.response.CheererResponse
 import io.raemian.api.cheer.controller.response.CheeringCountResponse
+import io.raemian.api.cheer.event.CheeringEvent
+import io.raemian.api.support.error.CoreApiException
+import io.raemian.api.support.error.ErrorInfo
 import io.raemian.api.support.response.PageResult
 import io.raemian.storage.db.core.cheer.Cheerer
 import io.raemian.storage.db.core.cheer.CheererRepository
 import io.raemian.storage.db.core.cheer.CheeringRepository
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
+import io.raemian.storage.db.core.user.UserRepository
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -18,7 +24,20 @@ class CheeringServcie(
     private val cheererRepository: CheererRepository,
     private val cheeringRepository: CheeringRepository,
     private val lifeMapRepository: LifeMapRepository,
+    private val userRepository: UserRepository,
+    private val cheeringLimiter: CheeringLimiter,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
+    @Transactional
+    fun cheering(request: CheeringRequest) {
+        checkCheeringLimit(request.lifeMapId, request.cheererId)
+
+        saveCheerer(request.lifeMapId, request.cheererId)
+
+        applicationEventPublisher.publishEvent(CheeringEvent(request.lifeMapId))
+
+        cheeringLimiter.put(request.lifeMapId, request.cheererId)
+    }
 
     @Transactional(readOnly = true)
     fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPagingRequest): PageResult<CheererResponse> {
@@ -54,6 +73,18 @@ class CheeringServcie(
         }
     }
 
+    private fun saveCheerer(lifeMapId: Long, cheererId: Long) {
+        val cheerer = userRepository.getReferenceById(cheererId)
+
+        cheererRepository.save(
+            Cheerer(
+                lifeMapId = lifeMapId,
+                user = cheerer,
+                cheeringAt = LocalDateTime.now(),
+            ),
+        )
+    }
+
     private fun isLastPage(contentSize: Int, pageSize: Int, lifeMapId: Long, cheeringSquad: List<Cheerer>): Boolean {
         return if (contentSize < pageSize) {
             true
@@ -67,6 +98,12 @@ class CheeringServcie(
             cheererRepository.findByLifeMapIdOrderByCheeringAtDesc(lifeMapId, pageable)
         } else {
             cheererRepository.findByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAtDesc(lifeMapId, cheeringAt, pageable)
+        }
+    }
+
+    private fun checkCheeringLimit(lifeMapId: Long, cheererId: Long) {
+        if (!cheeringLimiter.isPermit(lifeMapId, cheererId)) {
+            throw CoreApiException(ErrorInfo.TOO_MANY_CHEERING)
         }
     }
 }

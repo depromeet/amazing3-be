@@ -8,6 +8,10 @@ class ApiResponse<T> private constructor(
     val errorInfo: ErrorInfo? = null,
 ) {
     companion object {
+        fun success(): ApiResponse<Unit> {
+            return ApiResponse(ResultType.SUCCESS, null, null)
+        }
+
         fun <S> success(data: S): ApiResponse<S> {
             return ApiResponse(ResultType.SUCCESS, data, null)
         }

@@ -12,7 +12,7 @@ import jakarta.persistence.Table
 @Table(name = "CHEERING")
 class Cheering(
     @Column
-    val count: Long,
+    var count: Long,
 
     @Column
     val lifeMapId: Long,
@@ -20,4 +20,9 @@ class Cheering(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-) : BaseEntity()
+) : BaseEntity() {
+    fun addCount(): Cheering {
+        this.count = this.count + 1
+        return this
+    }
+}
