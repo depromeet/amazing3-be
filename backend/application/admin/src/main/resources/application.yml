@@ -10,7 +10,7 @@ spring:
 server:
   servlet:
     context-path: /admin
-  port: 7000
+  port: 8080
 
 springdoc:
   server:
@@ -24,6 +24,7 @@ spring:
       local:
         - db-core-local
         - image
+        - logging
 
 ---
 # dev
@@ -33,6 +34,7 @@ spring:
       dev:
         - db-core-dev
         - image
+        - logging
 
 ---
 # live
@@ -42,3 +44,4 @@ spring:
       live:
         - db-core-live
         - image
+        - logging
