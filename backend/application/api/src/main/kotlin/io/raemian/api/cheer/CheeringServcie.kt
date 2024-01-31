@@ -42,7 +42,7 @@ class CheeringServcie(
     @Transactional(readOnly = true)
     fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPagingRequest): PageResult<CheererResponse> {
         val cheeringSquad =
-            cheererRepository.findAll()
+            findCheeringSquadPage(lifeMapId, request.lastCursorAt,Pageable.ofSize(request.pageSize))
 
         val isLastPage = isLastPage(cheeringSquad.size, request.pageSize, lifeMapId, cheeringSquad)
 
