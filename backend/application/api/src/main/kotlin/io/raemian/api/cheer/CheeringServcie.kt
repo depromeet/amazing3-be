@@ -30,7 +30,6 @@ class CheeringServcie(
 ) {
     @Transactional
     fun cheering(request: CheeringRequest) {
-        checkCheeringLimit(request.lifeMapId, request.cheererId)
 
         saveCheerer(request.lifeMapId, request.cheererId)
 
@@ -42,7 +41,7 @@ class CheeringServcie(
     @Transactional(readOnly = true)
     fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPagingRequest): PageResult<CheererResponse> {
         val cheeringSquad =
-            findCheeringSquadPage(lifeMapId, request.lastCursorAt,Pageable.ofSize(request.pageSize))
+            findCheeringSquadPage(lifeMapId, request.lastCursorAt, Pageable.ofSize(request.pageSize))
 
         val isLastPage = isLastPage(cheeringSquad.size, request.pageSize, lifeMapId, cheeringSquad)
 
@@ -89,15 +88,15 @@ class CheeringServcie(
         return if (contentSize < pageSize) {
             true
         } else {
-            !cheererRepository.existsByLifeMapIdAndCheeringAtGreaterThan(lifeMapId, cheeringSquad.last().cheeringAt)
+            !cheererRepository.existsByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAt(lifeMapId, cheeringSquad.last().cheeringAt)
         }
     }
 
     private fun findCheeringSquadPage(lifeMapId: Long, cheeringAt: LocalDateTime?, pageable: Pageable): List<Cheerer> {
         return if (cheeringAt == null) {
-            cheererRepository.findByLifeMapIdOrderByCheeringAtDesc(lifeMapId, pageable)
+            cheererRepository.findByLifeMapIdOrderByCheeringAt(lifeMapId, pageable)
         } else {
-            cheererRepository.findByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAtDesc(lifeMapId, cheeringAt, pageable)
+            cheererRepository.findByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAt(lifeMapId, cheeringAt, pageable)
         }
     }
 

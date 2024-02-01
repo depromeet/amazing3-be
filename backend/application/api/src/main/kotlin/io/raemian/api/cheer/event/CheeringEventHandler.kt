@@ -15,7 +15,7 @@ class CheeringEventHandler(
     @EventListener
     fun addCheeringCount(cheeringEvent: CheeringEvent) {
         val cheering = cheeringRepository.findByLifeMapIdForUpdate(cheeringEvent.lifeMapId)
-            ?: Cheering(1, cheeringEvent.lifeMapId)
+            ?: Cheering(0, cheeringEvent.lifeMapId)
 
         cheeringRepository.save(cheering.addCount())
     }
