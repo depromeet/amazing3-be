@@ -68,6 +68,10 @@ class WebSecurityConfig(
                         AntPathRequestMatcher("/swagger-resources/**"),
                         AntPathRequestMatcher("/webjars/**"),
                     ).permitAll()
+                    .requestMatchers(
+                        AntPathRequestMatcher("/cheering/squad/**"),
+                        AntPathRequestMatcher("/cheering/count/**"),
+                    ).permitAll()
                     .anyRequest().authenticated()
             }
             .oauth2Login {

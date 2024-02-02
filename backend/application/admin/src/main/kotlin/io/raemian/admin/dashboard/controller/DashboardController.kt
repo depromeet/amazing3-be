@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController
 class DashboardController(
     private val dashboardService: DashboardService,
 ) {
-
     @Operation(summary = "대시보드 통계 데이터 조회 API")
     @GetMapping
     fun findAll(): ResponseEntity<ApiResponse<DashboardResponse>> =
