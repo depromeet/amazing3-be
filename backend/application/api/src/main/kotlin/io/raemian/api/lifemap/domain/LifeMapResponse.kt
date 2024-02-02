@@ -1,5 +1,6 @@
 package io.raemian.api.lifemap.domain
 
+import io.raemian.api.cheer.controller.response.CheeringCountResponse
 import io.raemian.api.user.domain.UserSubset
 
 data class LifeMapResponse(
@@ -8,7 +9,7 @@ data class LifeMapResponse(
     val goals: List<GoalDto>,
     val goalsCount: Int,
     val user: UserSubset? = null,
-    val view: ViewResponse,
+    val count: CountResponse,
 ) {
     constructor(lifeMapDTO: LifeMapDTO, lifeMapCountDTO: LifeMapCountDTO, cheeringCount: Long) : this(
         lifeMapId = lifeMapDTO.lifeMapId,

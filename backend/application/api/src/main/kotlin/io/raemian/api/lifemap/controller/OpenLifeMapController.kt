@@ -20,7 +20,10 @@ class OpenLifeMapController(
 
     @Operation(summary = "UserName으로 인생 지도 조회 API")
     @GetMapping("/open/life-map/{username}")
-    fun findAllByUserName(@PathVariable("username") username: String): ResponseEntity<ApiResponse<LifeMapResponse>> {
+    fun findAllByUserName(
+        @AuthenticationPrincipal currentUser: CurrentUser?,
+        @PathVariable("username") username: String,
+    ): ResponseEntity<ApiResponse<LifeMapResponse>> {
         val lifeMap = lifeMapService.findFirstByUserName(username)
         val count = lifeMapService.addViewCount(lifeMap.lifeMapId)
         val cheeringCount = cheeringServcie.getCheeringCount(username)

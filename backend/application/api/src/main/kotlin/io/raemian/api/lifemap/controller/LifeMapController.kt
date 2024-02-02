@@ -1,6 +1,7 @@
 package io.raemian.api.lifemap.controller
 
 import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.cheer.CheeringServcie
 import io.raemian.api.lifemap.LifeMapService
 import io.raemian.api.lifemap.domain.LifeMapResponse
 import io.raemian.api.lifemap.domain.UpdatePublicRequest
@@ -31,7 +32,7 @@ class LifeMapController(
         val cheeringCount = cheeringServcie.getCheeringCount(currentUser.id)
 
         return ResponseEntity
-            .ok(ApiResponse.success(LifeMapResponse(lifeMap, count)))
+            .ok(ApiResponse.success(LifeMapResponse(lifeMap, count, cheeringCount)))
     }
 
     @Operation(summary = "인생 지도 공개 여부를 수정하는 API")
