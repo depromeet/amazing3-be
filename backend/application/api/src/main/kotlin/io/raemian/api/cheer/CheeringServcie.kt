@@ -10,6 +10,7 @@ import io.raemian.api.support.error.ErrorInfo
 import io.raemian.api.support.response.PageResult
 import io.raemian.storage.db.core.cheer.Cheerer
 import io.raemian.storage.db.core.cheer.CheererRepository
+import io.raemian.storage.db.core.cheer.Cheering
 import io.raemian.storage.db.core.cheer.CheeringRepository
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.user.UserRepository
@@ -42,7 +43,7 @@ class CheeringServcie(
     @Transactional(readOnly = true)
     fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPagingRequest): PageResult<CheererResponse> {
         val cheering = cheeringRepository.findByLifeMapId(lifeMapId)
-            ?: throw NoSuchElementException("존재하지 않는 LifeMap입니다. $lifeMapId")
+            ?: Cheering(0, lifeMapId)
 
         val cheeringSquad =
             findCheeringSquadPage(lifeMapId, request.lastCursorAt, Pageable.ofSize(request.pageSize))
