@@ -30,6 +30,7 @@ class CheeringServcie(
 ) {
     @Transactional
     fun cheering(request: CheeringRequest) {
+        checkCheeringLimit(request.lifeMapId, request.cheererId)
 
         saveCheerer(request.lifeMapId, request.cheererId)
 
@@ -40,12 +41,15 @@ class CheeringServcie(
 
     @Transactional(readOnly = true)
     fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPagingRequest): PageResult<CheererResponse> {
+        val cheering = cheeringRepository.findByLifeMapId(lifeMapId)
+            ?: throw NoSuchElementException("존재하지 않는 LifeMap입니다. $lifeMapId")
+
         val cheeringSquad =
             findCheeringSquadPage(lifeMapId, request.lastCursorAt, Pageable.ofSize(request.pageSize))
 
         val isLastPage = isLastPage(cheeringSquad.size, request.pageSize, lifeMapId, cheeringSquad)
 
-        return PageResult.of(cheeringSquad.map(CheererResponse::from), isLastPage)
+        return PageResult.of(cheering.count, cheeringSquad.map(CheererResponse::from), isLastPage)
     }
 
     @Transactional(readOnly = true)
