@@ -2,6 +2,8 @@ package io.raemian.api.integration.goal
 
 import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
+import io.raemian.api.goal.controller.request.UpdateGoalRequest
+import io.raemian.api.support.RaemianLocalDate
 import io.raemian.api.support.error.MaxGoalCountExceededException
 import io.raemian.api.support.error.PrivateLifeMapException
 import io.raemian.storage.db.core.goal.Goal
@@ -199,6 +201,64 @@ class GoalServiceTest {
         Assertions.assertThatThrownBy {
             goalService.create(USER_FIXTURE.id!!, createGoalRequest)
         }.isInstanceOf(MaxGoalCountExceededException::class.java)
+    }
+
+    @Test
+    @DisplayName("Goal의 정보들을 수정할 수 있다.")
+    @Transactional
+    fun updateGoalTest() {
+        // given
+        val title = "Title"
+        val description = "Description"
+        val year = "2000"
+        val month = "05"
+        val deadline = RaemianLocalDate.of(year, month)
+
+        val goal = Goal(
+            lifeMap = LIFE_MAP_FIXTURE,
+            title = title,
+            description = description,
+            deadline = deadline,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+        )
+
+        // when
+        val newTitle = "New" + title
+        val newDescription = "New" + description
+
+        val newSticker = Sticker(
+            "New" + STICKER_FIXTURE.name,
+            "New" + STICKER_FIXTURE.url,
+        )
+        val newTag = Tag("New" + TAG_FIXTURE.content)
+
+        val newDeadline = deadline.plusDays(77)
+        val newYear = newDeadline.year.toString()
+        val newMonth = newDeadline.monthValue.toString()
+
+        entityManager.merge(newSticker)
+        entityManager.merge(newTag)
+        goalRepository.save(goal)
+
+        val updateGoalRequest = UpdateGoalRequest(
+            title = newTitle,
+            yearOfDeadline = newYear,
+            monthOfDeadline = newMonth,
+            stickerId = newSticker.id!!,
+            tagId = newTag.id!!,
+            description = newDescription,
+        )
+        goalService.update(USER_FIXTURE.id!!, goal.id!!, updateGoalRequest)
+
+        // then
+        val findById = goalRepository.getById(goal.id!!)
+        assertThat(findById.title).isEqualTo(newTitle)
+        assertThat(findById.description).isEqualTo(newDescription)
+        assertThat(findById.deadline.year).isEqualTo(newDeadline.year)
+        assertThat(findById.deadline.month).isEqualTo(newDeadline.month)
+        assertThat(findById.sticker.name).isEqualTo(newSticker.name)
+        assertThat(findById.tag.content).isEqualTo(newTag.content)
     }
 
     @Test
