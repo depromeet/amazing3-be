@@ -3,6 +3,7 @@ package io.raemian.api.goal.controller
 import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
+import io.raemian.api.goal.controller.request.UpdateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.support.response.ApiResponse
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -46,6 +48,18 @@ class GoalController(
         return ResponseEntity
             .created("/goal/${response.id}".toUri())
             .body(ApiResponse.success(response))
+    }
+
+    @Operation(summary = "목표 수정 API")
+    @PatchMapping("/{goalId}")
+    fun update(
+        @AuthenticationPrincipal currentUser: CurrentUser,
+        @PathVariable("goalId") goalId: Long,
+        @RequestBody updateGoalRequest: UpdateGoalRequest,
+    ): ResponseEntity<ApiResponse<GoalResponse>> {
+        val goalResponse = goalService.update(currentUser.id, goalId, updateGoalRequest)
+        return ResponseEntity
+            .ok(ApiResponse.success(goalResponse))
     }
 
     @Operation(summary = "목표 삭제 API")

@@ -1,6 +1,7 @@
 package io.raemian.api.goal
 
 import io.raemian.api.goal.controller.request.CreateGoalRequest
+import io.raemian.api.goal.controller.request.UpdateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.sticker.StickerService
@@ -45,6 +46,21 @@ class GoalService(
     }
 
     @Transactional
+    fun update(userId: Long, goalId: Long, updateGoalRequest: UpdateGoalRequest): GoalResponse {
+        val goal = goalRepository.getById(goalId)
+        validateGoalIsUsers(userId, goal)
+
+        with(updateGoalRequest) {
+            updateTag(goal, tagId)
+            updateSticker(goal, stickerId)
+
+            val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadline)
+            goal.update(title, deadline, description)
+        }
+        return GoalResponse(goal)
+    }
+
+    @Transactional
     fun delete(userId: Long, goalId: Long) {
         val goal = goalRepository.getById(goalId)
         validateGoalIsUsers(userId, goal)
@@ -81,6 +97,20 @@ class GoalService(
             lifeMap.addGoal(goal)
         } catch (exception: IllegalArgumentException) {
             throw MaxGoalCountExceededException()
+        }
+    }
+
+    private fun updateTag(goal: Goal, tagId: Long) {
+        if (goal.tag.id != tagId) {
+            val newTag = tagService.getById(tagId)
+            goal.updateTag(newTag)
+        }
+    }
+
+    private fun updateSticker(goal: Goal, stickerId: Long) {
+        if (goal.sticker.id != stickerId) {
+            val newSticker = stickerService.getById(stickerId)
+            goal.updateSticker(newSticker)
         }
     }
 }
