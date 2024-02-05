@@ -73,11 +73,12 @@ class GoalService(
     }
 
     private fun createGoal(createGoalRequest: CreateGoalRequest, lifeMap: LifeMap): Goal {
-        val (title, yearOfDeadline, monthOfDeadLine, stickerId, tagId, description) = createGoalRequest
-        val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadLine)
-        val sticker = stickerService.getById(stickerId)
-        val tag = tagService.getById(tagId)
-        return Goal(lifeMap, title, deadline, sticker, tag, description!!)
+        with(createGoalRequest) {
+            val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadline)
+            val sticker = stickerService.getById(stickerId)
+            val tag = tagService.getById(tagId)
+            return Goal(lifeMap, title, deadline, sticker, tag, description!!)
+        }
     }
 
     private fun validateAnotherUserLifeMapPublic(userId: Long, lifeMap: LifeMap) {
