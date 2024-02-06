@@ -56,6 +56,7 @@ class GoalService(
 
             val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadline)
             goal.update(title, deadline, description)
+            goalRepository.save(goal)
         }
         return GoalResponse(goal)
     }
@@ -75,8 +76,8 @@ class GoalService(
     private fun createGoal(createGoalRequest: CreateGoalRequest, lifeMap: LifeMap): Goal {
         with(createGoalRequest) {
             val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadline)
-            val sticker = stickerService.getById(stickerId)
-            val tag = tagService.getById(tagId)
+            val sticker = stickerService.getReferenceById(stickerId)
+            val tag = tagService.getReferenceById(tagId)
             return Goal(lifeMap, title, deadline, sticker, tag, description!!)
         }
     }
@@ -103,14 +104,14 @@ class GoalService(
 
     private fun updateTag(goal: Goal, tagId: Long) {
         if (goal.tag.id != tagId) {
-            val newTag = tagService.getById(tagId)
+            val newTag = tagService.getReferenceById(tagId)
             goal.updateTag(newTag)
         }
     }
 
     private fun updateSticker(goal: Goal, stickerId: Long) {
         if (goal.sticker.id != stickerId) {
-            val newSticker = stickerService.getById(stickerId)
+            val newSticker = stickerService.getReferenceById(stickerId)
             goal.updateSticker(newSticker)
         }
     }

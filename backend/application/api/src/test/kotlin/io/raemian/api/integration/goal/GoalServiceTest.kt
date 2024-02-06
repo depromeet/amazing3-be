@@ -222,6 +222,7 @@ class GoalServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
         )
+        goalRepository.save(goal)
 
         // when
         val newTitle = "New" + title
@@ -232,14 +233,12 @@ class GoalServiceTest {
             "New" + STICKER_FIXTURE.url,
         )
         val newTag = Tag("New" + TAG_FIXTURE.content)
+        entityManager.merge(newSticker)
+        entityManager.merge(newTag)
 
         val newDeadline = deadline.plusDays(77)
         val newYear = newDeadline.year.toString()
         val newMonth = newDeadline.monthValue.toString()
-
-        entityManager.merge(newSticker)
-        entityManager.merge(newTag)
-        goalRepository.save(goal)
 
         val updateGoalRequest = UpdateGoalRequest(
             title = newTitle,
