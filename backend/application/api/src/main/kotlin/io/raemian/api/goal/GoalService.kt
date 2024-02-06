@@ -69,8 +69,12 @@ class GoalService(
     }
 
     private fun createFirstLifeMap(userId: Long): LifeMap {
-        val user = userRepository.getById(userId)
-        return LifeMap(user, true, goals = ArrayList())
+        val user = userRepository.getReferenceById(userId)
+        return LifeMap(
+            user = user,
+            isPublic = true,
+            goals = ArrayList(),
+        )
     }
 
     private fun createGoal(createGoalRequest: CreateGoalRequest, lifeMap: LifeMap): Goal {
