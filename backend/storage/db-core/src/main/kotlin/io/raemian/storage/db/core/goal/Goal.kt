@@ -69,19 +69,14 @@ class Goal(
         title: String,
         deadline: LocalDate,
         description: String,
-    ) {
-        this.title = title
-        this.deadline = deadline
-        this.description = description
-    }
+    ): Goal = Goal(lifeMap, title, deadline, sticker, tag, description, tasks, id)
 
-    fun updateSticker(sticker: Sticker) {
-        this.sticker = sticker
-    }
 
-    fun updateTag(tag: Tag) {
-        this.tag = tag
-    }
+    fun updateSticker(sticker: Sticker): Goal =
+        Goal(lifeMap, title, deadline, sticker, tag, description, tasks, id)
+
+    fun updateTag(tag: Tag): Goal =
+        Goal(lifeMap, title, deadline, sticker, tag, description, tasks, id)
 
     private fun validateMaxTaskCount() =
         require(tasks.size < MAX_TASK_COUNT)

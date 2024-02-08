@@ -51,14 +51,17 @@ class GoalService(
         validateGoalIsUsers(userId, goal)
 
         with(updateGoalRequest) {
-            updateTag(goal, tagId)
-            updateSticker(goal, stickerId)
+            val updateTagGoal = goal.takeIf { it.tag.id == tagId }
+                ?: updateTag(goal, tagId)
+
+            val updatedStickerGoal = updateTagGoal.takeIf { it.sticker.id == stickerId }
+                ?: updateSticker(updateTagGoal, stickerId)
 
             val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadline)
-            goal.update(title, deadline, description)
-            goalRepository.save(goal)
+            val updatedGoal = updatedStickerGoal.update(title, deadline, description)
+            goalRepository.save(updatedGoal)
+            return GoalResponse(updatedGoal)
         }
-        return GoalResponse(goal)
     }
 
     @Transactional
@@ -106,17 +109,13 @@ class GoalService(
         }
     }
 
-    private fun updateTag(goal: Goal, tagId: Long) {
-        if (goal.tag.id != tagId) {
-            val newTag = tagService.getReferenceById(tagId)
-            goal.updateTag(newTag)
-        }
+    private fun updateTag(goal: Goal, tagId: Long): Goal {
+        val newTag = tagService.getReferenceById(tagId)
+        return goal.updateTag(newTag)
     }
 
-    private fun updateSticker(goal: Goal, stickerId: Long) {
-        if (goal.sticker.id != stickerId) {
-            val newSticker = stickerService.getReferenceById(stickerId)
-            goal.updateSticker(newSticker)
-        }
+    private fun updateSticker(goal: Goal, stickerId: Long): Goal {
+        val newSticker = stickerService.getReferenceById(stickerId)
+        return goal.updateSticker(newSticker)
     }
 }

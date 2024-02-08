@@ -251,13 +251,13 @@ class GoalServiceTest {
         goalService.update(USER_FIXTURE.id!!, goal.id!!, updateGoalRequest)
 
         // then
-        val findById = goalRepository.getById(goal.id!!)
-        assertThat(findById.title).isEqualTo(newTitle)
-        assertThat(findById.description).isEqualTo(newDescription)
-        assertThat(findById.deadline.year).isEqualTo(newDeadline.year)
-        assertThat(findById.deadline.month).isEqualTo(newDeadline.month)
-        assertThat(findById.sticker.name).isEqualTo(newSticker.name)
-        assertThat(findById.tag.content).isEqualTo(newTag.content)
+        val updatedGoal = goalRepository.getById(goal.id!!)
+        assertThat(updatedGoal.title).isEqualTo(newTitle)
+        assertThat(updatedGoal.description).isEqualTo(newDescription)
+        assertThat(updatedGoal.deadline.year).isEqualTo(newDeadline.year)
+        assertThat(updatedGoal.deadline.month).isEqualTo(newDeadline.month)
+        assertThat(updatedGoal.sticker.name).isEqualTo(newSticker.name)
+        assertThat(updatedGoal.tag.content).isEqualTo(newTag.content)
     }
 
     @Test
