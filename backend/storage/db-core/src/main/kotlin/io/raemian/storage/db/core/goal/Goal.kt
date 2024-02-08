@@ -71,7 +71,6 @@ class Goal(
         description: String,
     ): Goal = Goal(lifeMap, title, deadline, sticker, tag, description, tasks, id)
 
-
     fun updateSticker(sticker: Sticker): Goal =
         Goal(lifeMap, title, deadline, sticker, tag, description, tasks, id)
 
