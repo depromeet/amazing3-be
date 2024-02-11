@@ -1,7 +1,7 @@
 package io.raemian.api.lifemap.controller
 
 import io.raemian.api.auth.domain.CurrentUser
-import io.raemian.api.cheer.CheeringServcie
+import io.raemian.api.cheer.CheeringService
 import io.raemian.api.lifemap.LifeMapService
 import io.raemian.api.lifemap.domain.LifeMapResponse
 import io.raemian.api.support.response.ApiResponse
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class OpenLifeMapController(
     private val lifeMapService: LifeMapService,
-    private val cheeringServcie: CheeringServcie,
+    private val cheeringService: CheeringService,
 ) {
 
     @Operation(summary = "UserName으로 인생 지도 조회 API")
@@ -26,7 +26,7 @@ class OpenLifeMapController(
     ): ResponseEntity<ApiResponse<LifeMapResponse>> {
         val lifeMap = lifeMapService.findFirstByUserName(username)
         val count = lifeMapService.addViewCount(lifeMap.lifeMapId)
-        val cheeringCount = cheeringServcie.getCheeringCount(username)
+        val cheeringCount = cheeringService.getCheeringCount(username)
 
         if (currentUser != null) {
             if (currentUser.id != lifeMap.user?.id) {

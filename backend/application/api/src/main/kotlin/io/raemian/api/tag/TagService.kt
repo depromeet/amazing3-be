@@ -18,7 +18,7 @@ class TagService(
     }
 
     @Transactional(readOnly = true)
-    fun getById(id: Long): Tag {
-        return tagRepository.getById(id)
+    fun getReferenceById(id: Long): Tag {
+        return tagRepository.getReferenceById(id)
     }
 }

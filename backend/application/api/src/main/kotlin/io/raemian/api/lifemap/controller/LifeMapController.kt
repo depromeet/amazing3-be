@@ -1,8 +1,9 @@
 package io.raemian.api.lifemap.controller
 
 import io.raemian.api.auth.domain.CurrentUser
-import io.raemian.api.cheer.CheeringServcie
+import io.raemian.api.cheer.CheeringService
 import io.raemian.api.lifemap.LifeMapService
+import io.raemian.api.lifemap.domain.ExploreResponses
 import io.raemian.api.lifemap.domain.LifeMapResponse
 import io.raemian.api.lifemap.domain.UpdatePublicRequest
 import io.raemian.api.support.response.ApiResponse
@@ -13,13 +14,14 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/life-map")
 class LifeMapController(
     private val lifeMapService: LifeMapService,
-    private val cheeringServcie: CheeringServcie,
+    private val cheeringService: CheeringService,
 ) {
 
     @Operation(summary = "로그인한 유저의 인생 지도 조회 API")
@@ -29,10 +31,22 @@ class LifeMapController(
     ): ResponseEntity<ApiResponse<LifeMapResponse>> {
         val lifeMap = lifeMapService.findFirstByUserId(currentUser.id)
         val count = lifeMapService.getLifeMapCount(lifeMap.lifeMapId)
-        val cheeringCount = cheeringServcie.getCheeringCount(currentUser.id)
+        val cheeringCount = cheeringService.getCheeringCount(currentUser.id)
 
         return ResponseEntity
             .ok(ApiResponse.success(LifeMapResponse(lifeMap, count, cheeringCount)))
+    }
+
+    @Operation(summary = "explore life map")
+    @GetMapping("/explore")
+    fun explore(
+        @AuthenticationPrincipal currentUser: CurrentUser,
+        @RequestParam(required = false, defaultValue = Long.MAX_VALUE.toString()) cursor: Long,
+    ): ResponseEntity<ApiResponse<ExploreResponses>> {
+        val maps = lifeMapService.explore(lifeMapId = cursor)
+
+        return ResponseEntity.ok()
+            .body(ApiResponse.success(ExploreResponses(maps)))
     }
 
     @Operation(summary = "인생 지도 공개 여부를 수정하는 API")

@@ -28,21 +28,21 @@ class Goal(
 
     @Column(nullable = false)
     @Nationalized
-    val title: String,
+    var title: String,
 
     @Column(nullable = false)
-    val deadline: LocalDate,
+    var deadline: LocalDate,
 
     @ManyToOne
     @JoinColumn(name = "sticker_id", nullable = false)
-    val sticker: Sticker,
+    var sticker: Sticker,
 
     @ManyToOne
     @JoinColumn(name = "tag_id", nullable = false)
-    val tag: Tag,
+    var tag: Tag,
 
     @Nationalized
-    val description: String = "",
+    var description: String = "",
 
     @OneToMany(
         mappedBy = "goal",
@@ -64,6 +64,18 @@ class Goal(
         validateMaxTaskCount()
         tasks.add(task)
     }
+
+    fun update(
+        title: String,
+        deadline: LocalDate,
+        description: String,
+    ): Goal = Goal(lifeMap, title, deadline, sticker, tag, description, tasks, id)
+
+    fun updateSticker(sticker: Sticker): Goal =
+        Goal(lifeMap, title, deadline, sticker, tag, description, tasks, id)
+
+    fun updateTag(tag: Tag): Goal =
+        Goal(lifeMap, title, deadline, sticker, tag, description, tasks, id)
 
     private fun validateMaxTaskCount() =
         require(tasks.size < MAX_TASK_COUNT)

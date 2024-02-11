@@ -112,7 +112,6 @@ class OAuth2UserService(
 
         userRepository.save(user)
         val updateUsername = updateUsername(user)
-        createUserDefaultLifeMap(updateUsername)
         return updateUsername
     }
 

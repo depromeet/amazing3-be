@@ -1,6 +1,6 @@
 package io.raemian.api.cheer.controller
 
-import io.raemian.api.cheer.CheeringServcie
+import io.raemian.api.cheer.CheeringService
 import io.raemian.api.cheer.controller.request.CheeringRequest
 import io.raemian.api.cheer.controller.request.CheeringSquadPagingRequest
 import io.raemian.api.cheer.controller.response.CheererResponse
@@ -18,23 +18,23 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/cheering")
 class CheeringController(
-    private val cheeringServcie: CheeringServcie,
+    private val cheeringService: CheeringService,
 ) {
 
     @GetMapping("/squad/{lifeMapId}")
     fun findCheeringSquad(@PathVariable("lifeMapId") lifeMapId: Long, request: CheeringSquadPagingRequest): ResponseEntity<ApiResponse<PageResult<CheererResponse>>> {
-        val response = cheeringServcie.findCheeringSquad(lifeMapId, request)
+        val response = cheeringService.findCheeringSquad(lifeMapId, request)
 
         return ResponseEntity.ok().body(ApiResponse.success(response))
     }
 
     @GetMapping("/count/{userName}")
     fun getCheeringCount(@PathVariable("userName") userName: String): ResponseEntity<ApiResponse<CheeringCountResponse>> =
-        ResponseEntity.ok().body(ApiResponse.success(cheeringServcie.getCheeringCount(userName)))
+        ResponseEntity.ok().body(ApiResponse.success(cheeringService.getCheeringCount(userName)))
 
     @PostMapping
     fun getCheeringCount(@RequestBody request: CheeringRequest): ResponseEntity<ApiResponse<Unit>> {
-        cheeringServcie.cheering(request)
+        cheeringService.cheering(request)
         return ResponseEntity.ok().body(ApiResponse.success())
     }
 }

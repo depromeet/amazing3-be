@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
-class CheeringServcie(
+class CheeringService(
     private val cheererRepository: CheererRepository,
     private val cheeringRepository: CheeringRepository,
     private val lifeMapRepository: LifeMapRepository,
@@ -70,11 +70,7 @@ class CheeringServcie(
 
         val cheering = cheeringRepository.findByLifeMapId(lifeMap.id!!)
 
-        return if (cheering == null) {
-            0
-        } else {
-            cheering.count
-        }
+        return cheering?.count ?: 0
     }
 
     private fun saveCheerer(lifeMapId: Long, cheererId: Long) {

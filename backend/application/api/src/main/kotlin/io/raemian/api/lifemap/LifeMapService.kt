@@ -1,5 +1,6 @@
 package io.raemian.api.lifemap
 
+import io.raemian.api.lifemap.domain.ExploreDTO
 import io.raemian.api.lifemap.domain.LifeMapCountDTO
 import io.raemian.api.lifemap.domain.LifeMapDTO
 import io.raemian.api.lifemap.domain.UpdatePublicRequest
@@ -22,6 +23,22 @@ class LifeMapService(
     private val lifeMapCountRepository: LifeMapCountRepository,
     private val lifeMapHistoryRepository: LifeMapHistoryRepository,
 ) {
+
+    @Transactional(readOnly = true)
+    fun explore(lifeMapId: Long): List<ExploreDTO> {
+        val ids = lifeMapRepository.explore(lifeMapId)
+        val lifeMaps = lifeMapRepository.findAllByIdInOrderByIdDesc(ids)
+        val countMap = lifeMapCountRepository.findAllByLifeMapIdIn(ids)
+            .associateBy { it.lifeMapId }
+        return lifeMaps
+            .map { LifeMapDTO(it) }
+            .map {
+                ExploreDTO(
+                    lifeMapDTO = it,
+                    lifeMapCountDTO = LifeMapCountDTO(countMap[it.lifeMapId] ?: LifeMapCount.of(lifeMapId)),
+                )
+            }
+    }
 
     @Transactional(readOnly = true)
     fun findFirstByUserId(userId: Long): LifeMapDTO {
@@ -105,7 +122,9 @@ class LifeMapService(
     fun addCount(lifeMapId: Long): Long {
         val lifeMapCount = lifeMapCountRepository.findByLifeMapId(lifeMapId)
             ?: LifeMapCount.of(lifeMapId)
-        val added = lifeMapCount.addCount()
+        val added = lifeMapCount
+            .addViewCount()
+            .addHistoryCount()
         val saved = lifeMapCountRepository.save(added)
         return saved.historyCount
     }

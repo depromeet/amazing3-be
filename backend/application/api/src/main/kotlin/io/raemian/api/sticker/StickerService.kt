@@ -18,7 +18,7 @@ class StickerService(
     }
 
     @Transactional(readOnly = true)
-    fun getById(id: Long): Sticker {
-        return stickerRepository.getById(id)
+    fun getReferenceById(id: Long): Sticker {
+        return stickerRepository.getReferenceById(id)
     }
 }
