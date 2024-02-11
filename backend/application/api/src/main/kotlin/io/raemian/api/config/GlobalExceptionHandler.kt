@@ -4,6 +4,7 @@ import io.raemian.api.log.LogService
 import io.raemian.api.support.error.CoreApiException
 import io.raemian.api.support.error.ErrorInfo
 import io.raemian.api.support.response.ApiResponse
+import jakarta.persistence.EntityNotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
@@ -20,6 +21,15 @@ class GlobalExceptionHandler(
     fun handleCoreApiException(e: CoreApiException): ResponseEntity<ApiResponse<Any>> {
         log.error("Exception : {}", e.message, e)
         return ResponseEntity(ApiResponse.error(e.errorInfo), e.errorInfo.status)
+    }
+
+    @ExceptionHandler(NoSuchElementException::class, EntityNotFoundException::class)
+    fun handleResourceNotFoundException(e: CoreApiException): ResponseEntity<ApiResponse<Any>> {
+        log.error("Exception : {}", e.message, e)
+        return ResponseEntity(
+            ApiResponse.error(ErrorInfo.RESOURCE_NOT_FOUND),
+            ErrorInfo.RESOURCE_NOT_FOUND.status,
+        )
     }
 
     @ExceptionHandler(Exception::class)

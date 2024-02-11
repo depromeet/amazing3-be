@@ -16,6 +16,13 @@ enum class ErrorInfo(
         LogLevel.ERROR,
     ),
 
+    RESOURCE_NOT_FOUND(
+        HttpStatus.NOT_FOUND,
+        HttpStatus.NOT_FOUND.value(),
+        "Resource Not Found",
+        LogLevel.ERROR,
+    ),
+
     PRIVATE_LIFE_MAP_EXCEPTION(
         HttpStatus.FORBIDDEN,
         1001,
@@ -36,6 +43,7 @@ enum class ErrorInfo(
         "세부 목표의 최대 갯수를 초과했습니다.",
         LogLevel.INFO,
     ),
+
     TOO_MANY_CHEERING(
         HttpStatus.TOO_MANY_REQUESTS,
         1004,

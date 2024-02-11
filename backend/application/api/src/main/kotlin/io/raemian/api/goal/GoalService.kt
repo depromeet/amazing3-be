@@ -1,6 +1,7 @@
 package io.raemian.api.goal
 
 import io.raemian.api.goal.controller.request.CreateGoalRequest
+import io.raemian.api.goal.controller.request.UpdateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.sticker.StickerService
@@ -45,6 +46,25 @@ class GoalService(
     }
 
     @Transactional
+    fun update(userId: Long, goalId: Long, updateGoalRequest: UpdateGoalRequest): GoalResponse {
+        val goal = goalRepository.getById(goalId)
+        validateGoalIsUsers(userId, goal)
+
+        with(updateGoalRequest) {
+            val updateTagGoal = goal.takeIf { it.tag.id == tagId }
+                ?: updateTag(goal, tagId)
+
+            val updatedStickerGoal = updateTagGoal.takeIf { it.sticker.id == stickerId }
+                ?: updateSticker(updateTagGoal, stickerId)
+
+            val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadline)
+            val updatedGoal = updatedStickerGoal.update(title, deadline, description)
+            goalRepository.save(updatedGoal)
+            return GoalResponse(updatedGoal)
+        }
+    }
+
+    @Transactional
     fun delete(userId: Long, goalId: Long) {
         val goal = goalRepository.getById(goalId)
         validateGoalIsUsers(userId, goal)
@@ -52,16 +72,21 @@ class GoalService(
     }
 
     private fun createFirstLifeMap(userId: Long): LifeMap {
-        val user = userRepository.getById(userId)
-        return LifeMap(user, true, goals = ArrayList())
+        val user = userRepository.getReferenceById(userId)
+        return LifeMap(
+            user = user,
+            isPublic = true,
+            goals = ArrayList(),
+        )
     }
 
     private fun createGoal(createGoalRequest: CreateGoalRequest, lifeMap: LifeMap): Goal {
-        val (title, yearOfDeadline, monthOfDeadLine, stickerId, tagId, description) = createGoalRequest
-        val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadLine)
-        val sticker = stickerService.getById(stickerId)
-        val tag = tagService.getById(tagId)
-        return Goal(lifeMap, title, deadline, sticker, tag, description!!)
+        with(createGoalRequest) {
+            val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadline)
+            val sticker = stickerService.getReferenceById(stickerId)
+            val tag = tagService.getReferenceById(tagId)
+            return Goal(lifeMap, title, deadline, sticker, tag, description!!)
+        }
     }
 
     private fun validateAnotherUserLifeMapPublic(userId: Long, lifeMap: LifeMap) {
@@ -82,5 +107,15 @@ class GoalService(
         } catch (exception: IllegalArgumentException) {
             throw MaxGoalCountExceededException()
         }
+    }
+
+    private fun updateTag(goal: Goal, tagId: Long): Goal {
+        val newTag = tagService.getReferenceById(tagId)
+        return goal.updateTag(newTag)
+    }
+
+    private fun updateSticker(goal: Goal, stickerId: Long): Goal {
+        val newSticker = stickerService.getReferenceById(stickerId)
+        return goal.updateSticker(newSticker)
     }
 }
