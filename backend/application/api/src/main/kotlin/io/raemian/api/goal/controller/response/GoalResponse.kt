@@ -11,16 +11,18 @@ data class GoalResponse(
     val deadline: String,
     val stickerUrl: String,
     val tagInfo: TagInfo,
+    val isMyGoal: Boolean,
     val tasks: List<TaskInfo>,
 ) {
 
-    constructor(goal: Goal) : this(
-        goal.title,
-        goal.description,
-        goal.deadline.format(),
-        goal.sticker.url,
-        TagInfo(goal.tag),
-        goal.tasks.map(::TaskInfo),
+    constructor(goal: Goal, isMyGoal: Boolean) : this(
+        title = goal.title,
+        description = goal.description,
+        deadline = goal.deadline.format(),
+        stickerUrl = goal.sticker.url,
+        tagInfo = TagInfo(goal.tag),
+        isMyGoal = isMyGoal,
+        tasks = goal.tasks.map(::TaskInfo),
     )
 
     data class TagInfo(

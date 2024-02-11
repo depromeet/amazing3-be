@@ -136,6 +136,32 @@ class GoalServiceTest {
     }
 
     @Test
+    @DisplayName("목표 조회시, 자신의 목표인지 다른 사람의 목표인지 확인할 수 있다.")
+    @Transactional
+    fun isMyGoalTest() {
+        // given
+        val lifeMap = entityManager.find(LifeMap::class.java, LIFE_MAP_FIXTURE.id)
+
+        val goal = Goal(
+            lifeMap = lifeMap,
+            title = "목표",
+            deadline = LocalDate.MAX,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "목표 설명.",
+        )
+        goalRepository.save(goal)
+
+        // when
+        val myGoal = goalService.getById(goal.id!!, USER_FIXTURE.id!!)
+        val othersGoal = goalService.getById(goal.id!!, USER_FIXTURE.id!! + 1)
+
+        // then
+        assertThat(myGoal.isMyGoal).isTrue()
+        assertThat(othersGoal.isMyGoal).isFalse()
+    }
+
+    @Test
     @DisplayName("Goal을 생성할 수 있다.")
     @Transactional
     fun createGoalTest() {
