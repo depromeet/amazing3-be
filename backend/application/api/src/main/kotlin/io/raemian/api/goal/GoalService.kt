@@ -29,7 +29,7 @@ class GoalService(
     @Transactional(readOnly = true)
     fun getById(id: Long, userId: Long): GoalResponse {
         val goal = goalRepository.getById(id)
-        val isMyGoal = goal.lifeMap.user.id != userId
+        val isMyGoal = goal.lifeMap.user.id == userId
         validateAnotherUserLifeMapPublic(isMyGoal, goal.lifeMap)
         return GoalResponse(goal, isMyGoal)
     }
