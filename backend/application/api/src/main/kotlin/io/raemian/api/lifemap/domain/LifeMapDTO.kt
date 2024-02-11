@@ -17,6 +17,7 @@ data class LifeMapDTO(
         isPublic = lifeMap.isPublic,
         goals = lifeMap.goals.map(::GoalDto),
         goalsCount = lifeMap.goals.size,
+        user = UserSubset(lifeMap.user),
     )
 
     constructor(lifeMap: LifeMap, user: User) : this(
