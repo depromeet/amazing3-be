@@ -70,11 +70,7 @@ class CheeringService(
 
         val cheering = cheeringRepository.findByLifeMapId(lifeMap.id!!)
 
-        return if (cheering == null) {
-            0
-        } else {
-            cheering.count
-        }
+        return cheering?.count ?: 0
     }
 
     private fun saveCheerer(lifeMapId: Long, cheererId: Long) {

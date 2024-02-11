@@ -4,6 +4,7 @@ import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.UpdateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
+import io.raemian.api.goal.event.CreateGoalEvent
 import io.raemian.api.sticker.StickerService
 import io.raemian.api.support.RaemianLocalDate
 import io.raemian.api.support.error.MaxGoalCountExceededException
@@ -14,6 +15,7 @@ import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.user.UserRepository
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -24,6 +26,7 @@ class GoalService(
     private val userRepository: UserRepository,
     private val goalRepository: GoalRepository,
     private val lifeMapRepository: LifeMapRepository,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
 
     @Transactional(readOnly = true)
@@ -43,6 +46,14 @@ class GoalService(
         addNewGoal(lifeMap, goal)
 
         lifeMapRepository.save(lifeMap)
+
+        // goal 생성시 count event 발행
+        applicationEventPublisher.publishEvent(
+            CreateGoalEvent(
+                goalId = goal.id!!,
+                lifeMapId = lifeMap.id!!,
+            ),
+        )
         return CreateGoalResponse(goal)
     }
 

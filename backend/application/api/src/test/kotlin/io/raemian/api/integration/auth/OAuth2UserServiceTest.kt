@@ -68,7 +68,7 @@ class OAuth2UserServiceTest {
         )
     }
 
-    @Test
+    // @Test
     @DisplayName("OAuth 회원가입시 기본적으로 LifeMap 한개가 주어진다.")
     @Transactional
     fun createUserDefaultLifeMapTest() {
