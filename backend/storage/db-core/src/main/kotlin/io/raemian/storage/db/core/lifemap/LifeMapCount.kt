@@ -12,6 +12,7 @@ class LifeMapCount(
     val lifeMapId: Long,
     val viewCount: Long,
     val historyCount: Long,
+    val goalCount: Long,
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
@@ -22,6 +23,7 @@ class LifeMapCount(
                 lifeMapId = lifeMapId,
                 viewCount = 0,
                 historyCount = 0,
+                goalCount = 0
             )
         }
     }
@@ -30,6 +32,7 @@ class LifeMapCount(
             lifeMapId = lifeMapId,
             viewCount = viewCount + 1,
             historyCount = historyCount,
+            goalCount = goalCount,
             id = id,
         )
     }
@@ -39,15 +42,17 @@ class LifeMapCount(
             lifeMapId = lifeMapId,
             viewCount = viewCount,
             historyCount = historyCount + 1,
+            goalCount = goalCount,
             id = id,
         )
     }
 
-    fun addCount(): LifeMapCount {
+    fun addGoalCount(): LifeMapCount {
         return LifeMapCount(
             lifeMapId = lifeMapId,
-            viewCount = viewCount + 1,
-            historyCount = historyCount + 1,
+            viewCount = viewCount,
+            historyCount = historyCount,
+            goalCount = goalCount + 1,
             id = id,
         )
     }

@@ -105,7 +105,9 @@ class LifeMapService(
     fun addCount(lifeMapId: Long): Long {
         val lifeMapCount = lifeMapCountRepository.findByLifeMapId(lifeMapId)
             ?: LifeMapCount.of(lifeMapId)
-        val added = lifeMapCount.addCount()
+        val added = lifeMapCount
+            .addViewCount()
+            .addHistoryCount()
         val saved = lifeMapCountRepository.save(added)
         return saved.historyCount
     }
