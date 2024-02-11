@@ -1,7 +1,7 @@
 package io.raemian.api.lifemap.controller
 
 import io.raemian.api.auth.domain.CurrentUser
-import io.raemian.api.cheer.CheeringServcie
+import io.raemian.api.cheer.CheeringService
 import io.raemian.api.lifemap.LifeMapService
 import io.raemian.api.lifemap.domain.LifeMapResponse
 import io.raemian.api.lifemap.domain.UpdatePublicRequest
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/life-map")
 class LifeMapController(
     private val lifeMapService: LifeMapService,
-    private val cheeringService: CheeringServcie,
+    private val cheeringService: CheeringService,
 ) {
 
     @Operation(summary = "로그인한 유저의 인생 지도 조회 API")

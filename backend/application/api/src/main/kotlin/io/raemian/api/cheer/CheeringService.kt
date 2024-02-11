@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
-class CheeringServcie(
+class CheeringService(
     private val cheererRepository: CheererRepository,
     private val cheeringRepository: CheeringRepository,
     private val lifeMapRepository: LifeMapRepository,
