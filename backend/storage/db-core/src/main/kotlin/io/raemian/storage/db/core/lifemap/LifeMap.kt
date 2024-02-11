@@ -19,7 +19,7 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "LIFE_MAPS")
 class LifeMap(
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     val user: User,
 
