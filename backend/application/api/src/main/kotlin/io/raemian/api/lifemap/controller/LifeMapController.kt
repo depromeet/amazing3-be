@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/life-map")
 class LifeMapController(
     private val lifeMapService: LifeMapService,
-    private val cheeringServcie: CheeringServcie,
+    private val cheeringService: CheeringServcie,
 ) {
 
     @Operation(summary = "로그인한 유저의 인생 지도 조회 API")
@@ -29,7 +29,7 @@ class LifeMapController(
     ): ResponseEntity<ApiResponse<LifeMapResponse>> {
         val lifeMap = lifeMapService.findFirstByUserId(currentUser.id)
         val count = lifeMapService.getLifeMapCount(lifeMap.lifeMapId)
-        val cheeringCount = cheeringServcie.getCheeringCount(currentUser.id)
+        val cheeringCount = cheeringService.getCheeringCount(currentUser.id)
 
         return ResponseEntity
             .ok(ApiResponse.success(LifeMapResponse(lifeMap, count, cheeringCount)))
