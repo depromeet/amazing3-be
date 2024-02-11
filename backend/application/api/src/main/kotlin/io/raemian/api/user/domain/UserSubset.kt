@@ -7,9 +7,9 @@ data class UserSubset(
     val nickname: String,
     val image: String,
 ) {
-    constructor(user: User): this(
+    constructor(user: User) : this(
         id = user.id!!,
         nickname = user.nickname ?: "",
-        image = user.image
+        image = user.image,
     )
 }
