@@ -19,7 +19,7 @@ import jakarta.persistence.Table
 @Table(name = "LIFE_MAPS")
 class LifeMap(
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     val user: User,
 
     @Column(nullable = false)
