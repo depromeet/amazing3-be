@@ -30,7 +30,7 @@ class GoalController(
 
     @Operation(summary = "목표 단건 조회 API")
     @GetMapping("/{goalId}")
-    fun getByUserId(
+    fun getById(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @PathVariable("goalId") goalId: Long,
     ): ResponseEntity<ApiResponse<GoalResponse>> =

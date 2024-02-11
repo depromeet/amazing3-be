@@ -29,8 +29,9 @@ class GoalService(
     @Transactional(readOnly = true)
     fun getById(id: Long, userId: Long): GoalResponse {
         val goal = goalRepository.getById(id)
-        validateAnotherUserLifeMapPublic(userId, goal.lifeMap)
-        return GoalResponse(goal)
+        val isMyGoal = goal.lifeMap.user.id != userId
+        validateAnotherUserLifeMapPublic(isMyGoal, goal.lifeMap)
+        return GoalResponse(goal, isMyGoal)
     }
 
     @Transactional
@@ -60,7 +61,7 @@ class GoalService(
             val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadline)
             val updatedGoal = updatedStickerGoal.update(title, deadline, description)
             goalRepository.save(updatedGoal)
-            return GoalResponse(updatedGoal)
+            return GoalResponse(updatedGoal, true)
         }
     }
 
@@ -89,8 +90,8 @@ class GoalService(
         }
     }
 
-    private fun validateAnotherUserLifeMapPublic(userId: Long, lifeMap: LifeMap) {
-        if (lifeMap.user.id != userId && !lifeMap.isPublic) {
+    private fun validateAnotherUserLifeMapPublic(isMyGoal: Boolean, lifeMap: LifeMap) {
+        if (!isMyGoal && !lifeMap.isPublic) {
             throw PrivateLifeMapException()
         }
     }
