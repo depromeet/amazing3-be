@@ -50,8 +50,8 @@ class GoalService(
         applicationEventPublisher.publishEvent(
             CreateGoalEvent(
                 goalId = goal.id!!,
-                lifeMapId = lifeMap.id!!
-            )
+                lifeMapId = lifeMap.id!!,
+            ),
         )
         return CreateGoalResponse(goal)
     }

@@ -23,7 +23,7 @@ class LifeMapCount(
                 lifeMapId = lifeMapId,
                 viewCount = 0,
                 historyCount = 0,
-                goalCount = 0
+                goalCount = 0,
             )
         }
     }

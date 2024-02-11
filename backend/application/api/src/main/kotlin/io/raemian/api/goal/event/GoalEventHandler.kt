@@ -1,7 +1,6 @@
 package io.raemian.api.goal.event
 
 import io.raemian.storage.db.core.goal.GoalRepository
-import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapCount
 import io.raemian.storage.db.core.lifemap.LifeMapCountRepository
 import io.raemian.storage.db.core.lifemap.LifeMapRepository

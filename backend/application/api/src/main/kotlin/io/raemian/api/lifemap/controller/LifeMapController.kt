@@ -3,10 +3,7 @@ package io.raemian.api.lifemap.controller
 import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.cheer.CheeringService
 import io.raemian.api.lifemap.LifeMapService
-import io.raemian.api.lifemap.domain.ExploreDTO
-import io.raemian.api.lifemap.domain.ExploreResponse
 import io.raemian.api.lifemap.domain.ExploreResponses
-import io.raemian.api.lifemap.domain.LifeMapDTO
 import io.raemian.api.lifemap.domain.LifeMapResponse
 import io.raemian.api.lifemap.domain.UpdatePublicRequest
 import io.raemian.api.support.response.ApiResponse
@@ -44,7 +41,7 @@ class LifeMapController(
     @GetMapping("/explore")
     fun explore(
         @AuthenticationPrincipal currentUser: CurrentUser,
-        @RequestParam(required = false, defaultValue = Long.MAX_VALUE.toString()) cursor: Long
+        @RequestParam(required = false, defaultValue = Long.MAX_VALUE.toString()) cursor: Long,
     ): ResponseEntity<ApiResponse<ExploreResponses>> {
         val maps = lifeMapService.explore(lifeMapId = cursor)
 

@@ -15,5 +15,4 @@ data class ExploreResponse(
         user = exploreDTO.user,
         count = CountResponse(exploreDTO.count, 0),
     )
-
 }

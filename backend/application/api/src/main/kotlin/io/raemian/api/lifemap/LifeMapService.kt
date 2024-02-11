@@ -26,19 +26,20 @@ class LifeMapService(
 
     @Transactional(readOnly = true)
     fun explore(lifeMapId: Long): List<ExploreDTO> {
-
         val ids = lifeMapRepository.explore(lifeMapId)
         val lifeMaps = lifeMapRepository.findAllByIdInOrderByIdDesc(ids)
         val countMap = lifeMapCountRepository.findAllByLifeMapIdIn(ids)
             .associateBy { it.lifeMapId }
         return lifeMaps
             .map { LifeMapDTO(it) }
-            .map { ExploreDTO(
-                lifeMapDTO = it,
-                lifeMapCountDTO = LifeMapCountDTO(countMap[it.lifeMapId] ?: LifeMapCount.of(lifeMapId)),
-            ) }
-
+            .map {
+                ExploreDTO(
+                    lifeMapDTO = it,
+                    lifeMapCountDTO = LifeMapCountDTO(countMap[it.lifeMapId] ?: LifeMapCount.of(lifeMapId)),
+                )
+            }
     }
+
     @Transactional(readOnly = true)
     fun findFirstByUserId(userId: Long): LifeMapDTO {
         val lifeMap = lifeMapRepository.findFirstByUserId(userId)
