@@ -10,7 +10,7 @@ spring:
 server:
   servlet:
     context-path: /admin
-  port: 7000
+  port: 8080
 
 springdoc:
   server:

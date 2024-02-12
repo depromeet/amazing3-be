@@ -16,6 +16,7 @@ export interface IPageHeader {
 export type IDefaultLayoutPage<P = {}> = NextPage<P> & {
   getLayout(page: NextComponentType, props: unknown): React.ReactNode;
   pageHeader?: IPageHeader;
+  setSidebarClose?: boolean;
 };
 
 interface IDefaultLayoutProps {
@@ -23,7 +24,7 @@ interface IDefaultLayoutProps {
 }
 
 const DefaultLayout = ({ Page, ...props }: IDefaultLayoutProps) => {
-  const [isShowSidebar, setIsShowSidebar] = useState(true);
+  const [isShowSidebar, setIsShowSidebar] = useState(Page.setSidebarClose === true ? false : true);
   const [isShowPopupMenu, setIsShowPopupMenu] = useState(false);
   const router = useRouter();
 
