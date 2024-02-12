@@ -3,7 +3,6 @@ package io.raemian.api.lifemap.controller
 import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.cheer.CheeringService
 import io.raemian.api.lifemap.LifeMapService
-import io.raemian.api.lifemap.domain.LifeMapExploreResponses
 import io.raemian.api.lifemap.domain.LifeMapResponse
 import io.raemian.api.lifemap.domain.UpdatePublicRequest
 import io.raemian.api.support.response.ApiResponse
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -47,17 +45,4 @@ class LifeMapController(
         lifeMapService.updatePublic(currentUser.id, updatePublicRequest)
         return ResponseEntity.ok().build()
     }
-
-    @Operation(summary = "explore life map")
-    @GetMapping("/explore")
-    fun explore(
-        @AuthenticationPrincipal currentUser: CurrentUser,
-        @RequestParam(required = false, defaultValue = Long.MAX_VALUE.toString()) cursor: Long,
-    ): ResponseEntity<ApiResponse<LifeMapExploreResponses>> {
-        val maps = lifeMapService.explore(lifeMapId = cursor)
-
-        return ResponseEntity.ok()
-            .body(ApiResponse.success(LifeMapExploreResponses(maps)))
-    }
-
 }

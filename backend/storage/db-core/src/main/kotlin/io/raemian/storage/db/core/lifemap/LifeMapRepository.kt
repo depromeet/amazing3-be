@@ -12,22 +12,4 @@ interface LifeMapRepository : JpaRepository<LifeMap, Long> {
 
     fun findAllByIdInOrderByIdDesc(ids: List<Long>): List<LifeMap>
 
-    @Query(
-        """
-        SELECT
-            map.id
-        FROM
-            LifeMap as map, 
-            LifeMapCount as count 
-        WHERE 1 = 1
-            AND map.id = count.lifeMapId
-            AND count.goalCount > 2
-            AND map.id < :cursor
-            AND map.isPublic = true
-        ORDER BY 
-            map.id DESC 
-        LIMIT 5
-    """,
-    )
-    fun explore(@Param("cursor") lifeMapId: Long): List<Long>
 }
