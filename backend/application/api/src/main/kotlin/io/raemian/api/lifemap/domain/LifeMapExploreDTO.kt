@@ -2,7 +2,7 @@ package io.raemian.api.lifemap.domain
 
 import io.raemian.api.user.domain.UserSubset
 
-data class ExploreDTO(
+data class LifeMapExploreDTO(
     val lifeMapId: Long,
     val goals: List<GoalDto>,
     val count: LifeMapCountDTO,

@@ -29,7 +29,5 @@ interface LifeMapRepository : JpaRepository<LifeMap, Long> {
         LIMIT 5
     """,
     )
-    fun explore(
-        @Param("cursor") lifeMapId: Long,
-    ): List<Long>
+    fun explore(@Param("cursor") lifeMapId: Long): List<Long>
 }
