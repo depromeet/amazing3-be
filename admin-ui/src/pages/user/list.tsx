@@ -1,19 +1,19 @@
 import { getDefaultLayout, IDefaultLayoutPage, IPageHeader } from "@/components/layout/default-layout";
-import TagList from "@/components/page/tag/tag-list";
+import UserList from "@/components/page/user/user-list";
 
 const pageHeader: IPageHeader = {
-  title: "태그 목록",
+  title: "유저 목록",
 };
 
-const TagListPage: IDefaultLayoutPage = () => {
+const UserListPage: IDefaultLayoutPage = () => {
   return (
     <>
-      <TagList />
+      <UserList />
     </>
   );
 };
 
-TagListPage.getLayout = getDefaultLayout;
-TagListPage.pageHeader = pageHeader;
+UserListPage.getLayout = getDefaultLayout;
+UserListPage.pageHeader = pageHeader;
 
-export default TagListPage;
+export default UserListPage;

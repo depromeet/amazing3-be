@@ -1,15 +1,18 @@
 import useSWR from "swr";
-import {fetchApi} from "@/client/base";
 
-export interface ITag {
+export interface IUser {
     id: number;
-    content: string;
+    email: string;
+    username: string;
+    nickname: string;
+    birth: string;
+    image: string;
+    provider: string;
+    authority: string;
 }
-
-export interface ITagFormValue extends ITag {}
-export interface ITagsResponse {
+export interface IUsersResponse {
     result: number;
-    body: ITag[]
+    body: IUser[]
     error: {
         code: string;
         message: string;
@@ -17,9 +20,9 @@ export interface ITagsResponse {
     };
 }
 
-export interface ITagResponse {
+export interface IUserResponse {
     result: number;
-    body: ITag
+    body: IUser
     error: {
         code: string;
         message: string;
@@ -27,22 +30,10 @@ export interface ITagResponse {
     };
 }
 
-export const useTags = () => {
-    return useSWR<ITagsResponse>(`tag`);
+export const useUsers = () => {
+    return useSWR<IUsersResponse>(`user`);
 };
 
-export const useTag = (id: string | number) => {
-    return useSWR<ITagResponse>(`tag/${id}`);
-};
-
-export const createTag = (value: ITagFormValue) => {
-    return fetchApi.post(`tag`, { body: JSON.stringify(value) });
-};
-
-export const updateTag = (id: string | number, value: ITagFormValue) => {
-    return fetchApi.patch(`tag/${id}`, { body: JSON.stringify(value) });
-};
-
-export const deleteTag = (id: string | number) => {
-    return fetchApi.delete(`tag/${id}`);
+export const useUser = (id: string | number) => {
+    return useSWR<IUserResponse>(`user/${id}`);
 };

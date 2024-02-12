@@ -1,20 +1,37 @@
 import useSWR from "swr";
 
-export interface IGoal {
+export interface ILifeMap {
     id: number;
-    email: string;
-    username: string;
-    nickname: string;
-    birth: string;
-    image: string;
-    provider: string;
-    authority: string;
+    isPublic: boolean;
+    goals: IGoal[];
+    goalCount: number;
+    viewCount: number;
+    cheeringCount: number;
 }
 
-export interface IGoalFormValue extends IGoal {}
-export interface IGoalsResponse {
+export interface IGoal {
+    title: string;
+    description: string;
+    deadline: string;
+    stickerUrl: string
+    tagInfo: ITag;
+    tasks: ITask[]
+}
+
+export interface ITag {
+    tagId: number;
+    tagContent: string;
+}
+
+
+export interface ITask {
+    taskId: number;
+    isTaskDone: boolean;
+    taskDescription: string;
+}
+export interface ILifeMapResponse {
     result: number;
-    body: IGoal[]
+    body: ILifeMap
     error: {
         code: string;
         message: string;
@@ -22,20 +39,6 @@ export interface IGoalsResponse {
     };
 }
 
-export interface IGoalResponse {
-    result: number;
-    body: IGoal
-    error: {
-        code: string;
-        message: string;
-        data: object;
-    };
-}
-
-export const useGoals = (userId: number) => {
-    return useSWR<IGoalsResponse>(`goal?userId=${userId}`);
-};
-
-export const useGoal = (id: string | number) => {
-    return useSWR<IGoalResponse>(`user/${id}/goal`);
+export const useLifeMap = (id: string | number) => {
+    return useSWR<ILifeMapResponse>(`life-map?userId=${id}`);
 };

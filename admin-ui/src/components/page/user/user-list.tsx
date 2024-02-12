@@ -1,18 +1,14 @@
 import DefaultTable from "@/components/shared/ui/default-table";
-import DefaultTableBtn from "@/components/shared/ui/default-table-btn";
-import {Alert, Button, message, Popconfirm} from "antd";
+import {Alert, Button, Modal} from "antd";
 import { ColumnsType } from "antd/es/table";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
-import {deleteSticker, ISticker, useStickers} from "@/client/sticker";
+import React, {useCallback} from "react";
+import {IUser, useUsers} from "@/client/user";
 
-const StickerList = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [messageApi, contextHolder] = message.useMessage();
+const UserList = () => {
   const router = useRouter();
 
-  const { data, error, isLoading } = useStickers();
+  const { data, error, isLoading } = useUsers();
 
   const handleChangePage = useCallback(
     (pageNumber: number) => {
@@ -24,92 +20,104 @@ const StickerList = () => {
     [router]
   );
 
-  const onSelectChange = useCallback((newSelectedRowKeys: React.Key[]) => {
-    setSelectedRowKeys(newSelectedRowKeys);
-  }, []);
+  const convertProvider = (provider: string) => {
+    if(provider === 'KAKAO') {
+      return '카카오'
+    } else if (provider === 'GOOGLE') {
+      return '구글'
+    } else if (provider === 'NAVER') {
+      return '네이버'
+    }
 
-  const onDelete = (record: ISticker) => {
-      try{
-          deleteSticker(record.id)
-          messageApi.success("삭제되었습니다.")
-      } catch (e) {
-          messageApi.error("에러가 발생하였습니다.")
-      } finally {
-          router.push("/sticker/list")
-      }
+    return '알 수 없는 경로'
   }
 
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-  const hasSelected = selectedRowKeys.length > 0;
+    const openLifeMapPopup = (userId: number) => {
+        window.open(`/popup/life-map/${userId}`, 'LifeMap', 'width=1000, height=610');
+    };
 
-  const columns: ColumnsType<ISticker> = [
+
+
+  const columns: ColumnsType<IUser> = [
     {
+      title: "인생 지도",
       key: "action",
       width: 120,
       align: "center",
-      render: (_value: unknown, record: ISticker) => {
+      render: (_value: unknown, record: IUser) => {
         return (
           <span className="flex justify-center gap-2">
-            <Link href={`/sticker/edit/${record.id}`} className="px-2 py-1 text-sm btn">
-              수정
-            </Link>
-            <Popconfirm
-              title="스티커를 삭제하시겠습니까?"
-              onConfirm={() => onDelete(record)}
-              okText="예"
-              cancelText="아니오"
-            >
-              <a className="px-2 py-1 text-sm btn">삭제</a>
-            </Popconfirm>
+            <Button type="primary" onClick={() => openLifeMapPopup(record.id)}>
+              보기
+            </Button>
           </span>
         );
       },
     },
     {
-      title: "스티커 ID",
+      title: "유저 ID",
       dataIndex: "id",
       width: 100,
-        render: (value: string, record: ISticker) => {
-            return (
-                <span>
-            <span className="px-2 py-1 mr-1 bg-gray-100 rounded">{record.id}</span>
-          </span>
-            );
-        },
-    },
-    {
-      title: "스티커 이름",
-      dataIndex: "name",
-      render: (value: string, record: ISticker) => {
+      render: (value: string, record: IUser) => {
         return (
-          <span>
-            <span className="px-2 py-1 mr-1 bg-gray-100 rounded">{record.name}</span>
+            <span>
+            <span className="px-2 py-1 mr-1 bg-gray-100 rounded">{record.id}</span>
           </span>
         );
       },
     },
     {
-      title: "스티커 URL",
-      dataIndex: "url",
-      render: (value: string, record: ISticker) => {
-          return (
-              <span>
-                <span className="px-2 py-1 mr-1 bg-gray-100 rounded">{record.url}</span>
-              </span>
-          );
+      title: "유저 이름 (username)",
+      dataIndex: "username",
+      render: (value: string, record: IUser) => {
+        return (
+          <span>
+            <span className="px-2 py-1 mr-1 bg-gray-100 rounded">{record.username}</span>
+          </span>
+        );
       },
     },
     {
-      title: "스티커 이미지",
-      dataIndex: "name",
-      render: (value: string, record: ISticker) => {
-          return (
-              <span>
-                <img src={record.url} height={100} width={100} className="px-2 py-1 mr-1 bg-gray-100 rounded" />
-              </span>
+      title: "유저 별명 (nickname)",
+      dataIndex: "nickname",
+      render: (value: string, record: IUser) => {
+        return (
+          <span>
+            <span className="px-2 py-1 mr-1 bg-gray-100 rounded">{record.nickname}</span>
+          </span>
+        );
+      },
+    },
+    {
+      title: "생년월",
+      dataIndex: "birth",
+      render: (value: string, record: IUser) => {
+        return (
+          <span>
+            <span className="px-2 py-1 mr-1 bg-gray-100 rounded">{record.birth}</span>
+          </span>
+        );
+      },
+    },
+    {
+      title: "유저 이미지",
+      dataIndex: "image",
+      render: (value: string, record: IUser) => {
+        return (
+          <span>
+            <img src={record.image} height={100} width={100} className="px-2 py-1 mr-1 bg-gray-100 rounded" />
+          </span>
+        );
+      },
+    },
+    {
+      title: "가입 경로",
+      dataIndex: "provider",
+      render: (value: string, record: IUser) => {
+        return (
+          <span>
+            <span className="px-2 py-1 mr-1 bg-gray-100 rounded">{convertProvider(record.provider)}</span>
+          </span>
           );
       },
     },
@@ -121,21 +129,7 @@ const StickerList = () => {
 
   return (
     <>
-      {contextHolder}
-      <DefaultTableBtn className="justify-between">
-        <div>
-          <span style={{ marginLeft: 8 }}>{hasSelected ? `${selectedRowKeys.length}건 선택` : ""}</span>
-        </div>
-
-        <div className="flex-item-list">
-          <Button type="primary" onClick={() => router.push("/sticker/new")}>
-            스티커등록
-          </Button>
-        </div>
-      </DefaultTableBtn>
-
-      <DefaultTable<ISticker>
-        rowSelection={rowSelection}
+      <DefaultTable<IUser>
         columns={columns}
         dataSource={data?.body || []}
         loading={isLoading}
@@ -153,4 +147,4 @@ const StickerList = () => {
   );
 };
 
-export default React.memo(StickerList);
+export default React.memo(UserList);

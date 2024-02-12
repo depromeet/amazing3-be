@@ -11,7 +11,7 @@ interface IDashboardStaticsProps {
 const renderTodayIncrease = (value: number, unit: string) => {
   if (0 < value) {
     return (
-      <span className="flex items-center px-2 py-1 text-sm text-white rounded-full bg-emerald">
+      <span className="flex items-center px-2 py-1 text-sm text-white rounded-full bg-blue-400">
         <ArrowUp className="w-5 h-4" />
         오늘 {value}{unit} 추가
       </span>
