@@ -8,7 +8,6 @@ import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.goal.domain.GoalExploreDTO
 import io.raemian.api.support.response.ApiResponse
-import io.raemian.storage.db.core.model.GoalExploreQueryResult
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -83,5 +82,4 @@ class GoalController(
     ): List<GoalExploreDTO> {
         return goalService.explore(goalId = cursor)
     }
-
 }

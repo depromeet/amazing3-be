@@ -15,7 +15,6 @@ import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
-import io.raemian.storage.db.core.model.GoalExploreQueryResult
 import io.raemian.storage.db.core.user.UserRepository
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
@@ -90,7 +89,6 @@ class GoalService(
         val results = goalRepository.explore(goalId)
 
         return results.map { GoalExploreDTO(it) }
-
     }
 
     private fun createFirstLifeMap(userId: Long): LifeMap {

@@ -9,7 +9,7 @@ data class GoalSubset(
     val description: String,
     val deadline: LocalDate,
     val sticker: String,
-    val tag: String
+    val tag: String,
 ) {
     constructor(result: GoalExploreQueryResult) : this(
         id = result.goalId,
@@ -17,6 +17,6 @@ data class GoalSubset(
         description = result.description,
         deadline = result.deadline,
         sticker = result.stickerUrl,
-        tag = result.tagContent
+        tag = result.tagContent,
     )
 }

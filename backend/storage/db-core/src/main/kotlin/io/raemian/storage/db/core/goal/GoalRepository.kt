@@ -15,7 +15,8 @@ interface GoalRepository : JpaRepository<Goal, Long> {
     override fun getById(id: Long): Goal =
         findById(id).orElseThrow() { NoSuchElementException("목표가 없습니다 $id") }
 
-    @Query("""
+    @Query(
+        """
         SELECT 
             new io.raemian.storage.db.core.model.GoalExploreQueryResult(
                 goal.id,
@@ -49,6 +50,7 @@ interface GoalRepository : JpaRepository<Goal, Long> {
         ORDER BY 
             goal.id DESC
         LIMIT 10
-    """)
+    """,
+    )
     fun explore(@Param("cursor") goalId: Long): List<GoalExploreQueryResult>
 }

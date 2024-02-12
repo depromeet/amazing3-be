@@ -17,6 +17,6 @@ data class UserSubset(
     constructor(result: GoalExploreQueryResult) : this(
         id = result.userId,
         nickname = result.nickname,
-        image = result.userImage
+        image = result.userImage,
     )
 }

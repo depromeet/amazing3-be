@@ -17,5 +17,5 @@ data class GoalExploreQueryResult(
     val viewCount: Long,
     val userId: Long,
     val nickname: String,
-    val userImage: String
+    val userImage: String,
 )

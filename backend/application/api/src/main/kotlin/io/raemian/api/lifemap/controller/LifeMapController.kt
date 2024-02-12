@@ -35,7 +35,6 @@ class LifeMapController(
             .ok(ApiResponse.success(LifeMapResponse(lifeMap, count, cheeringCount)))
     }
 
-
     @Operation(summary = "인생 지도 공개 여부를 수정하는 API")
     @PatchMapping("/publication")
     fun updatePublic(
