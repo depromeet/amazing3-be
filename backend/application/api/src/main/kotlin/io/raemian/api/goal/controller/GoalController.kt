@@ -7,7 +7,6 @@ import io.raemian.api.goal.controller.request.UpdateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalExploreResponse
 import io.raemian.api.goal.controller.response.GoalResponse
-import io.raemian.api.goal.domain.GoalExploreDTO
 import io.raemian.api.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
