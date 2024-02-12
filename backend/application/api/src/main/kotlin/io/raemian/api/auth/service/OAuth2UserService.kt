@@ -97,6 +97,9 @@ class OAuth2UserService(
         val user = userRepository.findByEmailAndProvider(email, oAuthProvider)
             ?: createUser(email, image, oAuthProvider)
 
+        lifeMapRepository.findFirstByUserId(user.id!!)
+            ?: createUserDefaultLifeMap(user)
+
         userLoginLogService.upsertLatestLogin(user.id)
 
         return user
@@ -112,6 +115,7 @@ class OAuth2UserService(
 
         userRepository.save(user)
         val updateUsername = updateUsername(user)
+        createUserDefaultLifeMap(user)
         return updateUsername
     }
 
