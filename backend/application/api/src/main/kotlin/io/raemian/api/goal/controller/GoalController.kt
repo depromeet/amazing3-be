@@ -5,6 +5,7 @@ import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.UpdateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
+import io.raemian.api.goal.controller.response.GoalExploreResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.goal.domain.GoalExploreDTO
 import io.raemian.api.support.response.ApiResponse
@@ -79,7 +80,10 @@ class GoalController(
     fun exploreGoals(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @RequestParam(required = false, defaultValue = Long.MAX_VALUE.toString()) cursor: Long,
-    ): List<GoalExploreDTO> {
-        return goalService.explore(goalId = cursor)
+    ): ResponseEntity<ApiResponse<GoalExploreResponse>> {
+        val goals = goalService.explore(goalId = cursor)
+
+        return ResponseEntity.ok()
+            .body(ApiResponse.success(GoalExploreResponse(goals)))
     }
 }
