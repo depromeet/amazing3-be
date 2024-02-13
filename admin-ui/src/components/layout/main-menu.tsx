@@ -53,6 +53,20 @@ const mainMenuData: IMenu[] = [
         },
       },
     ],
+  },
+  {
+    id: "user",
+    name: "유저 관리",
+    icon: <Package2 className="w-5 h-5" />,
+    submenu: [
+      {
+        id: "userList",
+        name: "유저 목록",
+        link: {
+          path: "/user/list",
+        },
+      },
+    ],
   }
 ];
 

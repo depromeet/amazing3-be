@@ -89,15 +89,15 @@ class CheeringService(
         return if (contentSize < pageSize) {
             true
         } else {
-            !cheererRepository.existsByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAt(lifeMapId, cheeringSquad.last().cheeringAt)
+            !cheererRepository.existsByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAtDesc(lifeMapId, cheeringSquad.last().cheeringAt)
         }
     }
 
     private fun findCheeringSquadPage(lifeMapId: Long, cheeringAt: LocalDateTime?, pageable: Pageable): List<Cheerer> {
         return if (cheeringAt == null) {
-            cheererRepository.findByLifeMapIdOrderByCheeringAt(lifeMapId, pageable)
+            cheererRepository.findByLifeMapIdOrderByCheeringAtDesc(lifeMapId, pageable)
         } else {
-            cheererRepository.findByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAt(lifeMapId, cheeringAt, pageable)
+            cheererRepository.findByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAtDesc(lifeMapId, cheeringAt, pageable)
         }
     }
 
