@@ -6,9 +6,9 @@ import java.time.LocalDateTime
 
 interface CheererRepository : JpaRepository<Cheerer, Long> {
 
-    fun findByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAt(lifeMapId: Long, cheeringAt: LocalDateTime, pageable: Pageable): List<Cheerer>
+    fun findByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAtDesc(lifeMapId: Long, cheeringAt: LocalDateTime, pageable: Pageable): List<Cheerer>
 
-    fun findByLifeMapIdOrderByCheeringAt(lifeMapId: Long, pageable: Pageable): List<Cheerer>
+    fun findByLifeMapIdOrderByCheeringAtDesc(lifeMapId: Long, pageable: Pageable): List<Cheerer>
 
-    fun existsByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAt(lifeMapId: Long, cheeringAt: LocalDateTime): Boolean
+    fun existsByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAtDesc(lifeMapId: Long, cheeringAt: LocalDateTime): Boolean
 }
