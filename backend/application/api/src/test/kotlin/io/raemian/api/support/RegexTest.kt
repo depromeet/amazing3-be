@@ -15,12 +15,10 @@ class RegexTest {
         val result4 = regex.matches("aaaa-")
         val result5 = regex.matches("----")
 
-
         println(result1)
         println(result2)
         println(result3)
         println(result4)
         println(result5)
-
     }
 }
