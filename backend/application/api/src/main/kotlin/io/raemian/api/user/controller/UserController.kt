@@ -5,6 +5,7 @@ import io.raemian.api.auth.controller.request.UpdateUserRequest
 import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.auth.domain.UserDTO
 import io.raemian.api.lifemap.LifeMapService
+import io.raemian.api.support.error.ErrorInfo
 import io.raemian.api.support.response.ApiResponse
 import io.raemian.api.user.controller.response.UserResponse
 import io.raemian.api.user.service.UserService
@@ -63,8 +64,13 @@ class UserController(
             return ResponseEntity.ok().body(ApiResponse.success(updated))
         }
 
-        val isDuplicated = userService.isDuplicatedUsername(updateUserInfoRequest.username)
-        if (isDuplicated) {
+        if (!updateUserInfoRequest.validateUsername()) {
+            return ResponseEntity
+                .status(400)
+                .body(ApiResponse.error(ErrorInfo.RESOURCE_NOT_FOUND))
+        }
+
+        if (userService.isDuplicatedUsername(updateUserInfoRequest.username)) {
             return ResponseEntity.status(409).build()
         }
 

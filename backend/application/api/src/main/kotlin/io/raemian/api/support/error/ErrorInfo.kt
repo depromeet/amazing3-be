@@ -50,4 +50,11 @@ enum class ErrorInfo(
         "같은 인생 지도는 1분에 1번만 응원할 수 있습니다.",
         LogLevel.INFO,
     ),
+
+    INVALID_USERNAME(
+        HttpStatus.BAD_REQUEST,
+        1005,
+        "유효하지 않은 username 입니다.",
+        LogLevel.INFO,
+    ),
 }
