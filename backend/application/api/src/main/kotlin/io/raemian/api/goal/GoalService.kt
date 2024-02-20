@@ -4,6 +4,7 @@ import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.UpdateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
+import io.raemian.api.goal.domain.GoalExploreDTO
 import io.raemian.api.goal.event.CreateGoalEvent
 import io.raemian.api.sticker.StickerService
 import io.raemian.api.support.RaemianLocalDate
@@ -81,6 +82,13 @@ class GoalService(
         val goal = goalRepository.getById(goalId)
         validateGoalIsUsers(userId, goal)
         goalRepository.delete(goal)
+    }
+
+    @Transactional(readOnly = true)
+    fun explore(goalId: Long): List<GoalExploreDTO> {
+        val results = goalRepository.explore(goalId)
+
+        return results.map { GoalExploreDTO(it) }
     }
 
     private fun createFirstLifeMap(userId: Long): LifeMap {
