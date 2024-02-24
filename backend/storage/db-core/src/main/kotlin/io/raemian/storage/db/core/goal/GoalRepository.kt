@@ -32,6 +32,7 @@ interface GoalRepository : JpaRepository<Goal, Long> {
                 count.viewCount,
                 user.id,
                 user.nickname,
+                user.username,
                 user.image
             )
         FROM 
