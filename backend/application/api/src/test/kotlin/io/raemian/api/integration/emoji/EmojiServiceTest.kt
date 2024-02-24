@@ -113,7 +113,7 @@ class EmojiServiceTest {
         reactedEmojiRepository.saveAll(listOf(reactedEmoji, reactedEmoji2, reactedEmoji3))
 
         // when
-        val reactedEmojis = emojiService.findGoalReactedEmojis(GOAL_FIXTURE.id!!)
+        val reactedEmojis = emojiService.findAllReactedEmojisByGoalId(GOAL_FIXTURE.id!!)
 
         // then
         assertThat(reactedEmojis.totalReactedEmojisCount).isEqualTo(3)
