@@ -16,8 +16,8 @@ import jakarta.persistence.UniqueConstraint
 @Table(
     name = "REACTED_EMOJIS",
     uniqueConstraints = [
-        UniqueConstraint(name = "uk_reacted_emoji", columnNames = ["goal_id", "react_user_id", "emoji_id"])
-    ]
+        UniqueConstraint(name = "uk_reacted_emoji", columnNames = ["goal_id", "react_user_id", "emoji_id"]),
+    ],
 )
 class ReactedEmoji(
     @ManyToOne
