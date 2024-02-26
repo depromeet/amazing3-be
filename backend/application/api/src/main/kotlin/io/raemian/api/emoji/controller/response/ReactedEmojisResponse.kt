@@ -16,13 +16,13 @@ data class ReactedEmojisResponse(
             return ReactedEmojisResponse(
                 totalReactedEmojisCount = totalEmojisCount,
                 latestReactUserNickname = latestReactUserNickname,
-                reactedEmojis = reactedEmojiAndReactUsers
+                reactedEmojis = reactedEmojiAndReactUsers,
             )
         }
 
         private fun convert(
             reactedEmojis: List<ReactedEmoji>,
-            username: String
+            username: String,
         ): List<ReactedEmojiAndReactUsers> =
             reactedEmojis
                 .filter { it.emoji.id != null }
