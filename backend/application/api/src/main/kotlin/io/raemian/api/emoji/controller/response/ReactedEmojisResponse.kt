@@ -18,7 +18,7 @@ data class ReactedEmojisResponse(
             reactedEmojis
                 .filter { it.emoji.id != null }
                 .groupBy { it.emoji.id!! }
-                .mapValues { entry -> ReactedEmojiAndReactUsers.from(entry.value) }
+                .mapValues { entry -> ReactedEmojiAndReactUsers.of(entry.value) }
                 .values
                 .toList()
     }
@@ -31,7 +31,7 @@ data class ReactedEmojisResponse(
         val reactUsers: Set<ReactUser>,
     ) {
         companion object {
-            fun from(reactedEmojis: List<ReactedEmoji>): ReactedEmojiAndReactUsers {
+            fun of(reactedEmojis: List<ReactedEmoji>): ReactedEmojiAndReactUsers {
                 val emoji = reactedEmojis.first().emoji
                 val reactUsers = getReactUsers(reactedEmojis)
 
