@@ -9,12 +9,12 @@ data class ReactedEmojisResponse(
 ) {
     companion object {
         fun of(reactedEmojis: List<ReactedEmoji>): ReactedEmojisResponse {
-            val reactedEmojiDTOs = convertToDTOs(reactedEmojis)
-            val totalEmojisCount = reactedEmojiDTOs.sumOf { it.count }
-            return ReactedEmojisResponse(totalEmojisCount, reactedEmojiDTOs)
+            val reactedEmojiAndReactUsers = convert(reactedEmojis)
+            val totalEmojisCount = reactedEmojiAndReactUsers.sumOf { it.count }
+            return ReactedEmojisResponse(totalEmojisCount, reactedEmojiAndReactUsers)
         }
 
-        private fun convertToDTOs(reactedEmojis: List<ReactedEmoji>): List<ReactedEmojiAndReactUsers> =
+        private fun convert(reactedEmojis: List<ReactedEmoji>): List<ReactedEmojiAndReactUsers> =
             reactedEmojis
                 .filter { it.emoji.id != null }
                 .groupBy { it.emoji.id!! }
