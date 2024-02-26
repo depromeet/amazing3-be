@@ -33,8 +33,11 @@ class EmojiController(
 
     @Operation(summary = "Goal에 반응된 이모지와 유저 정보 전체 조회 API")
     @GetMapping("/{goalId}")
-    fun findAllReactedEmojisAtGoal(@PathVariable goalId: Long): ResponseEntity<ApiResponse<ReactedEmojisResponse>> {
-        val response = emojiService.findAllReactedEmojisByGoalId(goalId)
+    fun findAllReactedEmojisAtGoal(
+        @PathVariable goalId: Long,
+        @AuthenticationPrincipal currentUser: CurrentUser,
+    ): ResponseEntity<ApiResponse<ReactedEmojisResponse>> {
+        val response = emojiService.findAllReactedEmojisByGoalId(goalId, currentUser.username)
         return ResponseEntity.ok(ApiResponse.success(response))
     }
 

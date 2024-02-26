@@ -24,10 +24,10 @@ class EmojiService(
             .map(EmojiResponse::from)
 
     @Transactional(readOnly = true)
-    fun findAllReactedEmojisByGoalId(goalId: Long): ReactedEmojisResponse {
+    fun findAllReactedEmojisByGoalId(goalId: Long, currentUserUsername: String): ReactedEmojisResponse {
         val goal = goalRepository.getReferenceById(goalId)
         val reactedEmojis = reactedEmojiRepository.findAllByGoal(goal)
-        return ReactedEmojisResponse.of(reactedEmojis)
+        return ReactedEmojisResponse.of(reactedEmojis, currentUserUsername)
     }
 
     @Transactional
