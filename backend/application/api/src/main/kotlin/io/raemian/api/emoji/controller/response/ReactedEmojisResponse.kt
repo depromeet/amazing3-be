@@ -49,7 +49,7 @@ data class ReactedEmojisResponse(
                     .map { it.reactUser }
                     .filter { it.username != null }
                     .filter { it.nickname != null }
-                    .map(ReactedEmojisResponse::ReactUser)
+                    .map(ReactUser::from)
                     .toList()
                     .toSet()
         }
@@ -60,10 +60,12 @@ data class ReactedEmojisResponse(
         val nickname: String,
         val image: String,
     ) {
-        constructor(user: User) : this(
-            username = user.username!!,
-            nickname = user.nickname!!,
-            image = user.image,
-        )
+        companion object {
+            fun from(user: User) = ReactUser(
+                username = user.username!!,
+                nickname = user.nickname!!,
+                image = user.image,
+            )
+        }
     }
 }
