@@ -47,6 +47,7 @@ data class ReactedEmojisResponse(
             private fun getReactUsers(reactedEmojis: List<ReactedEmoji>) =
                 reactedEmojis.stream()
                     .map { it.reactUser }
+                    .filter { it.username != null }
                     .filter { it.nickname != null }
                     .map(ReactedEmojisResponse::ReactUser)
                     .toList()
@@ -55,12 +56,12 @@ data class ReactedEmojisResponse(
     }
 
     data class ReactUser(
-        val id: Long,
+        val username: String,
         val nickname: String,
         val image: String,
     ) {
         constructor(user: User) : this(
-            id = user.id!!,
+            username = user.username!!,
             nickname = user.nickname!!,
             image = user.image,
         )
