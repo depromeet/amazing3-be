@@ -5,13 +5,19 @@ import io.raemian.storage.db.core.user.User
 
 data class ReactedEmojisResponse(
     val totalReactedEmojisCount: Int,
+    val latestReactUserNickname: String?,
     val reactedEmojis: List<ReactedEmojiAndReactUsers>,
 ) {
     companion object {
         fun of(reactedEmojis: List<ReactedEmoji>, username: String): ReactedEmojisResponse {
             val reactedEmojiAndReactUsers = convert(reactedEmojis, username)
             val totalEmojisCount = reactedEmojiAndReactUsers.sumOf { it.reactCount }
-            return ReactedEmojisResponse(totalEmojisCount, reactedEmojiAndReactUsers)
+            val latestReactUserNickname = reactedEmojis.lastOrNull()?.reactUser?.nickname
+            return ReactedEmojisResponse(
+                totalReactedEmojisCount = totalEmojisCount,
+                latestReactUserNickname = latestReactUserNickname,
+                reactedEmojis = reactedEmojiAndReactUsers
+            )
         }
 
         private fun convert(
