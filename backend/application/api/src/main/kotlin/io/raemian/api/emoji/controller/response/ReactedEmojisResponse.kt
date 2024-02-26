@@ -5,34 +5,37 @@ import io.raemian.storage.db.core.user.User
 
 data class ReactedEmojisResponse(
     val totalReactedEmojisCount: Int,
-    val reactedEmojis: Map<Long, ReactedEmojiDTO>,
+    val reactedEmojis: List<ReactedEmojiAndReactUsers>,
 ) {
     companion object {
         fun of(reactedEmojis: List<ReactedEmoji>): ReactedEmojisResponse {
-            val mapValues = reactedEmojis
+            val reactedEmojiDTOs = convertToDTOs(reactedEmojis)
+            val totalEmojisCount = reactedEmojiDTOs.sumOf { it.count }
+            return ReactedEmojisResponse(totalEmojisCount, reactedEmojiDTOs)
+        }
+
+        private fun convertToDTOs(reactedEmojis: List<ReactedEmoji>): List<ReactedEmojiAndReactUsers> =
+            reactedEmojis
                 .filter { it.emoji.id != null }
                 .groupBy { it.emoji.id!! }
-                .mapValues(ReactedEmojiDTO.Companion::from)
-
-            val totalEmojisCount = mapValues.values.sumOf { it.count }
-            return ReactedEmojisResponse(totalEmojisCount, mapValues)
-        }
+                .mapValues { entry -> ReactedEmojiAndReactUsers.from(entry.value) }
+                .values
+                .toList()
     }
 
-    data class ReactedEmojiDTO(
+    data class ReactedEmojiAndReactUsers(
         val id: Long?,
         val name: String,
         val url: String,
         val count: Int,
-        val reactUsers: Set<ReactUserDTO>,
+        val reactUsers: Set<ReactUser>,
     ) {
         companion object {
-            fun from(reactedEmojis2: Map.Entry<Long, List<ReactedEmoji>>): ReactedEmojiDTO {
-                val reactedEmojis = reactedEmojis2.value
+            fun from(reactedEmojis: List<ReactedEmoji>): ReactedEmojiAndReactUsers {
                 val emoji = reactedEmojis.first().emoji
                 val reactUsers = getReactUsers(reactedEmojis)
 
-                return ReactedEmojiDTO(
+                return ReactedEmojiAndReactUsers(
                     id = emoji.id,
                     name = emoji.name,
                     url = emoji.url,
@@ -45,13 +48,13 @@ data class ReactedEmojisResponse(
                 reactedEmojis.stream()
                     .map { it.reactUser }
                     .filter { it.nickname != null }
-                    .map(ReactedEmojisResponse::ReactUserDTO)
+                    .map(ReactedEmojisResponse::ReactUser)
                     .toList()
                     .toSet()
         }
     }
 
-    data class ReactUserDTO(
+    data class ReactUser(
         val id: Long,
         val nickname: String,
         val image: String,
