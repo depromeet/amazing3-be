@@ -8,17 +8,20 @@ data class ReactedEmojisResponse(
     val reactedEmojis: List<ReactedEmojiAndReactUsers>,
 ) {
     companion object {
-        fun of(reactedEmojis: List<ReactedEmoji>): ReactedEmojisResponse {
-            val reactedEmojiAndReactUsers = convert(reactedEmojis)
-            val totalEmojisCount = reactedEmojiAndReactUsers.sumOf { it.count }
+        fun of(reactedEmojis: List<ReactedEmoji>, username: String): ReactedEmojisResponse {
+            val reactedEmojiAndReactUsers = convert(reactedEmojis, username)
+            val totalEmojisCount = reactedEmojiAndReactUsers.sumOf { it.reactCount }
             return ReactedEmojisResponse(totalEmojisCount, reactedEmojiAndReactUsers)
         }
 
-        private fun convert(reactedEmojis: List<ReactedEmoji>): List<ReactedEmojiAndReactUsers> =
+        private fun convert(
+            reactedEmojis: List<ReactedEmoji>,
+            username: String
+        ): List<ReactedEmojiAndReactUsers> =
             reactedEmojis
                 .filter { it.emoji.id != null }
                 .groupBy { it.emoji.id!! }
-                .mapValues { entry -> ReactedEmojiAndReactUsers.of(entry.value) }
+                .mapValues { entry -> ReactedEmojiAndReactUsers.of(entry.value, username) }
                 .values
                 .toList()
     }
@@ -27,19 +30,22 @@ data class ReactedEmojisResponse(
         val id: Long?,
         val name: String,
         val url: String,
-        val count: Int,
+        val reactCount: Int,
+        val isMyReaction: Boolean,
         val reactUsers: Set<ReactUser>,
     ) {
         companion object {
-            fun of(reactedEmojis: List<ReactedEmoji>): ReactedEmojiAndReactUsers {
+            fun of(reactedEmojis: List<ReactedEmoji>, username: String): ReactedEmojiAndReactUsers {
                 val emoji = reactedEmojis.first().emoji
                 val reactUsers = getReactUsers(reactedEmojis)
+                val isMyReaction = reactUsers.any { it.username == username }
 
                 return ReactedEmojiAndReactUsers(
                     id = emoji.id,
                     name = emoji.name,
                     url = emoji.url,
-                    count = reactUsers.size,
+                    reactCount = reactUsers.size,
+                    isMyReaction = isMyReaction,
                     reactUsers = reactUsers,
                 )
             }
