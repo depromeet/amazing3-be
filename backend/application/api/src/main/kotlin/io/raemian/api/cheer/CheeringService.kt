@@ -89,7 +89,7 @@ class CheeringService(
         return if (contentSize < pageSize) {
             true
         } else {
-            !cheererRepository.existsByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAtDesc(lifeMapId, cheeringSquad.last().cheeringAt)
+            !cheererRepository.existsByLifeMapIdAndCheeringAtLessThanOrderByCheeringAtDesc(lifeMapId, cheeringSquad.last().cheeringAt)
         }
     }
 
@@ -97,7 +97,7 @@ class CheeringService(
         return if (cheeringAt == null) {
             cheererRepository.findByLifeMapIdOrderByCheeringAtDesc(lifeMapId, pageable)
         } else {
-            cheererRepository.findByLifeMapIdAndCheeringAtGreaterThanOrderByCheeringAtDesc(lifeMapId, cheeringAt, pageable)
+            cheererRepository.findByLifeMapIdAndCheeringAtLessThanOrderByCheeringAtDesc(lifeMapId, cheeringAt, pageable)
         }
     }
 
