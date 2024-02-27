@@ -27,7 +27,7 @@ data class ReactedEmojisResponse(
         ): List<ReactedEmojiAndReactUsers> =
             reactedEmojis
                 .filter { it.emoji.id != null }
-                .groupBy { it.emoji.id!! }
+                .groupBy { it.emoji.id }
                 .mapValues { entry -> ReactedEmojiAndReactUsers.of(entry.value, username) }
                 .values
                 .toList()
@@ -63,7 +63,6 @@ data class ReactedEmojisResponse(
                     .filter { it.username != null }
                     .filter { it.nickname != null }
                     .map(ReactUser::from)
-                    .toList()
         }
     }
 
