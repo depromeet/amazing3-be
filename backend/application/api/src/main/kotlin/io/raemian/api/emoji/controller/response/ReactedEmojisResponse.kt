@@ -11,6 +11,7 @@ data class ReactedEmojisResponse(
     companion object {
         fun of(reactedEmojis: List<ReactedEmoji>, username: String): ReactedEmojisResponse {
             val reactedEmojiAndReactUsers = convert(reactedEmojis, username)
+
             val totalEmojisCount = reactedEmojiAndReactUsers.sumOf { it.reactCount }
             val latestReactUserNickname = reactedEmojis.lastOrNull()?.reactUser?.nickname
             return ReactedEmojisResponse(
@@ -57,7 +58,7 @@ data class ReactedEmojisResponse(
             }
 
             private fun getReactUsers(reactedEmojis: List<ReactedEmoji>) =
-                reactedEmojis.stream()
+                reactedEmojis
                     .map { it.reactUser }
                     .filter { it.username != null }
                     .filter { it.nickname != null }
