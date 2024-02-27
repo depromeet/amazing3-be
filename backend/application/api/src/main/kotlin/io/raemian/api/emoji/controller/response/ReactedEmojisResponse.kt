@@ -39,7 +39,7 @@ data class ReactedEmojisResponse(
         val url: String,
         val reactCount: Int,
         val isMyReaction: Boolean,
-        val reactUsers: Set<ReactUser>,
+        val reactUsers: List<ReactUser>,
     ) {
         companion object {
             fun of(reactedEmojis: List<ReactedEmoji>, username: String): ReactedEmojiAndReactUsers {
@@ -64,7 +64,6 @@ data class ReactedEmojisResponse(
                     .filter { it.nickname != null }
                     .map(ReactUser::from)
                     .toList()
-                    .toSet()
         }
     }
 
