@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
 import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.auth.domain.UserInfoDto
 import io.raemian.api.log.UserLoginLogService
 import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
@@ -39,8 +40,8 @@ class OAuth2UserService(
         )
 
         val user = upsert(
-            email = userInfo.getAsString("email"),
-            image = userInfo.getAsString("image"),
+            email = userInfo.email,
+            image = userInfo.image,
             oAuthProvider = provider,
         )
 
@@ -100,13 +101,14 @@ class OAuth2UserService(
         return payload
     }
 
-    private fun parseUserInfo(provide: OAuthProvider, request: OAuth2UserRequest): JSONObject {
+    private fun parseUserInfo(provide: OAuthProvider, request: OAuth2UserRequest): UserInfoDto {
         return when (provide) {
             OAuthProvider.APPLE -> {
                 val idToken = request.additionalParameters["id_token"].toString()
 
-                decodeIdToken(idToken)
-                    .appendField("image", "")
+                val userInfo = decodeIdToken(idToken)
+
+                UserInfoDto(email = userInfo.getAsString("email"), image = "")
             }
             OAuthProvider.GOOGLE -> {
                 val oAuth2User: OAuth2User = super.loadUser(request)
@@ -115,21 +117,17 @@ class OAuth2UserService(
                     oAuth2User.attributes["email"]?.toString() ?: throw RuntimeException("구글 이메일이없음")
                 val image = oAuth2User.attributes["picture"]?.toString() ?: ""
 
-                JSONObject()
-                    .appendField("email", email)
-                    .appendField("image", image)
+                UserInfoDto(email = email, image = image)
             }
             OAuthProvider.KAKAO -> {
                 val oAuth2User = super.loadUser(request)
                 val properties = oAuth2User.attributes["properties"] as Map<String, String>
                 val account = oAuth2User.attributes["kakao_account"] as Map<String, String>
 
-                val profileImage = properties["profile_image"] ?: ""
                 val email = account["email"] ?: throw RuntimeException("카카오 이메일없음")
+                val image = properties["profile_image"] ?: ""
 
-                JSONObject()
-                    .appendField("email", email)
-                    .appendField("image", profileImage)
+                UserInfoDto(email = email, image = image)
             }
             OAuthProvider.NAVER -> {
                 val oAuth2User: OAuth2User = super.loadUser(request)
@@ -142,9 +140,7 @@ class OAuth2UserService(
                 val email = userInfo["email"] ?: throw RuntimeException("네이버 이메일없음")
                 val image = userInfo["profile_image"] ?: ""
 
-                JSONObject()
-                    .appendField("email", email)
-                    .appendField("image", image)
+                UserInfoDto(email = email, image = image)
             }
         }
     }
