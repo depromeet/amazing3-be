@@ -39,13 +39,11 @@ interface GoalRepository : JpaRepository<Goal, Long> {
             Goal as goal,
             LifeMap as map,
             USERS  as user,
-            LifeMapCount as count,
-            Task as task
+            LifeMapCount as count
         WHERE 1 = 1
             AND goal.lifeMap.id = map.id
             AND map.user.id = user.id
             AND map.id = count.lifeMapId
-            AND goal.id = task.goal.id
             AND map.isPublic = true
             AND goal.id < :cursor
         ORDER BY 
