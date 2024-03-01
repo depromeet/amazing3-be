@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCo
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequestEntityConverter
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
+import java.io.File
 import java.io.StringReader
 import java.security.PrivateKey
 import java.time.LocalDateTime
@@ -40,10 +41,10 @@ class TokenRequestEntityConverter(
     }
 
     fun getPrivateKey(): PrivateKey {
-        val resource = ClassPathResource(appleLoginProps.keyPath)
+        val resource = File(appleLoginProps.keyPath)
         val converter = JcaPEMKeyConverter()
 
-        val input = resource.inputStream
+        val input = resource.inputStream()
         val pemParser = PEMParser(StringReader(IOUtils.readInputStreamToString(input, StandardCharset.UTF_8)))
         val key = pemParser.readObject() as PrivateKeyInfo
 
