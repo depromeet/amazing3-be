@@ -1,5 +1,6 @@
 package io.raemian.api.config
 
+import io.raemian.api.auth.converter.TokenRequestEntityConverter
 import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.auth.service.OAuth2UserService
 import io.raemian.api.support.TokenProvider
@@ -18,6 +19,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest
 import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
@@ -33,6 +37,7 @@ class WebSecurityConfig(
     private val oAuth2UserService: OAuth2UserService,
     @Value("\${spring.profiles.active:local}")
     private val profile: String,
+    private val tokenRequestEntityConverter: TokenRequestEntityConverter,
 ) : SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -75,7 +80,8 @@ class WebSecurityConfig(
                     .anyRequest().authenticated()
             }
             .oauth2Login {
-                it.userInfoEndpoint { endpoint -> endpoint.userService(oAuth2UserService) }
+                it.tokenEndpoint { it.accessTokenResponseClient(accessTokenResponseClient()) }
+                    .userInfoEndpoint { endpoint -> endpoint.userService(oAuth2UserService) }
                 it.successHandler { request, response, authentication ->
                     val user = authentication.principal as CurrentUser
                     response.contentType = MediaType.APPLICATION_JSON_VALUE
@@ -114,5 +120,13 @@ class WebSecurityConfig(
     @Bean
     fun getPasswordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
+    }
+
+    @Bean
+    fun accessTokenResponseClient(): OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> {
+        val accessTokenResponseClient = DefaultAuthorizationCodeTokenResponseClient()
+        accessTokenResponseClient.setRequestEntityConverter(tokenRequestEntityConverter)
+
+        return accessTokenResponseClient
     }
 }

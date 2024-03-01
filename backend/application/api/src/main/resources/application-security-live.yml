@@ -5,6 +5,13 @@ server:
   servlet:
     context-path: /live/api
 
+apple-login:
+  url: https://appleid.apple.com
+  key-path: ENC(gx6Kp/2mu6h1YLa5RIJw+IT1uVig/jK8zAv0ZJzQNrWKGkIIcgQod3UhWZujYuuY)
+  client-id: ENC(j8Pv9pV9xD3oBKDsElXTedl2UrtAGMx13RpJ9NRDVH4=)
+  team-id: ENC(jzk4UvjfcLerYSo05oJ8vNGGxgt4SLuS)
+  key-id: ENC(T/yX80PVdBkgQcFkOs/H2dFgAuBKDeNR)
+
 spring:
   security:
     oauth2:
@@ -20,6 +27,9 @@ spring:
             token_uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user_name_attribute: id
+          apple:
+            authorization-uri: https://appleid.apple.com/auth/authorize?scope=name%20email&response_mode=form_post
+            token-uri: https://appleid.apple.com/auth/token
         registration:
           naver:
             redirect-uri: ENC(MQq1obaTDXs7LryM3+BOdHMrQcs/zibSLKHoPst/H6swX8Dpvl7Wo+XBW+SGaMq37aJZyQ9+pqcyYuUIPABg4l/4I2JBKQ4V)
@@ -45,4 +55,14 @@ spring:
             scope:
               - email
               - profile
+          apple:
+            client-id: ENC(j8Pv9pV9xD3oBKDsElXTedl2UrtAGMx13RpJ9NRDVH4=)
+            client-secret: ENC(gx6Kp/2mu6h1YLa5RIJw+IT1uVig/jK8zAv0ZJzQNrWKGkIIcgQod3UhWZujYuuY)
+            redirect-uri: ENC(2YqEJV59zerpIc6IHl+DZuQIrtlbWWJ7WB5//o19st3Nm46pQJ0gh0XG4127p2oVWjpLhgeLjyzm3Jgw5CWa34K1WEjWlEWX)
+            authorizationGrantType: authorization_code
+            clientAuthenticationMethod: POST
+            clientName: Apple
+            scope:
+              - email
+              - name
 

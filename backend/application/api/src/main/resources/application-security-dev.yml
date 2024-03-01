@@ -6,6 +6,14 @@ server:
   servlet:
     context-path: /dev/api
 
+apple-login:
+  url: https://appleid.apple.com
+  key-path: ENC(gx6Kp/2mu6h1YLa5RIJw+IT1uVig/jK8zAv0ZJzQNrWKGkIIcgQod3UhWZujYuuY)
+  client-id: ENC(j8Pv9pV9xD3oBKDsElXTedl2UrtAGMx13RpJ9NRDVH4=)
+  team-id: ENC(jzk4UvjfcLerYSo05oJ8vNGGxgt4SLuS)
+  key-id: ENC(T/yX80PVdBkgQcFkOs/H2dFgAuBKDeNR)
+
+
 spring:
   security:
     oauth2:
@@ -21,16 +29,19 @@ spring:
             token_uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user_name_attribute: id
+          apple:
+            authorization-uri: https://appleid.apple.com/auth/authorize?scope=name%20email&response_mode=form_post
+            token-uri: https://appleid.apple.com/auth/token
         registration:
           naver:
             redirect-uri: ENC(4+bYmAkIEVrVaxN+PJN45Yw4OX+7ic6kI++xBfdUrAQue4vWC1apiXgr+jIHrd1/IIFxyyNHSzDYjxMT89gBjaIGUPuhX3lZ)
             client-id: ENC(qFYukOWHaCGpavvnBwIIe5MfIbMaETjo8ABJPEvKL1o=)
             client-secret: ENC(sJK/TYU3PJj1+d6mB1OXjZTrmUFdALuC)
             authorization-grant-type: authorization_code
+            client-name: naver
             scope:
               - email
               - name
-            client-name: naver
           kakao:
             redirect-uri: ENC(cNaBf93iYsA00MQEQfTGWEsp7iDqUMwuMKzYg6XHjZ9X8CfegTlRidbSrMC67R73zy3BnKfjBmTtJzin8iowfaww+J8WqD6n)
             client-id: ENC(nUuzK5Tc/0XQDn0AWm3DlNjzZaLxUPzh9ujSdPot9wrOnA1Cmgl1eLyWMyIpI/P0)
@@ -46,3 +57,13 @@ spring:
             scope:
               - email
               - profile
+          apple:
+            client-id: ENC(j8Pv9pV9xD3oBKDsElXTedl2UrtAGMx13RpJ9NRDVH4=)
+            client-secret: ENC(gx6Kp/2mu6h1YLa5RIJw+IT1uVig/jK8zAv0ZJzQNrWKGkIIcgQod3UhWZujYuuY)
+            redirect-uri: ENC(2YqEJV59zerpIc6IHl+DZuQIrtlbWWJ7WB5//o19st3Nm46pQJ0gh0XG4127p2oVWjpLhgeLjyzm3Jgw5CWa34K1WEjWlEWX)
+            authorizationGrantType: authorization_code
+            clientAuthenticationMethod: POST
+            clientName: Apple
+            scope:
+              - email
+              - name

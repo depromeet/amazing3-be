@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":storage:db-core"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     /* jwt */
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
@@ -20,6 +21,7 @@ dependencies {
 
     /* security */
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.bouncycastle:bcpkix-jdk18on:1.72")
 
     /* oauth-client */
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")

@@ -6,6 +6,13 @@ server:
   servlet:
     context-path: /dev/api
 
+apple-login:
+  url: https://appleid.apple.com
+  key-path: EMPTY-VALUE
+  client-id: EMPTY-VALUE
+  team-id: EMPTY-VALUE
+  key-id: EMPTY-VALUE
+
 spring:
   security:
     oauth2:
@@ -21,6 +28,9 @@ spring:
             token_uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user_name_attribute: id
+          apple:
+            authorization-uri: https://appleid.apple.com/auth/authorize?scope=name%20email&response_mode=form_post
+            token-uri: https://appleid.apple.com/auth/token
         registration:
           naver:
             redirect-uri: http://localhost:8080/dev/api/login/oauth2/code/naver
@@ -46,3 +56,13 @@ spring:
             scope:
               - email
               - profile
+          apple:
+            client-id: EMPTY-VALUE
+            client-secret: EMPTY-VALUE
+            redirect-uri: EMPTY-VALUE
+            authorizationGrantType: authorization_code
+            clientAuthenticationMethod: POST
+            clientName: pple
+            scope:
+              - email
+              - name
