@@ -4,8 +4,6 @@ server:
   port: 8080
   servlet:
     context-path: /live/api
-  forward-headers-strategy: framework
-
 
 apple-login:
   url: https://appleid.apple.com
