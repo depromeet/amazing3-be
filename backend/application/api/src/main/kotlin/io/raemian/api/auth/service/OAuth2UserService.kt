@@ -74,14 +74,16 @@ class OAuth2UserService(
         )
 
         userRepository.save(user)
-        val updateUsername = updateUsername(user)
+        val updateUsername = updateUsernameAndNickname(user)
         createUserDefaultLifeMap(user)
         return updateUsername
     }
 
-    private fun updateUsername(user: User): User {
-        val updateUsername = user.updateUsername("$USERNAME_PREFIX${user.id!!}")
-        return userRepository.save(updateUsername)
+    private fun updateUsernameAndNickname(user: User): User {
+        val update = user
+            .updateUsername("$USERNAME_PREFIX${user.id!!}")
+            .updateNickname("$USERNAME_PREFIX${user.id!!}")
+        return userRepository.save(update)
     }
 
     private fun createUserDefaultLifeMap(user: User) {
