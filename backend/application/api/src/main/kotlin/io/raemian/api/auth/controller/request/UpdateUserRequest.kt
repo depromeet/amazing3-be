@@ -14,6 +14,9 @@ data class UpdateUserInfoRequest(
     val image: String,
 ) {
     fun validateUsername(): Boolean {
+        if (username.uppercase().contains("BANDIBOODI")) {
+            return false
+        }
         val regex = "^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*".toRegex()
         return regex.matches(username)
     }
