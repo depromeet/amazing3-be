@@ -5,6 +5,7 @@ import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.UpdateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
+import io.raemian.api.goal.controller.response.GoalExploreResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.net.URI
 
@@ -70,5 +72,17 @@ class GoalController(
     ): ResponseEntity<Unit> {
         goalService.delete(currentUser.id, goalId)
         return ResponseEntity.noContent().build()
+    }
+
+    @Operation(summary = "explore goal")
+    @GetMapping("/explore")
+    fun exploreGoals(
+        @AuthenticationPrincipal currentUser: CurrentUser,
+        @RequestParam(required = false, defaultValue = Long.MAX_VALUE.toString()) cursor: Long,
+    ): ResponseEntity<ApiResponse<GoalExploreResponse>> {
+        val goals = goalService.explore(goalId = cursor)
+
+        return ResponseEntity.ok()
+            .body(ApiResponse.success(GoalExploreResponse(goals)))
     }
 }

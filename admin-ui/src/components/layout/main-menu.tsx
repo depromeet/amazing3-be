@@ -41,6 +41,20 @@ const mainMenuData: IMenu[] = [
     ],
   },
   {
+    id: "emoji",
+    name: "이모지 관리",
+    icon: <Package2 className="w-5 h-5" />,
+    submenu: [
+      {
+        id: "emojiList",
+        name: "이모지 목록",
+        link: {
+          path: "/emoji/list",
+        },
+      },
+    ],
+  },
+  {
     id: "defaultProfile",
     name: "기본 프로필 관리",
     icon: <Package2 className="w-5 h-5" />,

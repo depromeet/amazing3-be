@@ -28,6 +28,7 @@ data class LifeMapDTO(
         user = UserSubset(
             id = user.id ?: 0,
             nickname = user.nickname!!,
+            username = user.username ?: "",
             image = user.image,
         ),
     )
