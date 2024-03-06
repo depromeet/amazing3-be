@@ -1,19 +1,23 @@
 package io.raemian.api.comment
 
+import io.raemian.api.comment.event.UpdateLastCommentReadAtEvent
 import io.raemian.api.support.error.CoreApiException
 import io.raemian.api.support.error.ErrorInfo
 import io.raemian.storage.db.core.comment.Comment
 import io.raemian.storage.db.core.comment.CommentRepository
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.user.UserRepository
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class CommentService(
     val commentRepository: CommentRepository,
     val goalRepository: GoalRepository,
     val userRepository: UserRepository,
+    val applicationEventPublisher: ApplicationEventPublisher,
 ) {
 
     companion object {
@@ -21,8 +25,12 @@ class CommentService(
     }
 
     @Transactional(readOnly = true)
-    fun getAllByGoalId(goalId: Long, currentUserId: Long) =
-        CommentsResponse.from(commentRepository.findAllByGoalId(goalId), currentUserId)
+    fun getAllByGoalId(goalId: Long, currentUserId: Long): CommentsResponse {
+        if (isCurrentUserGoalOwner(goalId, currentUserId)) {
+            publishUpdateCommentReadAtEvent(goalId)
+        }
+        return CommentsResponse.from(commentRepository.findAllByGoalId(goalId), currentUserId)
+    }
 
     @Transactional
     fun isNewComment(goalId: Long): Boolean {
@@ -48,6 +56,16 @@ class CommentService(
         }
 
         commentRepository.delete(comment)
+    }
+
+    private fun isCurrentUserGoalOwner(goalId: Long, currentUserId: Long): Boolean {
+        val goal = goalRepository.getById(goalId)
+        return currentUserId == goal.lifeMap.user.id
+    }
+
+    private fun publishUpdateCommentReadAtEvent(goalId: Long) {
+        val event = UpdateLastCommentReadAtEvent(goalId, LocalDateTime.now())
+        applicationEventPublisher.publishEvent(event)
     }
 
     private fun validateContentCharacterLimit(content: String) {
