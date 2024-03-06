@@ -16,10 +16,10 @@ import java.time.LocalDateTime
 
 @Service
 class CommentService(
-    val commentRepository: CommentRepository,
-    val goalRepository: GoalRepository,
-    val userRepository: UserRepository,
-    val applicationEventPublisher: ApplicationEventPublisher,
+    private val commentRepository: CommentRepository,
+    private val goalRepository: GoalRepository,
+    private val userRepository: UserRepository,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
 
     @Transactional(readOnly = true)
