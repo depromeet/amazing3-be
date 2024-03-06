@@ -37,7 +37,7 @@ class Comment(
     }
 
     init {
-        require(content.length > CONTENT_CHARACTER_LIMIT) {
+        require(content.length <= CONTENT_CHARACTER_LIMIT) {
             "글자수 제한${CONTENT_CHARACTER_LIMIT}자를 초과했습니다."
         }
     }
