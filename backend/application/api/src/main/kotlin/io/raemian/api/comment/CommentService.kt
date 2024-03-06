@@ -5,7 +5,9 @@ import io.raemian.api.support.error.CoreApiException
 import io.raemian.api.support.error.ErrorInfo
 import io.raemian.storage.db.core.comment.Comment
 import io.raemian.storage.db.core.comment.CommentRepository
+import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
+import io.raemian.storage.db.core.user.User
 import io.raemian.storage.db.core.user.UserRepository
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
@@ -19,10 +21,6 @@ class CommentService(
     val userRepository: UserRepository,
     val applicationEventPublisher: ApplicationEventPublisher,
 ) {
-
-    companion object {
-        const val CONTENT_CHARACTER_LIMIT = 50
-    }
 
     @Transactional(readOnly = true)
     fun getAllByGoalId(goalId: Long, currentUserId: Long): CommentsResponse {
@@ -40,11 +38,9 @@ class CommentService(
 
     @Transactional
     fun write(goalId: Long, currentUserId: Long, content: String) {
-        validateContentCharacterLimit(content)
-
         val goal = goalRepository.getReferenceById(goalId)
         val currentUser = userRepository.getReferenceById(currentUserId)
-        val comment = Comment(goal, currentUser, content)
+        val comment = createComment(goal, currentUser, content)
         commentRepository.save(comment)
     }
 
@@ -58,6 +54,14 @@ class CommentService(
         commentRepository.delete(comment)
     }
 
+    private fun createComment(goal: Goal, currentUser: User, content: String): Comment {
+        return try {
+            Comment(goal, currentUser, content)
+        } catch (exception: IllegalArgumentException) {
+            throw CoreApiException(ErrorInfo.COMMENT_CHARACTER_LIMIT_EXCEED, exception.message)
+        }
+    }
+
     private fun isCurrentUserGoalOwner(goalId: Long, currentUserId: Long): Boolean {
         val goal = goalRepository.getById(goalId)
         return currentUserId == goal.lifeMap.user.id
@@ -66,11 +70,5 @@ class CommentService(
     private fun publishUpdateCommentReadAtEvent(goalId: Long) {
         val event = UpdateLastCommentReadAtEvent(goalId, LocalDateTime.now())
         applicationEventPublisher.publishEvent(event)
-    }
-
-    private fun validateContentCharacterLimit(content: String) {
-        if (content.length > CONTENT_CHARACTER_LIMIT) {
-            throw CoreApiException(ErrorInfo.COMMENT_CHARACTER_LIMIT_EXCEED)
-        }
     }
 }
