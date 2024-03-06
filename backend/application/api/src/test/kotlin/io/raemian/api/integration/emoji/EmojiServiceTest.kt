@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @SpringBootTest
 @Transactional
@@ -58,6 +59,7 @@ class EmojiServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "내용",
+            lastCommentReadAt = LocalDateTime.now(),
         )
     }
 
