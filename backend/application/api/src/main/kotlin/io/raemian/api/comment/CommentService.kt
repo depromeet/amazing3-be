@@ -40,11 +40,10 @@ class CommentService(
     }
 
     @Transactional
-    fun write(writeCommentRequest: WriteCommentRequest) {
-        val (goalId, currentUserId, content) = writeCommentRequest
+    fun write(goalId: Long, currentUserId: Long, request: WriteCommentRequest) {
         val goal = goalRepository.getReferenceById(goalId)
         val currentUser = userRepository.getReferenceById(currentUserId)
-        val comment = createComment(goal, currentUser, content)
+        val comment = createComment(goal, currentUser, request.content)
         commentRepository.save(comment)
     }
 
