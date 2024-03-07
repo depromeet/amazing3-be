@@ -60,7 +60,7 @@ class TaskController(
 
     @Operation(summary = "Task를 삭제하는 API입니다.")
     @DeleteMapping("/{taskId}")
-    fun updateTaskCompletion(
+    fun delete(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @PathVariable("taskId") taskId: Long,
     ): ResponseEntity<Unit> {
