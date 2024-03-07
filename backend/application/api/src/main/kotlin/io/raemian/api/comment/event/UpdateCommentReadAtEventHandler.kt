@@ -15,7 +15,8 @@ class UpdateCommentReadAtEventHandler(
     @EventListener
     fun updateLastCommentReadTime(event: UpdateLastCommentReadAtEvent) {
         goalRepository.updateLastCommentReadAtByGoalId(
-            event.goalId, event.commentReadAt,
+            event.goalId,
+            event.commentReadAt,
         )
     }
 }

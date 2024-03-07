@@ -197,7 +197,8 @@ class CommentServiceTest {
         // when
         // then
         assertThrowsCoreApiExceptionExactly(
-            ErrorInfo.RESOURCE_DELETE_FORBIDDEN) {
+            ErrorInfo.RESOURCE_DELETE_FORBIDDEN,
+        ) {
             commentService.delete(comment.id!!, USER_FIXTURE.id!! + 1L)
         }
     }

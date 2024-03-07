@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import java.time.LocalDateTime
 
-
 interface GoalRepository : JpaRepository<Goal, Long> {
     fun findUserByCreatedAtGreaterThanEqual(createdAt: LocalDateTime): List<Goal>
 
@@ -56,9 +55,11 @@ interface GoalRepository : JpaRepository<Goal, Long> {
     fun explore(@Param("cursor") goalId: Long): List<GoalExploreQueryResult>
 
     @Modifying(clearAutomatically = true)
-    @Query("""
+    @Query(
+        """
         UPDATE Goal G 
         SET G.lastCommentReadAt = :lastCommentReadAt
-        WHERE G.id = :goalId""")
+        WHERE G.id = :goalId""",
+    )
     fun updateLastCommentReadAtByGoalId(goalId: Long, lastCommentReadAt: LocalDateTime)
 }
