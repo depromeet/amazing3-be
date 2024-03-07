@@ -87,7 +87,7 @@ class CommentServiceTest {
         commentRepository.save(Comment(GOAL_FIXTURE, USER_FIXTURE, "comment2"))
 
         // when
-        val (comments) = commentService.getAllByGoalId(GOAL_FIXTURE.id!!, USER_FIXTURE.id!!)
+        val (comments) = commentService.findAllByGoalId(GOAL_FIXTURE.id!!, USER_FIXTURE.id!!)
 
         // then
         assertThat(comments[0].content).isEqualTo("comment0")

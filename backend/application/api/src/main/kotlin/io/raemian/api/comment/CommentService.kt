@@ -23,7 +23,7 @@ class CommentService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getAllByGoalId(goalId: Long, currentUserId: Long): CommentsResponse {
+    fun findAllByGoalId(goalId: Long, currentUserId: Long): CommentsResponse {
         val comments = commentRepository.findAllByGoalId(goalId)
         val goal = comments[0]?.goal
 
