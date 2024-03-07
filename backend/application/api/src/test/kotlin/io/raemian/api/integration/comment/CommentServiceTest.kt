@@ -1,7 +1,7 @@
 package io.raemian.api.integration.comment
 
 import io.raemian.api.comment.CommentService
-import io.raemian.api.comment.WriteCommentRequest
+import io.raemian.api.comment.controller.request.WriteCommentRequest
 import io.raemian.api.support.CoreApiExceptionTestSupporter.Companion.assertThrowsCoreApiExceptionExactly
 import io.raemian.api.support.error.CoreApiException
 import io.raemian.api.support.error.ErrorInfo
@@ -125,8 +125,8 @@ class CommentServiceTest {
         val content = "댓글"
 
         // when
-        val request = WriteCommentRequest(GOAL_FIXTURE.id!!, USER_FIXTURE.id!!, content)
-        commentService.write(request)
+        val request = WriteCommentRequest(content)
+        commentService.write(GOAL_FIXTURE.id!!, USER_FIXTURE.id!!, request)
 
         // then
         val comments = commentRepository.findAllByGoalId(GOAL_FIXTURE.id!!)
@@ -152,17 +152,17 @@ class CommentServiceTest {
         val contentExceedLimit = stringBuilder.toString()
 
         val requestNotContentLimitExceed =
-            WriteCommentRequest(GOAL_FIXTURE.id!!, USER_FIXTURE.id!!, contentNotExceedLimit)
+            WriteCommentRequest(contentNotExceedLimit)
         val requestContentLimitExceed =
-            WriteCommentRequest(GOAL_FIXTURE.id!!, USER_FIXTURE.id!!, contentExceedLimit)
+            WriteCommentRequest(contentExceedLimit)
 
         // then
         assertDoesNotThrow {
-            commentService.write(requestNotContentLimitExceed)
+            commentService.write(GOAL_FIXTURE.id!!, USER_FIXTURE.id!!, requestNotContentLimitExceed)
         }
 
         try {
-            commentService.write(requestContentLimitExceed)
+            commentService.write(GOAL_FIXTURE.id!!, USER_FIXTURE.id!!, requestContentLimitExceed)
             fail()
         } catch (coreApiException: CoreApiException) {
             assertThat(coreApiException.errorInfo)

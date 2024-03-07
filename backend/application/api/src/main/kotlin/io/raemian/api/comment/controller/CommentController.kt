@@ -2,8 +2,8 @@ package io.raemian.api.comment.controller
 
 import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.comment.CommentService
-import io.raemian.api.comment.CommentsResponse
-import io.raemian.api.comment.WriteCommentRequest
+import io.raemian.api.comment.controller.request.WriteCommentRequest
+import io.raemian.api.comment.controller.response.CommentsResponse
 import io.raemian.api.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
