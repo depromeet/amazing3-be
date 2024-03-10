@@ -5,7 +5,6 @@ server:
   port: 8888
   servlet:
     context-path: /dev/api
-  forward-headers-strategy: framework
 
 apple-login:
   url: https://appleid.apple.com
