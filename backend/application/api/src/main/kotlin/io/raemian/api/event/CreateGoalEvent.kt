@@ -1,4 +1,4 @@
-package io.raemian.api.goal.event
+package io.raemian.api.event
 
 data class CreateGoalEvent(
     val goalId: Long,
