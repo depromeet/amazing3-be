@@ -5,6 +5,7 @@ import io.raemian.api.cheer.controller.request.CheeringSquadPagingRequest
 import io.raemian.api.cheer.controller.response.CheererResponse
 import io.raemian.api.cheer.controller.response.CheeringCountResponse
 import io.raemian.api.event.CheeringEvent
+import io.raemian.api.event.ExclusiveRunner
 import io.raemian.api.support.error.CoreApiException
 import io.raemian.api.support.error.ErrorInfo
 import io.raemian.api.support.response.PageResult
@@ -18,6 +19,7 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.Duration
 import java.time.LocalDateTime
 
 @Service
@@ -28,6 +30,7 @@ class CheeringService(
     private val userRepository: UserRepository,
     private val cheeringLimiter: CheeringLimiter,
     private val applicationEventPublisher: ApplicationEventPublisher,
+    private val exclusiveRunner: ExclusiveRunner,
 ) {
     @Transactional
     fun cheering(request: CheeringRequest) {
@@ -35,7 +38,7 @@ class CheeringService(
 
         saveCheerer(request.lifeMapId, request.cheererId)
 
-        applicationEventPublisher.publishEvent(CheeringEvent(request.lifeMapId))
+        exclusiveRunner.call("cheering:${request.lifeMapId}", Duration.ofSeconds(10)) { applicationEventPublisher.publishEvent(CheeringEvent(request.lifeMapId)) }
 
         cheeringLimiter.put(request.lifeMapId, request.cheererId)
     }
