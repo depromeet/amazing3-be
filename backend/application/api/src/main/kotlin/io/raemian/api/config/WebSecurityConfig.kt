@@ -3,6 +3,7 @@ package io.raemian.api.config
 import io.raemian.api.auth.converter.TokenRequestEntityConverter
 import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.auth.service.OAuth2UserService
+import io.raemian.api.support.HttpCookieOAuth2AuthorizationRequestRepository
 import io.raemian.api.support.TokenProvider
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
@@ -38,6 +39,7 @@ class WebSecurityConfig(
     @Value("\${spring.profiles.active:local}")
     private val profile: String,
     private val tokenRequestEntityConverter: TokenRequestEntityConverter,
+    private val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository,
 ) : SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -81,7 +83,8 @@ class WebSecurityConfig(
             }
             .oauth2Login {
                 it.tokenEndpoint { it.accessTokenResponseClient(accessTokenResponseClient()) }
-                    .userInfoEndpoint { endpoint -> endpoint.userService(oAuth2UserService) }
+                it.userInfoEndpoint { it.userService(oAuth2UserService) }
+                it.authorizationEndpoint { it.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository) }
                 it.successHandler { request, response, authentication ->
                     val user = authentication.principal as CurrentUser
                     response.contentType = MediaType.APPLICATION_JSON_VALUE
