@@ -1,6 +1,7 @@
 package io.raemian.api.goal
 
 import io.raemian.api.event.CreateGoalEvent
+import io.raemian.api.event.ExclusiveRunner
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.UpdateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
@@ -19,6 +20,7 @@ import io.raemian.storage.db.core.user.UserRepository
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.Duration
 
 @Service
 class GoalService(
@@ -28,6 +30,7 @@ class GoalService(
     private val goalRepository: GoalRepository,
     private val lifeMapRepository: LifeMapRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
+    private val exclusiveRunner: ExclusiveRunner,
 ) {
 
     @Transactional(readOnly = true)
@@ -49,12 +52,12 @@ class GoalService(
         lifeMapRepository.save(lifeMap)
 
         // goal 생성시 count event 발행
-        applicationEventPublisher.publishEvent(
-            CreateGoalEvent(
-                goalId = goal.id!!,
-                lifeMapId = lifeMap.id!!,
-            ),
-        )
+        exclusiveRunner.call("goal:$goal.id:$lifeMap.id", Duration.ofSeconds(10)) {
+            applicationEventPublisher.publishEvent(
+                CreateGoalEvent(goalId = goal.id!!, lifeMapId = lifeMap.id!!),
+            )
+        }
+
         return CreateGoalResponse(goal)
     }
 
