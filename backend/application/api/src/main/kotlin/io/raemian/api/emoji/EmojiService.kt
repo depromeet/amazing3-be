@@ -2,7 +2,6 @@ package io.raemian.api.emoji
 
 import io.raemian.api.emoji.controller.response.EmojiResponse
 import io.raemian.api.emoji.controller.response.ReactedEmojisResponse
-import io.raemian.api.event.ExclusiveRunner
 import io.raemian.api.event.ReactEmojiEvent
 import io.raemian.api.event.RemoveEmojiEvent
 import io.raemian.storage.db.core.emoji.EmojiRepository
@@ -23,7 +22,6 @@ class EmojiService(
     private val userRepository: UserRepository,
     private val reactedEmojiRepository: ReactedEmojiRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
-    private val exclusiveRunner: ExclusiveRunner,
 ) {
     @Transactional(readOnly = true)
     fun findAll(): List<EmojiResponse> =
@@ -48,7 +46,7 @@ class EmojiService(
             reactedEmojiRepository.save(reactedEmoji)
         }
 
-        exclusiveRunner.call("emoji:$goalId:$emojiId", Duration.ofSeconds(10)) { applicationEventPublisher.publishEvent(ReactEmojiEvent(goalId, emojiId)) }
+        applicationEventPublisher.publishEvent(ReactEmojiEvent(goalId, emojiId))
     }
 
     @Transactional
@@ -60,7 +58,7 @@ class EmojiService(
         reactedEmojiRepository
             .deleteByEmojiAndGoalAndReactUser(emoji, goal, emojiReactUser)
 
-        exclusiveRunner.call("emoji:$goalId:$emojiId", Duration.ofSeconds(10)) { applicationEventPublisher.publishEvent(RemoveEmojiEvent(goalId, emojiId)) }
+        applicationEventPublisher.publishEvent(RemoveEmojiEvent(goalId, emojiId))
     }
 }
 
