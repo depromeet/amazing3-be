@@ -5,22 +5,24 @@ import java.time.Duration
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
-import java.util.concurrent.locks.Lock
-import java.util.concurrent.locks.ReentrantLock
 
 @Component
 class ExclusiveRunner {
-    private val map: ConcurrentHashMap<String, Lock> = ConcurrentHashMap<String, Lock>()
+    private val map: ConcurrentHashMap<String, RunnerLock> = ConcurrentHashMap<String, RunnerLock>()
 
     fun call(key: String, tryLockTimeout: Duration, f: Runnable) {
-        val lock = map.computeIfAbsent(key) { key -> ReentrantLock() }
+        val lock = map.computeIfAbsent(key) { key -> RunnerLock() }
 
         try {
+            lock.increase()
             if (lock.tryLock(tryLockTimeout.toSeconds(), TimeUnit.SECONDS)) {
                 try {
                     f.run()
                     return
                 } finally {
+                    if (lock.decrease() <= 0) {
+                        map.remove(key)
+                    }
                     lock.unlock()
                 }
             }
