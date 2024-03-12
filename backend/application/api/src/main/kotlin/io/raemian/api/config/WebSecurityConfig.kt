@@ -3,7 +3,7 @@ package io.raemian.api.config
 import io.raemian.api.auth.converter.TokenRequestEntityConverter
 import io.raemian.api.auth.domain.CurrentUser
 import io.raemian.api.auth.service.OAuth2UserService
-import io.raemian.api.support.HttpCookieOAuth2AuthorizationRequestRepository
+import io.raemian.api.support.StateOAuth2AuthorizationRequestRepository
 import io.raemian.api.support.TokenProvider
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
@@ -39,7 +39,7 @@ class WebSecurityConfig(
     @Value("\${spring.profiles.active:local}")
     private val profile: String,
     private val tokenRequestEntityConverter: TokenRequestEntityConverter,
-    private val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository,
+    private val httpCookieOAuth2AuthorizationRequestRepository: StateOAuth2AuthorizationRequestRepository,
 ) : SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
 
     private val log = LoggerFactory.getLogger(javaClass)
