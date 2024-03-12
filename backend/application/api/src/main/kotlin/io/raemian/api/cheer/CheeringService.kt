@@ -4,7 +4,7 @@ import io.raemian.api.cheer.controller.request.CheeringRequest
 import io.raemian.api.cheer.controller.request.CheeringSquadPagingRequest
 import io.raemian.api.cheer.controller.response.CheererResponse
 import io.raemian.api.cheer.controller.response.CheeringCountResponse
-import io.raemian.api.cheer.event.CheeringEvent
+import io.raemian.api.event.CheeredEvent
 import io.raemian.api.support.error.CoreApiException
 import io.raemian.api.support.error.ErrorInfo
 import io.raemian.api.support.response.PageResult
@@ -35,7 +35,7 @@ class CheeringService(
 
         saveCheerer(request.lifeMapId, request.cheererId)
 
-        applicationEventPublisher.publishEvent(CheeringEvent(request.lifeMapId))
+        applicationEventPublisher.publishEvent(CheeredEvent(request.lifeMapId))
 
         cheeringLimiter.put(request.lifeMapId, request.cheererId)
     }

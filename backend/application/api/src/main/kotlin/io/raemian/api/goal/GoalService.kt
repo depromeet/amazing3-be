@@ -1,11 +1,11 @@
 package io.raemian.api.goal
 
+import io.raemian.api.event.CreatedGoalEvent
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.UpdateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.goal.domain.GoalExploreDTO
-import io.raemian.api.goal.event.CreateGoalEvent
 import io.raemian.api.sticker.StickerService
 import io.raemian.api.support.RaemianLocalDate
 import io.raemian.api.support.error.MaxGoalCountExceededException
@@ -51,11 +51,9 @@ class GoalService(
 
         // goal 생성시 count event 발행
         applicationEventPublisher.publishEvent(
-            CreateGoalEvent(
-                goalId = goal.id!!,
-                lifeMapId = lifeMap.id!!,
-            ),
+            CreatedGoalEvent(goalId = goal.id!!, lifeMapId = lifeMap.id!!),
         )
+
         return CreateGoalResponse(goal)
     }
 
