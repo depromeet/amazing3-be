@@ -2,7 +2,7 @@ package io.raemian.api.comment
 
 import io.raemian.api.comment.controller.request.WriteCommentRequest
 import io.raemian.api.comment.controller.response.CommentsResponse
-import io.raemian.api.comment.event.UpdateLastCommentReadAtEvent
+import io.raemian.api.event.UpdateLastCommentReadAtEvent
 import io.raemian.api.support.error.CoreApiException
 import io.raemian.api.support.error.ErrorInfo
 import io.raemian.storage.db.core.comment.Comment

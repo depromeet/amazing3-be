@@ -1,4 +1,4 @@
-package io.raemian.api.comment.event
+package io.raemian.api.event
 
 import java.time.LocalDateTime
 

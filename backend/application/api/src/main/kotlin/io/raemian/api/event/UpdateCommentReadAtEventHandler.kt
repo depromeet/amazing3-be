@@ -1,4 +1,4 @@
-package io.raemian.api.comment.event
+package io.raemian.api.event
 
 import io.raemian.storage.db.core.goal.GoalRepository
 import org.springframework.context.event.EventListener
