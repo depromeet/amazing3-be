@@ -19,6 +19,7 @@ import io.raemian.storage.db.core.user.UserRepository
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class GoalService(
@@ -105,7 +106,15 @@ class GoalService(
             val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadline)
             val sticker = stickerService.getReferenceById(stickerId)
             val tag = tagService.getReferenceById(tagId)
-            return Goal(lifeMap, title, deadline, sticker, tag, description!!)
+            return Goal(
+                lifeMap = lifeMap,
+                title = title,
+                deadline = deadline,
+                sticker = sticker,
+                tag = tag,
+                description = description!!,
+                lastCommentReadAt = LocalDateTime.now(),
+            )
         }
     }
 
