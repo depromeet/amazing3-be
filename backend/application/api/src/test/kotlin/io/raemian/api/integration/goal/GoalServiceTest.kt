@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @SpringBootTest
 class GoalServiceTest {
@@ -75,6 +76,7 @@ class GoalServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "내용",
+            lastCommentReadAt = LocalDateTime.now(),
         )
         goalRepository.save(goal)
 
@@ -100,6 +102,7 @@ class GoalServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "목표 설명.",
+            lastCommentReadAt = LocalDateTime.now(),
         )
         goalRepository.save(goal)
 
@@ -125,6 +128,7 @@ class GoalServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "목표 설명.",
+            lastCommentReadAt = LocalDateTime.now(),
         )
         goalRepository.save(goal)
 
@@ -149,6 +153,7 @@ class GoalServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "목표 설명.",
+            lastCommentReadAt = LocalDateTime.now(),
         )
         goalRepository.save(goal)
 
@@ -247,6 +252,7 @@ class GoalServiceTest {
             deadline = deadline,
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
+            lastCommentReadAt = LocalDateTime.now(),
         )
         goalRepository.save(goal)
 
@@ -298,6 +304,7 @@ class GoalServiceTest {
             deadline = LocalDate.now(),
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
+            lastCommentReadAt = LocalDateTime.now(),
         )
 
         goalRepository.save(goal)
@@ -317,6 +324,7 @@ class GoalServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "목표 설명",
+            lastCommentReadAt = LocalDateTime.now(),
         )
 
         lifeMap.addGoal(goal)

@@ -1,11 +1,11 @@
 package io.raemian.api.goal
 
+import io.raemian.api.event.CreatedGoalEvent
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.UpdateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
 import io.raemian.api.goal.controller.response.GoalResponse
 import io.raemian.api.goal.domain.GoalExploreDTO
-import io.raemian.api.goal.event.CreateGoalEvent
 import io.raemian.api.sticker.StickerService
 import io.raemian.api.support.RaemianLocalDate
 import io.raemian.api.support.error.MaxGoalCountExceededException
@@ -19,6 +19,7 @@ import io.raemian.storage.db.core.user.UserRepository
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class GoalService(
@@ -50,11 +51,9 @@ class GoalService(
 
         // goal 생성시 count event 발행
         applicationEventPublisher.publishEvent(
-            CreateGoalEvent(
-                goalId = goal.id!!,
-                lifeMapId = lifeMap.id!!,
-            ),
+            CreatedGoalEvent(goalId = goal.id!!, lifeMapId = lifeMap.id!!),
         )
+
         return CreateGoalResponse(goal)
     }
 
@@ -105,7 +104,15 @@ class GoalService(
             val deadline = RaemianLocalDate.of(yearOfDeadline, monthOfDeadline)
             val sticker = stickerService.getReferenceById(stickerId)
             val tag = tagService.getReferenceById(tagId)
-            return Goal(lifeMap, title, deadline, sticker, tag, description!!)
+            return Goal(
+                lifeMap = lifeMap,
+                title = title,
+                deadline = deadline,
+                sticker = sticker,
+                tag = tag,
+                description = description!!,
+                lastCommentReadAt = LocalDateTime.now(),
+            )
         }
     }
 
