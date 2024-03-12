@@ -1,6 +1,6 @@
 package io.raemian.api.event
 
-data class RemoveEmojiEvent(
+data class RemovedEmojiEvent(
     val goalId: Long,
     val emojiId: Long,
 )

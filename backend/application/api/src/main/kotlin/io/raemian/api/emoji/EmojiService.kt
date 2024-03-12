@@ -2,8 +2,8 @@ package io.raemian.api.emoji
 
 import io.raemian.api.emoji.controller.response.EmojiResponse
 import io.raemian.api.emoji.controller.response.ReactedEmojisResponse
-import io.raemian.api.event.ReactEmojiEvent
-import io.raemian.api.event.RemoveEmojiEvent
+import io.raemian.api.event.ReactedEmojiEvent
+import io.raemian.api.event.RemovedEmojiEvent
 import io.raemian.storage.db.core.emoji.EmojiRepository
 import io.raemian.storage.db.core.emoji.ReactedEmoji
 import io.raemian.storage.db.core.emoji.ReactedEmojiRepository
@@ -13,7 +13,6 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.Duration
 
 @Service
 class EmojiService(
@@ -46,7 +45,7 @@ class EmojiService(
             reactedEmojiRepository.save(reactedEmoji)
         }
 
-        applicationEventPublisher.publishEvent(ReactEmojiEvent(goalId, emojiId))
+        applicationEventPublisher.publishEvent(ReactedEmojiEvent(goalId, emojiId))
     }
 
     @Transactional
@@ -58,7 +57,7 @@ class EmojiService(
         reactedEmojiRepository
             .deleteByEmojiAndGoalAndReactUser(emoji, goal, emojiReactUser)
 
-        applicationEventPublisher.publishEvent(RemoveEmojiEvent(goalId, emojiId))
+        applicationEventPublisher.publishEvent(RemovedEmojiEvent(goalId, emojiId))
     }
 }
 

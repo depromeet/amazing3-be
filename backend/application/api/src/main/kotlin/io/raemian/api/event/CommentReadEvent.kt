@@ -2,7 +2,7 @@ package io.raemian.api.event
 
 import java.time.LocalDateTime
 
-data class UpdateLastCommentReadAtEvent(
+data class CommentReadEvent(
     val goalId: Long,
     val commentReadAt: LocalDateTime,
 )

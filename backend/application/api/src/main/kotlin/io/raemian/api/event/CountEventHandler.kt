@@ -6,7 +6,6 @@ import io.raemian.storage.db.core.emoji.EmojiCount
 import io.raemian.storage.db.core.emoji.EmojiCountRepository
 import io.raemian.storage.db.core.lifemap.LifeMapCount
 import io.raemian.storage.db.core.lifemap.LifeMapCountRepository
-import org.slf4j.LoggerFactory
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -21,7 +20,7 @@ class CountEventHandler(
 ) {
     @Transactional
     @EventListener
-    fun addCheeringCount(cheeringEvent: CheeringEvent) {
+    fun addCheeringCount(cheeringEvent: CheeredEvent) {
         exclusiveRunner.call("cheering:${cheeringEvent.lifeMapId}", Duration.ofSeconds(10)) {
             val cheering = cheeringRepository.findByLifeMapId(cheeringEvent.lifeMapId)
                 ?: Cheering(0, cheeringEvent.lifeMapId)
@@ -32,7 +31,7 @@ class CountEventHandler(
 
     @Transactional
     @EventListener
-    fun addGoalCount(createGoalEvent: CreateGoalEvent) {
+    fun addGoalCount(createGoalEvent: CreatedGoalEvent) {
         // TODO goal 테이블에서 life map 기준으로 전체 count 한 값으로 업데이트
         exclusiveRunner.call("goal:${createGoalEvent.lifeMapId}:${createGoalEvent.goalId}", Duration.ofSeconds(10)) {
             val mapCount = lifeMapCountRepository.findByLifeMapId(createGoalEvent.lifeMapId)
@@ -46,7 +45,7 @@ class CountEventHandler(
 
     @Transactional
     @EventListener
-    fun addEmojiCount(reactEmojiEvent: ReactEmojiEvent) {
+    fun addEmojiCount(reactEmojiEvent: ReactedEmojiEvent) {
         exclusiveRunner.call("emoji:${reactEmojiEvent.goalId}:${reactEmojiEvent.emojiId}", Duration.ofSeconds(10)) {
             val emojiCount = emojiCountRepository.findByGoalIdAndEmojiId(reactEmojiEvent.goalId, reactEmojiEvent.emojiId)
                 ?: EmojiCount(0, reactEmojiEvent.emojiId, reactEmojiEvent.goalId)
@@ -55,10 +54,9 @@ class CountEventHandler(
         }
     }
 
-
     @Transactional
     @EventListener
-    fun minusEmojiCount(removeEmojiEvent: RemoveEmojiEvent) {
+    fun minusEmojiCount(removeEmojiEvent: RemovedEmojiEvent) {
         exclusiveRunner.call("emoji:${removeEmojiEvent.goalId}:${removeEmojiEvent.emojiId}", Duration.ofSeconds(10)) {
             val emojiCount = emojiCountRepository.findByGoalIdAndEmojiId(removeEmojiEvent.goalId, removeEmojiEvent.emojiId)
 

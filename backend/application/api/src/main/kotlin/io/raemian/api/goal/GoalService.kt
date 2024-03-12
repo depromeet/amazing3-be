@@ -1,6 +1,6 @@
 package io.raemian.api.goal
 
-import io.raemian.api.event.CreateGoalEvent
+import io.raemian.api.event.CreatedGoalEvent
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.UpdateGoalRequest
 import io.raemian.api.goal.controller.response.CreateGoalResponse
@@ -51,7 +51,7 @@ class GoalService(
 
         // goal 생성시 count event 발행
         applicationEventPublisher.publishEvent(
-            CreateGoalEvent(goalId = goal.id!!, lifeMapId = lifeMap.id!!),
+            CreatedGoalEvent(goalId = goal.id!!, lifeMapId = lifeMap.id!!),
         )
 
         return CreateGoalResponse(goal)

@@ -1,5 +1,5 @@
 package io.raemian.api.event
 
-data class CheeringEvent(
+data class CheeredEvent(
     val lifeMapId: Long,
 )

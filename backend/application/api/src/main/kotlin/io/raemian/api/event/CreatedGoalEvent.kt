@@ -1,6 +1,6 @@
 package io.raemian.api.event
 
-data class ReactEmojiEvent(
+data class CreatedGoalEvent(
     val goalId: Long,
-    val emojiId: Long,
+    val lifeMapId: Long,
 )
