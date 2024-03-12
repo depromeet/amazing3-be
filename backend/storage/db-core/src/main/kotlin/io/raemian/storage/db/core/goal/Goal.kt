@@ -18,6 +18,7 @@ import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import org.hibernate.annotations.Nationalized
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "GOALS")
@@ -44,6 +45,9 @@ class Goal(
     @Nationalized
     var description: String = "",
 
+    @Column(name = "lastCommentReadAt", nullable = false)
+    val lastCommentReadAt: LocalDateTime,
+
     @OneToMany(
         mappedBy = "goal",
         cascade = [CascadeType.REMOVE, CascadeType.MERGE],
@@ -69,13 +73,14 @@ class Goal(
         title: String,
         deadline: LocalDate,
         description: String,
-    ): Goal = Goal(lifeMap, title, deadline, sticker, tag, description, tasks, id)
+    ): Goal =
+        Goal(lifeMap, title, deadline, sticker, tag, description, lastCommentReadAt, tasks, id)
 
     fun updateSticker(sticker: Sticker): Goal =
-        Goal(lifeMap, title, deadline, sticker, tag, description, tasks, id)
+        Goal(lifeMap, title, deadline, sticker, tag, description, lastCommentReadAt, tasks, id)
 
     fun updateTag(tag: Tag): Goal =
-        Goal(lifeMap, title, deadline, sticker, tag, description, tasks, id)
+        Goal(lifeMap, title, deadline, sticker, tag, description, lastCommentReadAt, tasks, id)
 
     private fun validateMaxTaskCount() =
         require(tasks.size < MAX_TASK_COUNT)

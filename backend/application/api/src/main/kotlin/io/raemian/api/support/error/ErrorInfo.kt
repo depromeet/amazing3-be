@@ -16,6 +16,13 @@ enum class ErrorInfo(
         LogLevel.ERROR,
     ),
 
+    RESOURCE_DELETE_FORBIDDEN(
+        HttpStatus.FORBIDDEN,
+        HttpStatus.FORBIDDEN.value(),
+        "해당 리소스를 삭제할 권한이 없습니다.",
+        LogLevel.INFO,
+    ),
+
     RESOURCE_NOT_FOUND(
         HttpStatus.NOT_FOUND,
         HttpStatus.NOT_FOUND.value(),
@@ -54,7 +61,14 @@ enum class ErrorInfo(
     INVALID_USERNAME(
         HttpStatus.BAD_REQUEST,
         1005,
-        "유효하지 않은 username 입니다.",
+        "유효하지 않은 username입니다.",
+        LogLevel.INFO,
+    ),
+
+    COMMENT_CHARACTER_LIMIT_EXCEED(
+        HttpStatus.BAD_REQUEST,
+        1005,
+        "유효하지 않은 username입니다.",
         LogLevel.INFO,
     ),
 }
