@@ -32,7 +32,7 @@ class EmojiController(
         @PathVariable goalId: Long,
         @AuthenticationPrincipal currentUser: CurrentUser,
     ): ResponseEntity<ApiResponse<ReactedEmojisResponse>> {
-        val response = emojiService.findAllReactedEmojisByGoalId(goalId, currentUser.username)
+        val response = emojiService.findAllReactedEmojisByGoalId(goalId, currentUser.id)
         return ResponseEntity.ok(ApiResponse.success(response))
     }
 

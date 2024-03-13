@@ -5,17 +5,21 @@ import io.raemian.storage.db.core.user.User
 
 data class ReactedEmojisResponse(
     val totalReactedEmojisCount: Int,
+    val totalReactUserCount: Int,
     val latestReactUserNickname: String?,
     val reactedEmojis: List<ReactedEmojiAndReactUsers>,
 ) {
     companion object {
-        fun of(reactedEmojis: List<ReactedEmoji>, username: String): ReactedEmojisResponse {
-            val reactedEmojiAndReactUsers = convert(reactedEmojis, username)
+        fun of(reactedEmojis: List<ReactedEmoji>, userId: Long): ReactedEmojisResponse {
+            val reactedEmojiAndReactUsers = convert(reactedEmojis, userId)
 
+            val reactedUserCount = countTotalReactUser(reactedEmojiAndReactUsers)
             val totalEmojisCount = reactedEmojiAndReactUsers.sumOf { it.reactCount }
+
             val latestReactUserNickname = reactedEmojis.lastOrNull()?.reactUser?.nickname
             return ReactedEmojisResponse(
                 totalReactedEmojisCount = totalEmojisCount,
+                totalReactUserCount = reactedUserCount,
                 latestReactUserNickname = latestReactUserNickname,
                 reactedEmojis = reactedEmojiAndReactUsers,
             )
@@ -23,14 +27,21 @@ data class ReactedEmojisResponse(
 
         private fun convert(
             reactedEmojis: List<ReactedEmoji>,
-            username: String,
+            userId: Long,
         ): List<ReactedEmojiAndReactUsers> =
             reactedEmojis
                 .filter { it.emoji.id != null }
                 .groupBy { it.emoji.id }
-                .mapValues { entry -> ReactedEmojiAndReactUsers.of(entry.value, username) }
+                .mapValues { entry -> ReactedEmojiAndReactUsers.of(entry.value, userId) }
                 .values
                 .toList()
+
+        private fun countTotalReactUser(reactedEmojiAndReactUsers: List<ReactedEmojiAndReactUsers>) =
+            reactedEmojiAndReactUsers
+                .flatMap { it.reactUsers }
+                .map { it.username }
+                .distinct()
+                .size
     }
 
     data class ReactedEmojiAndReactUsers(
@@ -42,10 +53,10 @@ data class ReactedEmojisResponse(
         val reactUsers: List<ReactUser>,
     ) {
         companion object {
-            fun of(reactedEmojis: List<ReactedEmoji>, username: String): ReactedEmojiAndReactUsers {
+            fun of(reactedEmojis: List<ReactedEmoji>, userId: Long): ReactedEmojiAndReactUsers {
                 val emoji = reactedEmojis.first().emoji
                 val reactUsers = getReactUsers(reactedEmojis)
-                val isMyReaction = reactUsers.any { it.username == username }
+                val isMyReaction = reactedEmojis.any { userId == it.reactUser.id }
 
                 return ReactedEmojiAndReactUsers(
                     id = emoji.id,
