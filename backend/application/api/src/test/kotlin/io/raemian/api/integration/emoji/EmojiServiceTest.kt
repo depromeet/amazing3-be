@@ -226,4 +226,37 @@ class EmojiServiceTest {
         val reactedEmojis = reactedEmojiRepository.findAllByGoal(GOAL_FIXTURE)
         assertThat(reactedEmojis.size).isEqualTo(0)
     }
+
+    @Test
+    @DisplayName("Goal에 반응한 사람 수를 확인할 수 있다.")
+    fun totalReactUserCountTest() {
+        // given
+        val userFixture3 = User(
+            email = "dfghcvb2",
+            username = "binary",
+            nickname = "binary",
+            birth = LocalDate.MIN,
+            image = "",
+            provider = OAuthProvider.NAVER,
+            authority = Authority.ROLE_USER,
+        )
+        entityManager.merge(userFixture3)
+
+        val emoji = Emoji("이모지", "url")
+        val emoji2 = Emoji("이모지", "url")
+        emojiRepository.saveAll(listOf(emoji, emoji2))
+
+        val reactedEmoji = ReactedEmoji(GOAL_FIXTURE, emoji, USER_FIXTURE)
+        val reactedEmoji2 = ReactedEmoji(GOAL_FIXTURE, emoji, USER_FIXTURE2)
+        val reactedEmoji3 = ReactedEmoji(GOAL_FIXTURE, emoji2, USER_FIXTURE)
+        val reactedEmoji4 = ReactedEmoji(GOAL_FIXTURE, emoji2, USER_FIXTURE2)
+        val reactedEmoji5 = ReactedEmoji(GOAL_FIXTURE, emoji2, userFixture3)
+        reactedEmojiRepository.saveAll(listOf(reactedEmoji, reactedEmoji2, reactedEmoji3, reactedEmoji4, reactedEmoji5))
+
+        // when
+        val reactedEmojis = emojiService.findAllReactedEmojisByGoalId(GOAL_FIXTURE.id!!, USER_FIXTURE.username!!)
+
+        // then
+        assertThat(reactedEmojis.totalReactUserCount).isEqualTo(3)
+    }
 }
