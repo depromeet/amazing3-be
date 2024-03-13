@@ -11,6 +11,8 @@ import io.raemian.api.support.RaemianLocalDate
 import io.raemian.api.support.error.MaxGoalCountExceededException
 import io.raemian.api.support.error.PrivateLifeMapException
 import io.raemian.api.tag.TagService
+import io.raemian.storage.db.core.emoji.EmojiCountRepository
+import io.raemian.storage.db.core.emoji.ReactedEmojiRepository
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.lifemap.LifeMap
@@ -29,6 +31,8 @@ class GoalService(
     private val goalRepository: GoalRepository,
     private val lifeMapRepository: LifeMapRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
+    private val emojiCountRepository: EmojiCountRepository,
+    private val reactedEmojiRepository: ReactedEmojiRepository
 ) {
 
     @Transactional(readOnly = true)
@@ -85,9 +89,13 @@ class GoalService(
 
     @Transactional(readOnly = true)
     fun explore(goalId: Long): List<GoalExploreDTO> {
-        val results = goalRepository.explore(goalId)
+        val explore = goalRepository.explore(goalId)
+        val goalIds = explore.map { it.goalId }
 
-        return results.map { GoalExploreDTO(it) }
+        val emojiGroup = emojiCountRepository.findAllByGoalIdIn(goalIds).groupBy { it.goalId }
+
+        return explore
+            .map { GoalExploreDTO.from(it, emojiGroup[it.goalId] ?: listOf()) }
     }
 
     private fun createFirstLifeMap(userId: Long): LifeMap {

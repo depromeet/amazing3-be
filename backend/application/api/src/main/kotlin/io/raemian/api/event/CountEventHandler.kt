@@ -4,6 +4,7 @@ import io.raemian.storage.db.core.cheer.Cheering
 import io.raemian.storage.db.core.cheer.CheeringRepository
 import io.raemian.storage.db.core.emoji.EmojiCount
 import io.raemian.storage.db.core.emoji.EmojiCountRepository
+import io.raemian.storage.db.core.emoji.EmojiRepository
 import io.raemian.storage.db.core.lifemap.LifeMapCount
 import io.raemian.storage.db.core.lifemap.LifeMapCountRepository
 import org.springframework.context.event.EventListener
@@ -17,6 +18,7 @@ class CountEventHandler(
     private val lifeMapCountRepository: LifeMapCountRepository,
     private val emojiCountRepository: EmojiCountRepository,
     private val exclusiveRunner: ExclusiveRunner,
+    private val emojiRepository: EmojiRepository
 ) {
     @Transactional
     @EventListener
@@ -47,8 +49,9 @@ class CountEventHandler(
     @EventListener
     fun addEmojiCount(reactEmojiEvent: ReactedEmojiEvent) {
         exclusiveRunner.call("emoji:${reactEmojiEvent.goalId}:${reactEmojiEvent.emojiId}", Duration.ofSeconds(10)) {
+            val emoji = emojiRepository.getReferenceById(reactEmojiEvent.emojiId)
             val emojiCount = emojiCountRepository.findByGoalIdAndEmojiId(reactEmojiEvent.goalId, reactEmojiEvent.emojiId)
-                ?: EmojiCount(0, reactEmojiEvent.emojiId, reactEmojiEvent.goalId)
+                ?: EmojiCount(0, emoji, reactEmojiEvent.goalId)
 
             emojiCountRepository.save(emojiCount.addCount())
         }

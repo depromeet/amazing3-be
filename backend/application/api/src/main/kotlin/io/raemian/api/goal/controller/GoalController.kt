@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.net.URI
+import kotlin.math.exp
 
 fun String.toUri(): URI = URI.create(this)
 
@@ -80,9 +81,9 @@ class GoalController(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @RequestParam(required = false, defaultValue = Long.MAX_VALUE.toString()) cursor: Long,
     ): ResponseEntity<ApiResponse<GoalExploreResponse>> {
-        val goals = goalService.explore(goalId = cursor)
+        val explore = goalService.explore(goalId = cursor)
 
         return ResponseEntity.ok()
-            .body(ApiResponse.success(GoalExploreResponse(goals)))
+            .body(ApiResponse.success(GoalExploreResponse(explore)))
     }
 }
