@@ -9,8 +9,8 @@ data class ReactedEmojisResponse(
     val reactedEmojis: List<ReactedEmojiAndReactUsers>,
 ) {
     companion object {
-        fun of(reactedEmojis: List<ReactedEmoji>, username: String): ReactedEmojisResponse {
-            val reactedEmojiAndReactUsers = convert(reactedEmojis, username)
+        fun of(reactedEmojis: List<ReactedEmoji>, userId: Long): ReactedEmojisResponse {
+            val reactedEmojiAndReactUsers = convert(reactedEmojis, userId)
 
             val totalEmojisCount = reactedEmojiAndReactUsers.sumOf { it.reactCount }
             val latestReactUserNickname = reactedEmojis.lastOrNull()?.reactUser?.nickname
@@ -23,12 +23,12 @@ data class ReactedEmojisResponse(
 
         private fun convert(
             reactedEmojis: List<ReactedEmoji>,
-            username: String,
+            userId: Long,
         ): List<ReactedEmojiAndReactUsers> =
             reactedEmojis
                 .filter { it.emoji.id != null }
                 .groupBy { it.emoji.id }
-                .mapValues { entry -> ReactedEmojiAndReactUsers.of(entry.value, username) }
+                .mapValues { entry -> ReactedEmojiAndReactUsers.of(entry.value, userId) }
                 .values
                 .toList()
     }
@@ -42,10 +42,10 @@ data class ReactedEmojisResponse(
         val reactUsers: List<ReactUser>,
     ) {
         companion object {
-            fun of(reactedEmojis: List<ReactedEmoji>, username: String): ReactedEmojiAndReactUsers {
+            fun of(reactedEmojis: List<ReactedEmoji>, userId: Long): ReactedEmojiAndReactUsers {
                 val emoji = reactedEmojis.first().emoji
                 val reactUsers = getReactUsers(reactedEmojis)
-                val isMyReaction = reactUsers.any { it.username == username }
+                val isMyReaction = reactedEmojis.any { userId == it.reactUser.id }
 
                 return ReactedEmojiAndReactUsers(
                     id = emoji.id,
