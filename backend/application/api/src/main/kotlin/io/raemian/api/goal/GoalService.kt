@@ -13,7 +13,6 @@ import io.raemian.api.support.error.MaxGoalCountExceededException
 import io.raemian.api.support.error.PrivateLifeMapException
 import io.raemian.api.tag.TagService
 import io.raemian.storage.db.core.emoji.EmojiCountRepository
-import io.raemian.storage.db.core.emoji.ReactedEmojiRepository
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.lifemap.LifeMap
@@ -33,7 +32,7 @@ class GoalService(
     private val lifeMapRepository: LifeMapRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
     private val emojiCountRepository: EmojiCountRepository,
-    private val emojiService: EmojiService
+    private val emojiService: EmojiService,
 ) {
 
     @Transactional(readOnly = true)

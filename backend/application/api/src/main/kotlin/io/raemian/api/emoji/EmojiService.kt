@@ -22,7 +22,7 @@ class EmojiService(
     private val userRepository: UserRepository,
     private val reactedEmojiRepository: ReactedEmojiRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
-    private val emojiCountRepository: EmojiCountRepository
+    private val emojiCountRepository: EmojiCountRepository,
 ) {
     @Transactional(readOnly = true)
     fun findAll(): List<EmojiResponse> =
@@ -67,7 +67,6 @@ class EmojiService(
         return reactedEmojiRepository.findAllByGoalIdIn(ids)
             .groupBy { it.goal.id!! }
             .mapValues { ReactedEmojisResponse.of(it.value, userId ?: -1) }
-
     }
 }
 

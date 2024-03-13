@@ -29,7 +29,7 @@ fun String.toUri(): URI = URI.create(this)
 @RequestMapping("/goal")
 class GoalController(
     private val goalService: GoalService,
-    private val emojiService: EmojiService
+    private val emojiService: EmojiService,
 ) {
 
     @Operation(summary = "목표 단건 조회 API")

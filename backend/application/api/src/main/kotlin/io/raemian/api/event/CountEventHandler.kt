@@ -18,7 +18,7 @@ class CountEventHandler(
     private val lifeMapCountRepository: LifeMapCountRepository,
     private val emojiCountRepository: EmojiCountRepository,
     private val exclusiveRunner: ExclusiveRunner,
-    private val emojiRepository: EmojiRepository
+    private val emojiRepository: EmojiRepository,
 ) {
     @Transactional
     @EventListener

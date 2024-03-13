@@ -7,13 +7,13 @@ data class EmojiCountSubset(
     val name: String,
     val url: String,
     val count: Long,
-    val isMine: Boolean
+    val isMine: Boolean,
 ) {
-    constructor(emojiCount: EmojiCount): this(
+    constructor(emojiCount: EmojiCount) : this(
         id = emojiCount.emoji.id ?: -1,
         name = emojiCount.emoji.name,
         url = emojiCount.emoji.url,
         count = emojiCount.count,
-        isMine = false
+        isMine = false,
     )
 }
