@@ -5,6 +5,7 @@ import io.raemian.storage.db.core.user.User
 
 data class ReactedEmojisResponse(
     val totalReactedEmojisCount: Int,
+    val totalReactUserCount: Int,
     val latestReactUserNickname: String?,
     val reactedEmojis: List<ReactedEmojiAndReactUsers>,
 ) {
@@ -12,10 +13,13 @@ data class ReactedEmojisResponse(
         fun of(reactedEmojis: List<ReactedEmoji>, userId: Long): ReactedEmojisResponse {
             val reactedEmojiAndReactUsers = convert(reactedEmojis, userId)
 
+            val reactedUserCount = countTotalReactUser(reactedEmojiAndReactUsers)
             val totalEmojisCount = reactedEmojiAndReactUsers.sumOf { it.reactCount }
+
             val latestReactUserNickname = reactedEmojis.lastOrNull()?.reactUser?.nickname
             return ReactedEmojisResponse(
                 totalReactedEmojisCount = totalEmojisCount,
+                totalReactUserCount = reactedUserCount,
                 latestReactUserNickname = latestReactUserNickname,
                 reactedEmojis = reactedEmojiAndReactUsers,
             )
@@ -31,6 +35,13 @@ data class ReactedEmojisResponse(
                 .mapValues { entry -> ReactedEmojiAndReactUsers.of(entry.value, userId) }
                 .values
                 .toList()
+
+        private fun countTotalReactUser(reactedEmojiAndReactUsers: List<ReactedEmojiAndReactUsers>) =
+            reactedEmojiAndReactUsers
+                .flatMap { it.reactUsers }
+                .map { it.username }
+                .distinct()
+                .size
     }
 
     data class ReactedEmojiAndReactUsers(
