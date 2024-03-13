@@ -24,24 +24,15 @@ class StateOAuth2AuthorizationRequestRepository() : AuthorizationRequestReposito
         request: HttpServletRequest,
         response: HttpServletResponse,
     ) {
-        if (authorizationRequest == null) {
-            removeAuthorizationRequest(request, response)
-            return
+        if (authorizationRequest != null) {
+            oauthRequestStorage.put(authorizationRequest.state, authorizationRequest)
         }
-
-        oauthRequestStorage.put(authorizationRequest.state, authorizationRequest)
     }
 
     override fun removeAuthorizationRequest(
         request: HttpServletRequest,
         response: HttpServletResponse,
     ): OAuth2AuthorizationRequest? {
-        val authorizationRequest = loadAuthorizationRequest(request)
-
-        if (authorizationRequest != null) {
-            oauthRequestStorage.invalidate(authorizationRequest.state)
-        }
-
         return loadAuthorizationRequest(request)
     }
 
