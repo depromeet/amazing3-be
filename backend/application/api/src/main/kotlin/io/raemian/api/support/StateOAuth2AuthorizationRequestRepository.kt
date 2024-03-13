@@ -1,5 +1,6 @@
 package io.raemian.api.support
 
+import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -10,9 +11,9 @@ import java.util.concurrent.TimeUnit
 
 @Component
 class StateOAuth2AuthorizationRequestRepository() : AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
-    private val oauthRequestStorage = Caffeine.newBuilder()
+    private val oauthRequestStorage: Cache<String, OAuth2AuthorizationRequest> = Caffeine.newBuilder()
         .expireAfterWrite(60L, TimeUnit.SECONDS)
-        .build<String, OAuth2AuthorizationRequest>()
+        .build()
 
     override fun loadAuthorizationRequest(request: HttpServletRequest): OAuth2AuthorizationRequest? {
         return oauthRequestStorage.getIfPresent(getStateParameter(request))
@@ -35,6 +36,12 @@ class StateOAuth2AuthorizationRequestRepository() : AuthorizationRequestReposito
         request: HttpServletRequest,
         response: HttpServletResponse,
     ): OAuth2AuthorizationRequest? {
+        val authorizationRequest = loadAuthorizationRequest(request)
+
+        if (authorizationRequest != null) {
+            oauthRequestStorage.invalidate(authorizationRequest.state)
+        }
+
         return loadAuthorizationRequest(request)
     }
 
