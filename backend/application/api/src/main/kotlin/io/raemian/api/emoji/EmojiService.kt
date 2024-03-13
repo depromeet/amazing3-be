@@ -4,6 +4,7 @@ import io.raemian.api.emoji.controller.response.EmojiResponse
 import io.raemian.api.emoji.controller.response.ReactedEmojisResponse
 import io.raemian.api.event.ReactedEmojiEvent
 import io.raemian.api.event.RemovedEmojiEvent
+import io.raemian.storage.db.core.emoji.EmojiCountRepository
 import io.raemian.storage.db.core.emoji.EmojiRepository
 import io.raemian.storage.db.core.emoji.ReactedEmoji
 import io.raemian.storage.db.core.emoji.ReactedEmojiRepository
@@ -21,6 +22,7 @@ class EmojiService(
     private val userRepository: UserRepository,
     private val reactedEmojiRepository: ReactedEmojiRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
+    private val emojiCountRepository: EmojiCountRepository
 ) {
     @Transactional(readOnly = true)
     fun findAll(): List<EmojiResponse> =
@@ -58,6 +60,14 @@ class EmojiService(
             .deleteByEmojiAndGoalAndReactUser(emoji, goal, emojiReactUser)
 
         applicationEventPublisher.publishEvent(RemovedEmojiEvent(goalId, emojiId))
+    }
+
+    @Transactional(readOnly = true)
+    fun findAllByGoalIds(ids: List<Long>, userId: Long?): Map<Long, ReactedEmojisResponse> {
+        return reactedEmojiRepository.findAllByGoalIdIn(ids)
+            .groupBy { it.goal.id!! }
+            .mapValues { ReactedEmojisResponse.of(it.value, userId ?: -1) }
+
     }
 }
 

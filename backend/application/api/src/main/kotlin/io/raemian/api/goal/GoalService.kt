@@ -1,5 +1,6 @@
 package io.raemian.api.goal
 
+import io.raemian.api.emoji.EmojiService
 import io.raemian.api.event.CreatedGoalEvent
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.UpdateGoalRequest
@@ -32,7 +33,7 @@ class GoalService(
     private val lifeMapRepository: LifeMapRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
     private val emojiCountRepository: EmojiCountRepository,
-    private val reactedEmojiRepository: ReactedEmojiRepository
+    private val emojiService: EmojiService
 ) {
 
     @Transactional(readOnly = true)
@@ -88,14 +89,14 @@ class GoalService(
     }
 
     @Transactional(readOnly = true)
-    fun explore(goalId: Long): List<GoalExploreDTO> {
+    fun explore(goalId: Long, userId: Long?): List<GoalExploreDTO> {
         val explore = goalRepository.explore(goalId)
         val goalIds = explore.map { it.goalId }
 
-        val emojiGroup = emojiCountRepository.findAllByGoalIdIn(goalIds).groupBy { it.goalId }
+        val reactedEmojiMap = emojiService.findAllByGoalIds(goalIds, userId)
 
         return explore
-            .map { GoalExploreDTO.from(it, emojiGroup[it.goalId] ?: listOf()) }
+            .map { GoalExploreDTO.from(it, reactedEmojiMap[it.goalId]) }
     }
 
     private fun createFirstLifeMap(userId: Long): LifeMap {
