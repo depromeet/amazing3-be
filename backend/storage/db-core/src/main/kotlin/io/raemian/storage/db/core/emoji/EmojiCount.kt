@@ -7,16 +7,19 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Index
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "EMOJI_COUNTS", indexes = [Index(name = "IDX_GOAL_ID_AND_EMOJI_ID", columnList = "goalId, emojiId")])
+@Table(name = "EMOJI_COUNTS", indexes = [Index(name = "IDX_GOAL_ID", columnList = "goalId")])
 class EmojiCount(
     @Column
     var count: Long,
 
-    @Column
-    val emojiId: Long,
+    @ManyToOne
+    @JoinColumn(name = "emoji_id")
+    val emoji: Emoji,
 
     @Column
     val goalId: Long,

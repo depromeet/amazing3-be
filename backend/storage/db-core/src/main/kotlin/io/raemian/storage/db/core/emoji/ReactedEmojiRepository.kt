@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface ReactedEmojiRepository : JpaRepository<ReactedEmoji, Long> {
 
     fun findAllByGoal(goal: Goal): List<ReactedEmoji>
+    fun findAllByGoalIdIn(goalIds: List<Long>): List<ReactedEmoji>
 
     fun deleteByEmojiAndGoalAndReactUser(emoji: Emoji, goal: Goal, reactUser: User)
 }

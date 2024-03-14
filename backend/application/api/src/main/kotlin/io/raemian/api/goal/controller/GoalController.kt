@@ -1,6 +1,7 @@
 package io.raemian.api.goal.controller
 
 import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.emoji.EmojiService
 import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.UpdateGoalRequest
@@ -28,6 +29,7 @@ fun String.toUri(): URI = URI.create(this)
 @RequestMapping("/goal")
 class GoalController(
     private val goalService: GoalService,
+    private val emojiService: EmojiService,
 ) {
 
     @Operation(summary = "목표 단건 조회 API")
@@ -77,12 +79,12 @@ class GoalController(
     @Operation(summary = "explore goal")
     @GetMapping("/explore")
     fun exploreGoals(
-        @AuthenticationPrincipal currentUser: CurrentUser,
+        @AuthenticationPrincipal currentUser: CurrentUser?,
         @RequestParam(required = false, defaultValue = Long.MAX_VALUE.toString()) cursor: Long,
     ): ResponseEntity<ApiResponse<GoalExploreResponse>> {
-        val goals = goalService.explore(goalId = cursor)
+        val explore = goalService.explore(goalId = cursor, userId = currentUser?.id)
 
         return ResponseEntity.ok()
-            .body(ApiResponse.success(GoalExploreResponse(goals)))
+            .body(ApiResponse.success(GoalExploreResponse(explore)))
     }
 }
