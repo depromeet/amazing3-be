@@ -107,7 +107,7 @@ class CommentServiceTest {
         val comments = commentService.findAllByGoalId(GOAL_FIXTURE.id!!, USER_FIXTURE.id!!)
 
         // then
-        assertThat(comments.commentCount).isEqualTo(3);
+        assertThat(comments.commentCount).isEqualTo(3)
     }
 
     @Test
