@@ -4,13 +4,16 @@ import io.raemian.storage.db.core.comment.Comment
 import io.raemian.storage.db.core.user.User
 import java.time.LocalDateTime
 
-data class CommentsResponse(val comments: List<CommentResponse>) {
+data class CommentsResponse(
+    val comments: List<CommentResponse>,
+    val commentCount: Int,
+) {
     companion object {
         fun from(comments: List<Comment>, userId: Long): CommentsResponse {
             val comments = comments
                 .map { CommentResponse.from(it, userId) }
                 .sortedBy { it.writtenAt }
-            return CommentsResponse(comments)
+            return CommentsResponse(comments, comments.size)
         }
     }
 
