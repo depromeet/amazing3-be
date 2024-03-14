@@ -96,6 +96,21 @@ class CommentServiceTest {
     }
 
     @Test
+    @DisplayName("Goal의 Comment들을 조회할 때, 갯수를 함께 받을 수 있다.")
+    fun getAllByGoalIdCommentCountTest() {
+        // given
+        commentRepository.save(Comment(GOAL_FIXTURE, USER_FIXTURE, "comment0"))
+        commentRepository.save(Comment(GOAL_FIXTURE, USER_FIXTURE, "comment1"))
+        commentRepository.save(Comment(GOAL_FIXTURE, USER_FIXTURE, "comment2"))
+
+        // when
+        val comments = commentService.findAllByGoalId(GOAL_FIXTURE.id!!, USER_FIXTURE.id!!)
+
+        // then
+        assertThat(comments.commentCount).isEqualTo(3);
+    }
+
+    @Test
     @DisplayName("유저는 읽지 않은 Comment가 있는지 확인할 수 있다.")
     fun isNewTest() {
         // given
