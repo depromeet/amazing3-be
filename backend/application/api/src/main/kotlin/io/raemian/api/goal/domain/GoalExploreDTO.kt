@@ -18,8 +18,8 @@ data class GoalExploreDTO(
                     id = it.id ?: -1,
                     url = it.url,
                     name = it.name,
-                    count = it.reactCount.toLong(),
-                    isMine = it.isMyReaction,
+                    reactCount = it.reactCount.toLong(),
+                    isMyReaction = it.isMyReaction,
                 )
             } ?: listOf()
             return GoalExploreDTO(

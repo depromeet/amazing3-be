@@ -4,6 +4,6 @@ data class EmojiCountSubset(
     val id: Long,
     val name: String,
     val url: String,
-    val count: Long,
-    val isMine: Boolean,
+    val reactCount: Long,
+    val isMyReaction: Boolean,
 )
