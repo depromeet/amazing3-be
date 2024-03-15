@@ -7,13 +7,14 @@ import java.time.LocalDateTime
 data class CommentsResponse(
     val comments: List<CommentResponse>,
     val commentCount: Int,
+    val isMyGoal: Boolean,
 ) {
     companion object {
-        fun from(comments: List<Comment>, userId: Long): CommentsResponse {
+        fun from(comments: List<Comment>, userId: Long, isMyGoal: Boolean): CommentsResponse {
             val comments = comments
                 .map { CommentResponse.from(it, userId) }
                 .sortedBy { it.writtenAt }
-            return CommentsResponse(comments, comments.size)
+            return CommentsResponse(comments, comments.size, isMyGoal)
         }
     }
 
