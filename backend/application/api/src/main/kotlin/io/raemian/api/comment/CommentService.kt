@@ -27,13 +27,20 @@ class CommentService(
     @Transactional(readOnly = true)
     fun findAllByGoalId(goalId: Long, currentUserId: Long): CommentsResponse {
         val comments = commentRepository.findAllByGoalId(goalId)
-            .ifEmpty { return CommentsResponse.from(emptyList(), currentUserId) }
+            .ifEmpty {
+                return CommentsResponse.from(
+                    comments = emptyList(),
+                    userId = currentUserId,
+                    isMyGoal = isMyGoal(goalId, currentUserId),
+                )
+            }
 
         val goal = comments.first().goal
-        if (isCurrentUserGoalOwner(currentUserId, goal)) {
+        val isMyGoal = isMyGoal(goal, currentUserId)
+        if (isMyGoal) {
             publishUpdateCommentReadAtEvent(goalId)
         }
-        return CommentsResponse.from(comments, currentUserId)
+        return CommentsResponse.from(comments, currentUserId, isMyGoal)
     }
 
     @Transactional
@@ -68,8 +75,13 @@ class CommentService(
         }
     }
 
-    private fun isCurrentUserGoalOwner(currentUserId: Long, goal: Goal): Boolean =
-        currentUserId == goal.lifeMap.user.id
+    private fun isMyGoal(goalId: Long, userId: Long): Boolean {
+        val goal = goalRepository.getById(goalId)
+        return isMyGoal(goal, userId)
+    }
+
+    private fun isMyGoal(goal: Goal, userId: Long): Boolean =
+        userId == goal.lifeMap.user.id
 
     private fun publishUpdateCommentReadAtEvent(goalId: Long) {
         val event = CommentReadEvent(goalId, LocalDateTime.now())

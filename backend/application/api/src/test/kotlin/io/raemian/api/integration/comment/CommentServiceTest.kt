@@ -111,6 +111,22 @@ class CommentServiceTest {
     }
 
     @Test
+    @DisplayName("Goal의 Comment 조회시, 나의 Goal인지 확인할 수 있다.")
+    fun getAllByGoalIdIsMyGoalTest() {
+        // given
+        commentRepository.save(Comment(GOAL_FIXTURE, USER_FIXTURE, "comment0"))
+
+        // when
+        val comments = commentService.findAllByGoalId(GOAL_FIXTURE.id!!, USER_FIXTURE.id!!)
+        val anotherUserId = USER_FIXTURE.id!! + 1
+        val comments2 = commentService.findAllByGoalId(GOAL_FIXTURE.id!!, anotherUserId)
+
+        // then
+        assertThat(comments.isMyGoal).isEqualTo(true)
+        assertThat(comments2.isMyGoal).isEqualTo(false)
+    }
+
+    @Test
     @DisplayName("유저는 읽지 않은 Comment가 있는지 확인할 수 있다.")
     fun isNewTest() {
         // given
