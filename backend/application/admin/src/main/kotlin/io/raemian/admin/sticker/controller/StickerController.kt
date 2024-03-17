@@ -1,9 +1,9 @@
 package io.raemian.admin.sticker.controller
 
-import io.raemian.admin.sticker.StickerService
 import io.raemian.admin.sticker.controller.request.CreateStickerRequest
 import io.raemian.admin.sticker.controller.request.UpdateStickerRequest
-import io.raemian.admin.sticker.controller.response.StickerResponse
+import io.raemian.admin.sticker.model.StickerResult
+import io.raemian.admin.sticker.service.StickerService
 import io.raemian.admin.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.MediaType
@@ -30,7 +30,7 @@ class StickerController(
     @PostMapping(consumes = arrayOf(MediaType.MULTIPART_FORM_DATA_VALUE), produces = arrayOf(MediaType.APPLICATION_JSON_VALUE))
     fun create(
         @ModelAttribute createStickerRequest: CreateStickerRequest,
-    ): ResponseEntity<ApiResponse<StickerResponse>> {
+    ): ResponseEntity<ApiResponse<StickerResult>> {
         val response = stickerService.create(createStickerRequest)
 
         return ResponseEntity
@@ -40,12 +40,12 @@ class StickerController(
 
     @Operation(summary = "스티커 전체 조회 API")
     @GetMapping
-    fun findAll(): ResponseEntity<ApiResponse<List<StickerResponse>>> =
+    fun findAll(): ResponseEntity<ApiResponse<List<StickerResult>>> =
         ResponseEntity.ok(ApiResponse.success(stickerService.findAll()))
 
     @Operation(summary = "스티커 단건 조회 API")
     @GetMapping("/{stickerId}")
-    fun find(@PathVariable stickerId: Long): ResponseEntity<ApiResponse<StickerResponse>> =
+    fun find(@PathVariable stickerId: Long): ResponseEntity<ApiResponse<StickerResult>> =
         ResponseEntity.ok(ApiResponse.success(stickerService.find(stickerId)))
 
     @Operation(summary = "스티커 수정 API")

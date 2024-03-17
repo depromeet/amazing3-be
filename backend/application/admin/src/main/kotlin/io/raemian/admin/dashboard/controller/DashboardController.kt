@@ -1,6 +1,7 @@
 package io.raemian.admin.dashboard
 
-import io.raemian.admin.dashboard.controller.response.DashboardResponse
+import io.raemian.admin.dashboard.model.DashboardResult
+import io.raemian.admin.dashboard.service.DashboardService
 import io.raemian.admin.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -15,6 +16,6 @@ class DashboardController(
 ) {
     @Operation(summary = "대시보드 통계 데이터 조회 API")
     @GetMapping
-    fun findAll(): ResponseEntity<ApiResponse<DashboardResponse>> =
+    fun findAll(): ResponseEntity<ApiResponse<DashboardResult>> =
         ResponseEntity.ok(ApiResponse.success(dashboardService.getDashBoard()))
 }

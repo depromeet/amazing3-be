@@ -1,6 +1,6 @@
 package io.raemian.api.integration.tag
 
-import io.raemian.api.tag.TagService
+import io.raemian.api.tag.service.TagService
 import io.raemian.storage.db.core.tag.Tag
 import io.raemian.storage.db.core.tag.TagRepository
 import org.assertj.core.api.Assertions.assertThat

@@ -1,8 +1,8 @@
 package io.raemian.admin.user.controller
 
 import io.raemian.admin.support.response.ApiResponse
-import io.raemian.admin.user.UserService
-import io.raemian.admin.user.controller.response.UserResponse
+import io.raemian.admin.user.model.UserResult
+import io.raemian.admin.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,6 +16,6 @@ class UserController(
 ) {
     @Operation(summary = "유저 전체 조회 API")
     @GetMapping
-    fun findAll(): ResponseEntity<ApiResponse<List<UserResponse>>> =
+    fun findAll(): ResponseEntity<ApiResponse<List<UserResult>>> =
         ResponseEntity.ok(ApiResponse.success(userService.findAll()))
 }

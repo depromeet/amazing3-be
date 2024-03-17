@@ -1,6 +1,6 @@
 package io.raemian.api.auth.service
 
-import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.auth.model.CurrentUser
 import io.raemian.storage.db.core.user.UserRepository
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService

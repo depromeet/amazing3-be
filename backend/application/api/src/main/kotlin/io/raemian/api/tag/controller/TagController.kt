@@ -1,8 +1,8 @@
 package io.raemian.api.tag.controller
 
 import io.raemian.api.support.response.ApiResponse
-import io.raemian.api.tag.TagService
-import io.raemian.api.tag.controller.response.TagResponse
+import io.raemian.api.tag.model.TagResult
+import io.raemian.api.tag.service.TagService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,7 +17,7 @@ class TagController(
 
     @Operation(summary = "태그 전체 조회 API")
     @GetMapping
-    fun findAll(): ResponseEntity<ApiResponse<List<TagResponse>>> =
+    fun findAll(): ResponseEntity<ApiResponse<List<TagResult>>> =
         ResponseEntity.ok(
             ApiResponse.success(tagService.findAll()),
         )

@@ -1,13 +1,13 @@
 package io.raemian.api.task.controller
 
-import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.auth.model.CurrentUser
 import io.raemian.api.goal.controller.toUri
 import io.raemian.api.support.response.ApiResponse
-import io.raemian.api.task.TaskService
 import io.raemian.api.task.controller.request.CreateTaskRequest
 import io.raemian.api.task.controller.request.RewriteTaskRequest
 import io.raemian.api.task.controller.request.UpdateTaskCompletionRequest
-import io.raemian.api.task.controller.response.CreateTaskResponse
+import io.raemian.api.task.model.CreateTaskResult
+import io.raemian.api.task.service.TaskService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -30,7 +30,7 @@ class TaskController(
     fun create(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @RequestBody createTaskRequest: CreateTaskRequest,
-    ): ResponseEntity<ApiResponse<CreateTaskResponse>> {
+    ): ResponseEntity<ApiResponse<CreateTaskResult>> {
         val response = taskService.create(currentUser.id, createTaskRequest)
         return ResponseEntity.created("/task/${response.id}".toUri())
             .body(ApiResponse.success(response))

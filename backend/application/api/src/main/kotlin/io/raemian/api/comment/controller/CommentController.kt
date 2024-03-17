@@ -1,9 +1,9 @@
 package io.raemian.api.comment.controller
 
-import io.raemian.api.auth.domain.CurrentUser
-import io.raemian.api.comment.CommentService
+import io.raemian.api.auth.model.CurrentUser
 import io.raemian.api.comment.controller.request.WriteCommentRequest
-import io.raemian.api.comment.controller.response.CommentsResponse
+import io.raemian.api.comment.model.CommentsResult
+import io.raemian.api.comment.service.CommentService
 import io.raemian.api.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -27,7 +27,7 @@ class CommentController(
     fun findAllReactedEmojisAtGoal(
         @PathVariable goalId: Long,
         @AuthenticationPrincipal currentUser: CurrentUser,
-    ): ResponseEntity<ApiResponse<CommentsResponse>> =
+    ): ResponseEntity<ApiResponse<CommentsResult>> =
         ResponseEntity.ok(
             ApiResponse.success(commentService.findAllByGoalId(goalId, currentUser.id)),
         )
