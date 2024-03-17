@@ -1,6 +1,6 @@
 package io.raemian.api.goal.model
 
-import io.raemian.api.support.utils.format
+import io.raemian.api.support.extension.format
 import io.raemian.storage.db.core.goal.Goal
 
 data class CreateGoalResult(

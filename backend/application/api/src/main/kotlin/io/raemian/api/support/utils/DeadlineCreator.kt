@@ -4,20 +4,11 @@ import java.time.LocalDate
 import java.time.Month
 import java.time.Year
 
-fun LocalDate.format(): String {
-    var month = (this.monthValue).toString()
-    if (month.length == 1) {
-        month = "0$month"
-    }
-
-    return "${this.year}.$month"
-}
-
-object RaemianLocalDateUtil {
+object DeadlineCreator {
 
     private const val DAY_OF_MONTH = 1
 
-    fun of(year: String, month: String): LocalDate {
+    fun create(year: String, month: String): LocalDate {
         val parsedYear = parseYear(year)
         val parsedMonth = parseMonth(month)
         return LocalDate.of(parsedYear, parsedMonth, DAY_OF_MONTH)

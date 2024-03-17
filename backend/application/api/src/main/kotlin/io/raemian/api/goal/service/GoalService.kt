@@ -10,7 +10,7 @@ import io.raemian.api.goal.model.GoalResult
 import io.raemian.api.sticker.service.StickerService
 import io.raemian.api.support.exception.MaxGoalCountExceededException
 import io.raemian.api.support.exception.PrivateLifeMapException
-import io.raemian.api.support.utils.RaemianLocalDateUtil
+import io.raemian.api.support.utils.DeadlineCreator
 import io.raemian.api.tag.service.TagService
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
@@ -71,7 +71,7 @@ class GoalService(
             val updatedStickerGoal = updateTagGoal.takeIf { it.sticker.id == stickerId }
                 ?: updateSticker(updateTagGoal, stickerId)
 
-            val deadline = RaemianLocalDateUtil.of(yearOfDeadline, monthOfDeadline)
+            val deadline = DeadlineCreator.create(yearOfDeadline, monthOfDeadline)
             val updatedGoal = updatedStickerGoal.update(title, deadline, description)
             goalRepository.save(updatedGoal)
             return GoalResult(updatedGoal, true)
@@ -107,7 +107,7 @@ class GoalService(
 
     private fun createGoal(createGoalRequest: CreateGoalRequest, lifeMap: LifeMap): Goal {
         with(createGoalRequest) {
-            val deadline = RaemianLocalDateUtil.of(yearOfDeadline, monthOfDeadline)
+            val deadline = DeadlineCreator.create(yearOfDeadline, monthOfDeadline)
             val sticker = stickerService.getReferenceById(stickerId)
             val tag = tagService.getReferenceById(tagId)
             return Goal(

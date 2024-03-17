@@ -1,7 +1,7 @@
 package io.raemian.api.support
 
-import io.raemian.api.support.utils.RaemianLocalDateUtil
-import io.raemian.api.support.utils.format
+import io.raemian.api.support.extension.format
+import io.raemian.api.support.utils.DeadlineCreator
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.DisplayName
@@ -10,7 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import java.time.LocalDate
 
-class RaemianLocalDateUtilTest {
+class DeadlineCreatorTest {
 
     @Test
     @DisplayName("RaemianLocalDate를 통해 연도와 날짜 string으로 LocalDate를 만들 수 있다.")
@@ -20,7 +20,7 @@ class RaemianLocalDateUtilTest {
         val month = "11"
 
         // when
-        val localDate = RaemianLocalDateUtil.of(year, month)
+        val localDate = DeadlineCreator.create(year, month)
 
         // then
         assertThat(localDate.year.toString()).isEqualTo(year)
@@ -38,8 +38,8 @@ class RaemianLocalDateUtilTest {
         val month2 = (1..12).random().toString()
 
         // when
-        val localDate1 = RaemianLocalDateUtil.of(year1, month1)
-        val localDate2 = RaemianLocalDateUtil.of(year2, month2)
+        val localDate1 = DeadlineCreator.create(year1, month1)
+        val localDate2 = DeadlineCreator.create(year2, month2)
 
         // then
         assertThat(localDate1.dayOfMonth).isEqualTo(localDate2.dayOfMonth)
@@ -53,7 +53,7 @@ class RaemianLocalDateUtilTest {
         // when
         // then
         assertThatThrownBy {
-            RaemianLocalDateUtil.of(yearAndMonth, yearAndMonth)
+            DeadlineCreator.create(yearAndMonth, yearAndMonth)
         }.isInstanceOf(RuntimeException::class.java)
     }
 

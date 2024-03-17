@@ -1,6 +1,6 @@
 package io.raemian.api.lifemap.model
 
-import io.raemian.api.support.utils.format
+import io.raemian.api.support.extension.format
 import io.raemian.storage.db.core.goal.Goal
 
 class GoalDto private constructor(
