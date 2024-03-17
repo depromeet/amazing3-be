@@ -3,9 +3,9 @@ package io.raemian.api.auth.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
-import io.raemian.api.auth.domain.CurrentUser
-import io.raemian.api.auth.domain.UserInfoDto
-import io.raemian.api.log.UserLoginLogService
+import io.raemian.api.auth.model.CurrentUser
+import io.raemian.api.auth.model.OauthUserResult
+import io.raemian.api.log.service.LogService
 import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.user.Authority
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional
 class OAuth2UserService(
     private val userRepository: UserRepository,
     private val lifeMapRepository: LifeMapRepository,
-    private val userLoginLogService: UserLoginLogService,
+    private val logService: LogService,
 ) : DefaultOAuth2UserService() {
 
     companion object {
@@ -60,7 +60,7 @@ class OAuth2UserService(
         lifeMapRepository.findFirstByUserId(user.id!!)
             ?: createUserDefaultLifeMap(user)
 
-        userLoginLogService.upsertLatestLogin(user.id)
+        logService.upsertLatestLogin(user.id)
 
         return user
     }
@@ -103,14 +103,14 @@ class OAuth2UserService(
         return payload
     }
 
-    private fun parseUserInfo(provide: OAuthProvider, request: OAuth2UserRequest): UserInfoDto {
+    private fun parseUserInfo(provide: OAuthProvider, request: OAuth2UserRequest): OauthUserResult {
         return when (provide) {
             OAuthProvider.APPLE -> {
                 val idToken = request.additionalParameters["id_token"].toString()
 
                 val userInfo = decodeIdToken(idToken)
 
-                UserInfoDto(email = userInfo.getAsString("email"), image = "")
+                OauthUserResult(email = userInfo.getAsString("email"), image = "")
             }
             OAuthProvider.GOOGLE -> {
                 val oAuth2User: OAuth2User = super.loadUser(request)
@@ -119,7 +119,7 @@ class OAuth2UserService(
                     oAuth2User.attributes["email"]?.toString() ?: throw RuntimeException("구글 이메일이없음")
                 val image = oAuth2User.attributes["picture"]?.toString() ?: ""
 
-                UserInfoDto(email = email, image = image)
+                OauthUserResult(email = email, image = image)
             }
             OAuthProvider.KAKAO -> {
                 val oAuth2User = super.loadUser(request)
@@ -129,7 +129,7 @@ class OAuth2UserService(
                 val email = account["email"] ?: throw RuntimeException("카카오 이메일없음")
                 val image = properties["profile_image"] ?: ""
 
-                UserInfoDto(email = email, image = image)
+                OauthUserResult(email = email, image = image)
             }
             OAuthProvider.NAVER -> {
                 val oAuth2User: OAuth2User = super.loadUser(request)
@@ -142,7 +142,7 @@ class OAuth2UserService(
                 val email = userInfo["email"] ?: throw RuntimeException("네이버 이메일없음")
                 val image = userInfo["profile_image"] ?: ""
 
-                UserInfoDto(email = email, image = image)
+                OauthUserResult(email = email, image = image)
             }
         }
     }

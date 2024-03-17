@@ -1,11 +1,11 @@
 package io.raemian.api.config
 
 import io.raemian.api.auth.converter.TokenRequestEntityConverter
-import io.raemian.api.auth.domain.CurrentUser
+import io.raemian.api.auth.model.CurrentUser
 import io.raemian.api.auth.service.OAuth2UserService
-import io.raemian.api.support.StateOAuth2AuthorizationRequestRepository
-import io.raemian.api.support.TokenProvider
 import io.raemian.api.support.constant.WebSecurityConstant
+import io.raemian.api.support.security.StateOAuth2AuthorizationRequestRepository
+import io.raemian.api.support.security.TokenProvider
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value

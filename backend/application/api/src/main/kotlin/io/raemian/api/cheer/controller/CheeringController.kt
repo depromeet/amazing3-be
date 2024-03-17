@@ -1,10 +1,10 @@
 package io.raemian.api.cheer.controller
 
-import io.raemian.api.cheer.CheeringService
 import io.raemian.api.cheer.controller.request.CheeringRequest
 import io.raemian.api.cheer.controller.request.CheeringSquadPagingRequest
-import io.raemian.api.cheer.controller.response.CheererResponse
-import io.raemian.api.cheer.controller.response.CheeringCountResponse
+import io.raemian.api.cheer.model.CheererResult
+import io.raemian.api.cheer.model.CheeringCountResult
+import io.raemian.api.cheer.service.CheeringService
 import io.raemian.api.support.response.ApiResponse
 import io.raemian.api.support.response.PageResult
 import org.springframework.http.ResponseEntity
@@ -22,14 +22,14 @@ class CheeringController(
 ) {
 
     @GetMapping("/squad/{lifeMapId}")
-    fun findCheeringSquad(@PathVariable("lifeMapId") lifeMapId: Long, request: CheeringSquadPagingRequest): ResponseEntity<ApiResponse<PageResult<CheererResponse>>> {
+    fun findCheeringSquad(@PathVariable("lifeMapId") lifeMapId: Long, request: CheeringSquadPagingRequest): ResponseEntity<ApiResponse<PageResult<CheererResult>>> {
         val response = cheeringService.findCheeringSquad(lifeMapId, request)
 
         return ResponseEntity.ok().body(ApiResponse.success(response))
     }
 
     @GetMapping("/count/{userName}")
-    fun getCheeringCount(@PathVariable("userName") userName: String): ResponseEntity<ApiResponse<CheeringCountResponse>> =
+    fun getCheeringCount(@PathVariable("userName") userName: String): ResponseEntity<ApiResponse<CheeringCountResult>> =
         ResponseEntity.ok().body(ApiResponse.success(cheeringService.getCheeringCount(userName)))
 
     @PostMapping

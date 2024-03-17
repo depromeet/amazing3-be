@@ -1,10 +1,10 @@
 package io.raemian.admin.tag.controller
 
 import io.raemian.admin.support.response.ApiResponse
-import io.raemian.admin.tag.TagService
 import io.raemian.admin.tag.controller.request.CreateTagRequest
 import io.raemian.admin.tag.controller.request.UpdateTagRequest
-import io.raemian.admin.tag.controller.response.TagResponse
+import io.raemian.admin.tag.model.TagResult
+import io.raemian.admin.tag.service.TagService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -29,7 +29,7 @@ class TagController(
     @PostMapping
     fun create(
         @RequestBody createTagRequest: CreateTagRequest,
-    ): ResponseEntity<ApiResponse<TagResponse>> {
+    ): ResponseEntity<ApiResponse<TagResult>> {
         val response = tagService.create(createTagRequest)
         return ResponseEntity.created("/tag/${response.id}".toUri())
             .body(ApiResponse.success(response))
@@ -37,12 +37,12 @@ class TagController(
 
     @Operation(summary = "태그 전체 조회 API")
     @GetMapping
-    fun findAll(): ResponseEntity<ApiResponse<List<TagResponse>>> =
+    fun findAll(): ResponseEntity<ApiResponse<List<TagResult>>> =
         ResponseEntity.ok(ApiResponse.success(tagService.findAll()))
 
     @Operation(summary = "태그 단건 조회 API")
     @GetMapping("/{tagId}")
-    fun find(@PathVariable tagId: Long): ResponseEntity<ApiResponse<TagResponse>> =
+    fun find(@PathVariable tagId: Long): ResponseEntity<ApiResponse<TagResult>> =
         ResponseEntity.ok(ApiResponse.success(tagService.find(tagId)))
 
     @Operation(summary = "태그 수정 API")
@@ -50,7 +50,7 @@ class TagController(
     fun update(
         @PathVariable tagId: Long,
         @RequestBody updateTagRequest: UpdateTagRequest,
-    ): ResponseEntity<ApiResponse<TagResponse>> =
+    ): ResponseEntity<ApiResponse<TagResult>> =
         ResponseEntity.ok().body(ApiResponse.success(tagService.update(tagId, updateTagRequest)))
 
     @Operation(summary = "태그 삭제 API")

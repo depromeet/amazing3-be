@@ -1,11 +1,11 @@
 package io.raemian.api.integration.goal
 
-import io.raemian.api.goal.GoalService
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.UpdateGoalRequest
-import io.raemian.api.support.RaemianLocalDate
-import io.raemian.api.support.error.MaxGoalCountExceededException
-import io.raemian.api.support.error.PrivateLifeMapException
+import io.raemian.api.goal.service.GoalService
+import io.raemian.api.support.exception.MaxGoalCountExceededException
+import io.raemian.api.support.exception.PrivateLifeMapException
+import io.raemian.api.support.utils.DeadlineCreator
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.lifemap.LifeMap
@@ -243,7 +243,7 @@ class GoalServiceTest {
         val description = "Description"
         val year = "2000"
         val month = "05"
-        val deadline = RaemianLocalDate.of(year, month)
+        val deadline = DeadlineCreator.create(year, month)
 
         val goal = Goal(
             lifeMap = LIFE_MAP_FIXTURE,

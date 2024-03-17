@@ -1,6 +1,6 @@
 package io.raemian.api.integration.sticker
 
-import io.raemian.api.sticker.StickerService
+import io.raemian.api.sticker.service.StickerService
 import io.raemian.storage.db.core.sticker.Sticker
 import io.raemian.storage.db.core.sticker.StickerRepository
 import org.assertj.core.api.Assertions.assertThat
