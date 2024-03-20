@@ -1,10 +1,10 @@
 package io.raemian.api.lifemap.controller
 
-import io.raemian.api.auth.domain.CurrentUser
-import io.raemian.api.cheer.CheeringService
-import io.raemian.api.lifemap.LifeMapService
-import io.raemian.api.lifemap.domain.LifeMapResponse
-import io.raemian.api.lifemap.domain.UpdatePublicRequest
+import io.raemian.api.auth.model.CurrentUser
+import io.raemian.api.cheer.service.CheeringService
+import io.raemian.api.lifemap.controller.request.UpdatePublicRequest
+import io.raemian.api.lifemap.model.LifeMapResponse
+import io.raemian.api.lifemap.service.LifeMapService
 import io.raemian.api.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity

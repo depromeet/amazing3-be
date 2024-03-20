@@ -1,6 +1,6 @@
 package io.raemian.api.integration.emoji
 
-import io.raemian.api.emoji.EmojiService
+import io.raemian.api.emoji.service.EmojiService
 import io.raemian.storage.db.core.emoji.Emoji
 import io.raemian.storage.db.core.emoji.EmojiRepository
 import io.raemian.storage.db.core.emoji.ReactedEmoji

@@ -1,10 +1,10 @@
 package io.raemian.api.integration.comment
 
-import io.raemian.api.comment.CommentService
 import io.raemian.api.comment.controller.request.WriteCommentRequest
+import io.raemian.api.comment.service.CommentService
 import io.raemian.api.support.CoreApiExceptionTestSupporter.Companion.assertThrowsCoreApiExceptionExactly
-import io.raemian.api.support.error.CoreApiException
-import io.raemian.api.support.error.ErrorInfo
+import io.raemian.api.support.exception.CoreApiException
+import io.raemian.api.support.exception.ErrorInfo
 import io.raemian.storage.db.core.comment.Comment
 import io.raemian.storage.db.core.comment.CommentRepository
 import io.raemian.storage.db.core.goal.Goal

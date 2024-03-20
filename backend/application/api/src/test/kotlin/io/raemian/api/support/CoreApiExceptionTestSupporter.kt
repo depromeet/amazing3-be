@@ -1,7 +1,7 @@
 package io.raemian.api.support
 
-import io.raemian.api.support.error.CoreApiException
-import io.raemian.api.support.error.ErrorInfo
+import io.raemian.api.support.exception.CoreApiException
+import io.raemian.api.support.exception.ErrorInfo
 
 class CoreApiExceptionTestSupporter {
 

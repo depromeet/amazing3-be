@@ -1,9 +1,9 @@
 package io.raemian.api.emoji.controller
 
-import io.raemian.api.auth.domain.CurrentUser
-import io.raemian.api.emoji.EmojiService
-import io.raemian.api.emoji.controller.response.EmojiResponse
-import io.raemian.api.emoji.controller.response.ReactedEmojisResponse
+import io.raemian.api.auth.model.CurrentUser
+import io.raemian.api.emoji.model.EmojiResult
+import io.raemian.api.emoji.model.ReactedEmojisResult
+import io.raemian.api.emoji.service.EmojiService
 import io.raemian.api.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -21,7 +21,7 @@ class EmojiController(
 
     @Operation(summary = "이모지 전체 조회 API")
     @GetMapping("/emoji")
-    fun findAll(): ResponseEntity<ApiResponse<List<EmojiResponse>>> =
+    fun findAll(): ResponseEntity<ApiResponse<List<EmojiResult>>> =
         ResponseEntity.ok(
             ApiResponse.success(emojiService.findAll()),
         )
@@ -31,7 +31,7 @@ class EmojiController(
     fun findAllReactedEmojisAtGoal(
         @PathVariable goalId: Long,
         @AuthenticationPrincipal currentUser: CurrentUser,
-    ): ResponseEntity<ApiResponse<ReactedEmojisResponse>> {
+    ): ResponseEntity<ApiResponse<ReactedEmojisResult>> {
         val response = emojiService.findAllReactedEmojisByGoalId(goalId, currentUser.id)
         return ResponseEntity.ok(ApiResponse.success(response))
     }

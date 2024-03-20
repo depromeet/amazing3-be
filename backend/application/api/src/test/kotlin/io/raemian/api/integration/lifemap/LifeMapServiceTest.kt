@@ -1,7 +1,7 @@
 package io.raemian.api.integration.lifemap
 
-import io.raemian.api.lifemap.LifeMapService
-import io.raemian.api.lifemap.domain.UpdatePublicRequest
+import io.raemian.api.lifemap.controller.request.UpdatePublicRequest
+import io.raemian.api.lifemap.service.LifeMapService
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapRepository

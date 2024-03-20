@@ -1,7 +1,7 @@
 package io.raemian.api.config
 
-import io.raemian.api.support.JwtFilter
-import io.raemian.api.support.TokenProvider
+import io.raemian.api.support.security.JwtFilter
+import io.raemian.api.support.security.TokenProvider
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.web.DefaultSecurityFilterChain

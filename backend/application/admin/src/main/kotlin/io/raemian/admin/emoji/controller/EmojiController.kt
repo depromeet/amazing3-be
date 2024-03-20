@@ -1,9 +1,9 @@
 package io.raemian.admin.emoji.controller
 
-import io.raemian.admin.emoji.EmojiService
 import io.raemian.admin.emoji.controller.request.CreateEmojiRequest
 import io.raemian.admin.emoji.controller.request.UpdateEmojiRequest
-import io.raemian.admin.emoji.controller.response.EmojiResponse
+import io.raemian.admin.emoji.model.EmojiResult
+import io.raemian.admin.emoji.service.EmojiService
 import io.raemian.admin.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.MediaType
@@ -30,7 +30,7 @@ class EmojiController(
     @PostMapping(consumes = arrayOf(MediaType.MULTIPART_FORM_DATA_VALUE), produces = arrayOf(MediaType.APPLICATION_JSON_VALUE))
     fun create(
         @ModelAttribute createEmojiRequest: CreateEmojiRequest,
-    ): ResponseEntity<ApiResponse<EmojiResponse>> {
+    ): ResponseEntity<ApiResponse<EmojiResult>> {
         val response = emojiService.create(createEmojiRequest)
 
         return ResponseEntity
@@ -40,12 +40,12 @@ class EmojiController(
 
     @Operation(summary = "이모지 전체 조회 API")
     @GetMapping
-    fun findAll(): ResponseEntity<ApiResponse<List<EmojiResponse>>> =
+    fun findAll(): ResponseEntity<ApiResponse<List<EmojiResult>>> =
         ResponseEntity.ok(ApiResponse.success(emojiService.findAll()))
 
     @Operation(summary = "이모지 단건 조회 API")
     @GetMapping("/{emojiId}")
-    fun find(@PathVariable emojiId: Long): ResponseEntity<ApiResponse<EmojiResponse>> =
+    fun find(@PathVariable emojiId: Long): ResponseEntity<ApiResponse<EmojiResult>> =
         ResponseEntity.ok(ApiResponse.success(emojiService.find(emojiId)))
 
     @Operation(summary = "이모지 수정 API")
