@@ -7,7 +7,7 @@ interface CommentRepository : JpaRepository<Comment, Long> {
 
     fun findAllByGoalId(goalId: Long): List<Comment>
 
-    fun existsByCreatedAtGreaterThan(createdAt: LocalDateTime): Boolean
+    fun existsByIdAndCreatedAtGreaterThan(goalId: Long, createdAt: LocalDateTime): Boolean
 
     override fun getById(id: Long): Comment =
         findById(id).orElseThrow() { NoSuchElementException("Comment가 없습니다 $id") }
