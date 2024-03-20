@@ -136,17 +136,54 @@ class CommentServiceTest {
         commentRepository.save(comment2)
 
         // when
-        // 처음 저장된 댓글의 시간으로 last comment read at 업데이트
-        goalRepository.updateLastCommentReadAtByGoalId(GOAL_FIXTURE.id!!, comment1.createdAt!!)
+        // 더 빨리 저장된 댓글의 시간으로 last comment read at 업데이트하면 true를 반환한다.
+        val earlierCreatedAt =
+            if (comment1.createdAt!!.isBefore(comment2.createdAt)) comment1.createdAt else comment2.createdAt
+        goalRepository.updateLastCommentReadAtByGoalId(GOAL_FIXTURE.id!!, earlierCreatedAt!!)
         val result1 = commentService.isNewComment(GOAL_FIXTURE.id!!)
 
-        // 세 번째로 저장된 댓글의 시간으로 last comment read at 업데이트
-        goalRepository.updateLastCommentReadAtByGoalId(GOAL_FIXTURE.id!!, comment2.createdAt!!)
+        // 두 번째로 저장된 댓글의 시간으로 last comment read at 업데이트하면 false를 반환한다.
+        // 마지막으로 저장된 댓글은 다른 Goal의 댓글이므로 영향을 주지 않는다.
+        val laterCreatedAt =
+            if (comment1.createdAt!!.isAfter(comment2.createdAt)) comment1.createdAt else comment2.createdAt
+        goalRepository.updateLastCommentReadAtByGoalId(GOAL_FIXTURE.id!!, laterCreatedAt!!)
         val result2 = commentService.isNewComment(GOAL_FIXTURE.id!!)
+
+        println("lastCommentReadAt : " + goalRepository.getById(GOAL_FIXTURE.id!!).lastCommentReadAt)
+        println("comement1 : " + comment1.createdAt)
+        println("comement2 : " + comment2.createdAt)
+        println("laterCreatedAt : " + laterCreatedAt.toString())
 
         // then
         assertThat(result1).isTrue()
         assertThat(result2).isFalse()
+    }
+
+    @Test
+    @DisplayName("유저는 읽지 않은 Comment가 있는지 확인할 때 자신의 Goal만 확인한다.")
+    fun isNewCheckMyGoalOnlyTest() {
+        // given
+        val anotherGoal = Goal(
+            lifeMap = LIFE_MAP_FIXTURE,
+            title = "title",
+            deadline = LocalDate.MAX,
+            sticker = STICKER_FIXTURE,
+            tag = TAG_FIXTURE,
+            description = "description",
+            lastCommentReadAt = LocalDateTime.now(),
+        )
+        entityManager.merge(anotherGoal)
+
+        val comment1 = Comment(GOAL_FIXTURE, USER_FIXTURE, "comment1")
+        val comment2 = Comment(GOAL_FIXTURE, USER_FIXTURE, "comment2")
+        commentRepository.save(comment1)
+        commentRepository.save(comment2)
+
+        // when
+        goalRepository.updateLastCommentReadAtByGoalId(GOAL_FIXTURE.id!!, LocalDateTime.MIN!!)
+
+        // then
+        assertThat(commentService.isNewComment(anotherGoal.id!!)).isFalse()
     }
 
     @Test
