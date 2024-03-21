@@ -46,7 +46,7 @@ class CommentService(
     @Transactional
     fun isNewComment(goalId: Long): Boolean {
         val goal = goalRepository.getById(goalId)
-        return commentRepository.existsByCreatedAtGreaterThan(goal.lastCommentReadAt)
+        return commentRepository.existsByGoalIdAndCreatedAtGreaterThan(goal.id!!, goal.lastCommentReadAt)
     }
 
     @Transactional
