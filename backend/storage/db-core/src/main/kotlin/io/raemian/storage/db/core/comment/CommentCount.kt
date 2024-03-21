@@ -21,7 +21,7 @@ class CommentCount(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-): BaseEntity() {
+) : BaseEntity() {
     fun addCount(): CommentCount {
         this.count += 1
         return this

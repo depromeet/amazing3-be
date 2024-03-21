@@ -8,7 +8,7 @@ import io.raemian.storage.db.core.cheer.GoalExploreQueryResult
 data class GoalExploreResult(
     val user: UserSubset,
     val goal: GoalSubset,
-    val count: GoalCountSubset,
+    val count: GoalExploreCountSubset,
     val emojis: List<EmojiCountSubset>,
 ) {
     companion object {
@@ -18,14 +18,14 @@ data class GoalExploreResult(
                     id = it.id ?: -1,
                     url = it.url,
                     name = it.name,
-                    reactCount = it.reactCount.toLong(),
+                    reactCount = it.reactCount,
                     isMyReaction = it.isMyReaction,
                 )
             } ?: listOf()
             return GoalExploreResult(
                 goal = GoalSubset(explore),
                 user = UserSubset(explore),
-                count = GoalCountSubset(explore),
+                count = GoalExploreCountSubset(explore),
                 emojis = emojis,
             )
         }

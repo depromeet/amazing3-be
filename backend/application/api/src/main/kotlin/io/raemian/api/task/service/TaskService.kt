@@ -8,6 +8,7 @@ import io.raemian.api.task.model.CreateTaskResult
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.task.Task
+import io.raemian.storage.db.core.task.TaskJdbcQueryRepository
 import io.raemian.storage.db.core.task.TaskRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class TaskService(
     val taskRepository: TaskRepository,
+    val taskJdbcQueryRepository: TaskJdbcQueryRepository,
     val goalRepository: GoalRepository,
 ) {
 
@@ -58,6 +60,12 @@ class TaskService(
         validateCurrentUserIsGoalOwner(currentUserId, task.goal)
 
         taskRepository.delete(task)
+    }
+
+    @Transactional(readOnly = true)
+    fun findGoalTaskCountMap(goalIds: List<Long>): Map<Long, Int> {
+        val goalTaskCounts = taskJdbcQueryRepository.findAllGoalTaskCountByGoalIdIn(goalIds)
+        return goalTaskCounts.associate { it.goalId to it.taskCount }
     }
 
     private fun validateCurrentUserIsGoalOwner(currentUserId: Long, goal: Goal) {

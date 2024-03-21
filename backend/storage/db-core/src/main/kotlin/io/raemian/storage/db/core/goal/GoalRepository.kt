@@ -1,7 +1,6 @@
 package io.raemian.storage.db.core.goal
 
 import io.raemian.storage.db.core.cheer.GoalExploreQueryResult
-import io.raemian.storage.db.core.lifemap.LifeMap
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query

@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 class CheerJdbcQueryRepository(
     private val jdbcTemplate: NamedParameterJdbcTemplate,
 ) {
-    fun findAllCheererWithCursor(lifeMapId: Long, cursor: Long, size: Int): List<CheererQueryResult> {
+    fun findAllByLifeMapWithCursor(lifeMapId: Long, cursor: Long, size: Int): List<CheererQueryResult> {
         val sql =
             """
            SELECT

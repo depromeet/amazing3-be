@@ -88,8 +88,8 @@ class CheeringService(
 
     private fun findCheeringSquadWithCursor(lifeMapId: Long, request: CheeringSquadPageRequest): CursorPaginationResult<CheererQueryResult> {
         return CursorPaginationTemplate.execute(lifeMapId, request.cursor ?: Long.MAX_VALUE, request.size) {
-                id, cursor, pageable ->
-            cheererJdbcQueryRepository.findAllCheererWithCursor(id, cursor, pageable)
+                id, cursor, size ->
+            cheererJdbcQueryRepository.findAllByLifeMapWithCursor(id, cursor, size)
         }
     }
 
