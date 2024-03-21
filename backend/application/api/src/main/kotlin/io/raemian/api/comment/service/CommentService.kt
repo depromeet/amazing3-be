@@ -3,6 +3,8 @@ package io.raemian.api.comment.service
 import io.raemian.api.comment.controller.request.WriteCommentRequest
 import io.raemian.api.comment.model.CommentsResult
 import io.raemian.api.event.model.CommentReadEvent
+import io.raemian.api.event.model.CreatedCommentEvent
+import io.raemian.api.event.model.DeletedCommentEvent
 import io.raemian.api.support.exception.CoreApiException
 import io.raemian.api.support.exception.ErrorInfo
 import io.raemian.storage.db.core.comment.Comment
@@ -55,6 +57,8 @@ class CommentService(
         val currentUser = userRepository.getReferenceById(currentUserId)
         val comment = createComment(goal, currentUser, request.content)
         commentRepository.save(comment)
+
+        applicationEventPublisher.publishEvent(CreatedCommentEvent(goalId))
     }
 
     @Transactional
@@ -65,6 +69,8 @@ class CommentService(
         }
 
         commentRepository.delete(comment)
+
+        applicationEventPublisher.publishEvent(DeletedCommentEvent(comment.goal.id!!))
     }
 
     private fun createComment(goal: Goal, currentUser: User, content: String): Comment {
