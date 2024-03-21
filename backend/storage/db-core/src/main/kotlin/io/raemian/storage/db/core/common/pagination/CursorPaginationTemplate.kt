@@ -1,6 +1,5 @@
 package io.raemian.storage.db.core.common.pagination
 
-import org.springframework.data.domain.Pageable
 import kotlin.math.min
 
 object CursorPaginationTemplate {
@@ -8,9 +7,9 @@ object CursorPaginationTemplate {
         id: Long,
         cursorId: Long,
         size: Int,
-        query: TriFunction<Long, Long, Pageable, List<T>>,
+        query: TriFunction<Long, Long, Int, List<T>>,
     ): CursorPaginationResult<T> {
-        val data = query.apply(id, cursorId ?: 0, Pageable.ofSize(size + 1))
+        val data = query.apply(id, cursorId ?: 0, size + 1)
         val isLast = data.size != size + 1
         val nextCursor = if (isLast) null else data[size].getCursorId()
 

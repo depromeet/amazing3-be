@@ -1,7 +1,6 @@
 package io.raemian.storage.db.core.cheer
 
 import io.raemian.storage.db.core.common.BaseEntity
-import io.raemian.storage.db.core.common.pagination.CursorExtractable
 import io.raemian.storage.db.core.user.User
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -30,8 +29,4 @@ class Cheerer(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-) : BaseEntity(), CursorExtractable {
-    override fun getCursorId(): Long? {
-        return id
-    }
-}
+) : BaseEntity()

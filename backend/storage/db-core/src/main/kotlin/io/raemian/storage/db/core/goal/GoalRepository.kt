@@ -1,7 +1,7 @@
 package io.raemian.storage.db.core.goal
 
+import io.raemian.storage.db.core.cheer.GoalExploreQueryResult
 import io.raemian.storage.db.core.lifemap.LifeMap
-import io.raemian.storage.db.core.model.GoalExploreQueryResult
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -19,7 +19,7 @@ interface GoalRepository : JpaRepository<Goal, Long> {
     @Query(
         """
         SELECT 
-            new io.raemian.storage.db.core.model.GoalExploreQueryResult(
+            new io.raemian.storage.db.core.cheer.GoalExploreQueryResult(
                 goal.id,
                 goal.title,
                 goal.description,

@@ -1,4 +1,4 @@
-package io.raemian.storage.db.core.model
+package io.raemian.storage.db.core.cheer
 
 import java.time.LocalDate
 import java.time.LocalDateTime

@@ -3,7 +3,7 @@ package io.raemian.api.goal.model
 import io.raemian.api.emoji.model.EmojiCountSubset
 import io.raemian.api.emoji.model.ReactedEmojisResult
 import io.raemian.api.user.model.UserSubset
-import io.raemian.storage.db.core.model.GoalExploreQueryResult
+import io.raemian.storage.db.core.cheer.GoalExploreQueryResult
 
 data class GoalExploreResult(
     val user: UserSubset,

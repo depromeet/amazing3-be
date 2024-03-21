@@ -2,17 +2,18 @@ package io.raemian.api.cheer.service
 
 import io.raemian.api.cheer.controller.request.CheeringRequest
 import io.raemian.api.cheer.controller.request.CheeringSquadPageRequest
-import io.raemian.api.cheer.model.CheererResult
 import io.raemian.api.cheer.model.CheeringCountResult
-import io.raemian.api.cheer.model.CheeringSquadPageResult
 import io.raemian.api.event.model.CheeredEvent
 import io.raemian.api.support.exception.CoreApiException
 import io.raemian.api.support.exception.ErrorInfo
 import io.raemian.api.support.limiter.CheeringLimiter
+import io.raemian.api.support.response.PaginationResult
+import io.raemian.storage.db.core.cheer.CheerJdbcQueryRepository
 import io.raemian.storage.db.core.cheer.Cheerer
 import io.raemian.storage.db.core.cheer.CheererRepository
 import io.raemian.storage.db.core.cheer.Cheering
 import io.raemian.storage.db.core.cheer.CheeringRepository
+import io.raemian.storage.db.core.cheer.model.CheererQueryResult
 import io.raemian.storage.db.core.common.pagination.CursorPaginationResult
 import io.raemian.storage.db.core.common.pagination.CursorPaginationTemplate
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
@@ -24,11 +25,12 @@ import java.time.LocalDateTime
 
 @Service
 class CheeringService(
+    private val cheeringLimiter: CheeringLimiter,
+    private val cheererJdbcQueryRepository: CheerJdbcQueryRepository,
     private val cheererRepository: CheererRepository,
     private val cheeringRepository: CheeringRepository,
     private val lifeMapRepository: LifeMapRepository,
     private val userRepository: UserRepository,
-    private val cheeringLimiter: CheeringLimiter,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     @Transactional
@@ -43,16 +45,13 @@ class CheeringService(
     }
 
     @Transactional(readOnly = true)
-    fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPageRequest): CheeringSquadPageResult {
+    fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPageRequest): PaginationResult<CheererQueryResult> {
         val cheering = cheeringRepository.findByLifeMapId(lifeMapId)
             ?: Cheering(0, lifeMapId)
 
         val cheeringSquad = findCheeringSquadWithCursor(lifeMapId, request)
 
-        return CheeringSquadPageResult(
-            cheering.count,
-            cheeringSquad.transform(CheererResult::from),
-        )
+        return PaginationResult.from(cheering.count, cheeringSquad)
     }
 
     @Transactional(readOnly = true)
@@ -87,10 +86,10 @@ class CheeringService(
         )
     }
 
-    private fun findCheeringSquadWithCursor(lifeMapId: Long, request: CheeringSquadPageRequest): CursorPaginationResult<Cheerer> {
-        return CursorPaginationTemplate.execute(lifeMapId, request.cursorId ?: Long.MAX_VALUE, request.pageSize) {
-                id, cursorId, pageable ->
-            cheererRepository.findAllByLifeMapIdAndIdLessThanOrderByIdDesc(id, cursorId, pageable)
+    private fun findCheeringSquadWithCursor(lifeMapId: Long, request: CheeringSquadPageRequest): CursorPaginationResult<CheererQueryResult> {
+        return CursorPaginationTemplate.execute(lifeMapId, request.cursor ?: Long.MAX_VALUE, request.size) {
+                id, cursor, pageable ->
+            cheererJdbcQueryRepository.findAllCheererWithCursor(id, cursor, pageable)
         }
     }
 

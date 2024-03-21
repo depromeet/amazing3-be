@@ -1,6 +1,6 @@
 package io.raemian.api.goal.model
 
-import io.raemian.storage.db.core.model.GoalExploreQueryResult
+import io.raemian.storage.db.core.cheer.GoalExploreQueryResult
 
 data class GoalCountSubset(
     val reaction: Long,
