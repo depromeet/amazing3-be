@@ -1,4 +1,4 @@
-package io.raemian.storage.db.core
+package io.raemian.storage.db.core.common
 
 import jakarta.persistence.Column
 import jakarta.persistence.MappedSuperclass

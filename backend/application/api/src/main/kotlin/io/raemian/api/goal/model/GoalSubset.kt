@@ -1,6 +1,6 @@
 package io.raemian.api.goal.model
 
-import io.raemian.storage.db.core.model.GoalExploreQueryResult
+import io.raemian.storage.db.core.cheer.GoalExploreQueryResult
 import java.time.LocalDate
 import java.time.LocalDateTime
 

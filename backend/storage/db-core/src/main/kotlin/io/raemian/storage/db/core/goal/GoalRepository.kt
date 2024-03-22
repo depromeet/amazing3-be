@@ -1,7 +1,6 @@
 package io.raemian.storage.db.core.goal
 
-import io.raemian.storage.db.core.lifemap.LifeMap
-import io.raemian.storage.db.core.model.GoalExploreQueryResult
+import io.raemian.storage.db.core.cheer.GoalExploreQueryResult
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -11,15 +10,13 @@ import java.time.LocalDateTime
 interface GoalRepository : JpaRepository<Goal, Long> {
     fun findUserByCreatedAtGreaterThanEqual(createdAt: LocalDateTime): List<Goal>
 
-    fun countGoalByLifeMap(lifeMap: LifeMap): Int
-
     override fun getById(id: Long): Goal =
         findById(id).orElseThrow() { NoSuchElementException("목표가 없습니다 $id") }
 
     @Query(
         """
         SELECT 
-            new io.raemian.storage.db.core.model.GoalExploreQueryResult(
+            new io.raemian.storage.db.core.cheer.GoalExploreQueryResult(
                 goal.id,
                 goal.title,
                 goal.description,

@@ -1,6 +1,6 @@
 package io.raemian.storage.db.core.cheer
 
-import io.raemian.storage.db.core.BaseEntity
+import io.raemian.storage.db.core.common.BaseEntity
 import io.raemian.storage.db.core.user.User
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -14,7 +14,7 @@ import jakarta.persistence.Table
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "CHEERER", indexes = [Index(name = "IDX_LIFE_MAP_ID_AND_CHEERING_AT", columnList = "lifeMapId, cheeringAt")])
+@Table(name = "CHEERER", indexes = [Index(name = "IDX_LIFE_MAP_ID_AND_ID", columnList = "lifeMapId, id")])
 class Cheerer(
     @Column
     val lifeMapId: Long,

@@ -3,10 +3,14 @@ package io.raemian.api.comment.service
 import io.raemian.api.comment.controller.request.WriteCommentRequest
 import io.raemian.api.comment.model.CommentsResult
 import io.raemian.api.event.model.CommentReadEvent
+import io.raemian.api.event.model.CreatedCommentEvent
+import io.raemian.api.event.model.DeletedCommentEvent
 import io.raemian.api.support.exception.CoreApiException
 import io.raemian.api.support.exception.ErrorInfo
 import io.raemian.storage.db.core.comment.Comment
+import io.raemian.storage.db.core.comment.CommentJdbcQueryRepository
 import io.raemian.storage.db.core.comment.CommentRepository
+import io.raemian.storage.db.core.comment.model.GoalCommentCountQueryResult
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.user.User
@@ -19,6 +23,7 @@ import java.time.LocalDateTime
 @Service
 class CommentService(
     private val commentRepository: CommentRepository,
+    private val commentJdbcQueryRepository: CommentJdbcQueryRepository,
     private val goalRepository: GoalRepository,
     private val userRepository: UserRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
@@ -55,6 +60,8 @@ class CommentService(
         val currentUser = userRepository.getReferenceById(currentUserId)
         val comment = createComment(goal, currentUser, request.content)
         commentRepository.save(comment)
+
+        applicationEventPublisher.publishEvent(CreatedCommentEvent(goalId))
     }
 
     @Transactional
@@ -65,7 +72,13 @@ class CommentService(
         }
 
         commentRepository.delete(comment)
+
+        applicationEventPublisher.publishEvent(DeletedCommentEvent(comment.goal.id!!))
     }
+
+    @Transactional(readOnly = true)
+    fun findGoalCommentCounts(goalIds: List<Long>): List<GoalCommentCountQueryResult> =
+        commentJdbcQueryRepository.findAllGoalCommentCountByGoalIdIn(goalIds)
 
     private fun createComment(goal: Goal, currentUser: User, content: String): Comment {
         return try {

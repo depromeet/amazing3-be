@@ -1,6 +1,6 @@
 package io.raemian.api.user.model
 
-import io.raemian.storage.db.core.model.GoalExploreQueryResult
+import io.raemian.storage.db.core.cheer.GoalExploreQueryResult
 import io.raemian.storage.db.core.user.User
 
 data class UserSubset(

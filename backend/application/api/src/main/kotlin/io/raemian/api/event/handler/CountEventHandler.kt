@@ -1,8 +1,16 @@
-package io.raemian.api.event.model
+package io.raemian.api.event.handler
 
+import io.raemian.api.event.model.CheeredEvent
+import io.raemian.api.event.model.CreatedCommentEvent
+import io.raemian.api.event.model.CreatedGoalEvent
+import io.raemian.api.event.model.DeletedCommentEvent
+import io.raemian.api.event.model.ReactedEmojiEvent
+import io.raemian.api.event.model.RemovedEmojiEvent
 import io.raemian.api.support.lock.ExclusiveRunner
 import io.raemian.storage.db.core.cheer.Cheering
 import io.raemian.storage.db.core.cheer.CheeringRepository
+import io.raemian.storage.db.core.comment.CommentCount
+import io.raemian.storage.db.core.comment.CommentCountRepository
 import io.raemian.storage.db.core.emoji.EmojiCount
 import io.raemian.storage.db.core.emoji.EmojiCountRepository
 import io.raemian.storage.db.core.emoji.EmojiRepository
@@ -20,6 +28,7 @@ class CountEventHandler(
     private val emojiCountRepository: EmojiCountRepository,
     private val exclusiveRunner: ExclusiveRunner,
     private val emojiRepository: EmojiRepository,
+    private val commentCountRepository: CommentCountRepository,
 ) {
     @Transactional
     @EventListener
@@ -63,10 +72,29 @@ class CountEventHandler(
     fun minusEmojiCount(removeEmojiEvent: RemovedEmojiEvent) {
         exclusiveRunner.call("emoji:${removeEmojiEvent.goalId}:${removeEmojiEvent.emojiId}", Duration.ofSeconds(10)) {
             val emojiCount = emojiCountRepository.findByGoalIdAndEmojiId(removeEmojiEvent.goalId, removeEmojiEvent.emojiId)
+                ?: EmojiCount(count = 0, goalId = removeEmojiEvent.goalId, emoji = emojiRepository.getReferenceById(removeEmojiEvent.emojiId))
 
-            if (emojiCount != null && 0 < emojiCount.count) {
-                emojiCountRepository.save(emojiCount.minusCount())
-            }
+            emojiCountRepository.save(emojiCount.minusCount())
         }
+    }
+
+    @Transactional
+    @EventListener
+    fun addCommentCount(createdCommentEvent: CreatedCommentEvent) {
+        exclusiveRunner.call("comment:${createdCommentEvent.goalId}", Duration.ofSeconds(10)) {
+            val commentCount = commentCountRepository.findByGoalId(createdCommentEvent.goalId)
+                ?: CommentCount(0, createdCommentEvent.goalId)
+
+            commentCountRepository.save(commentCount.addCount())
+        }
+    }
+
+    @Transactional
+    @EventListener
+    fun minusCommentCount(deletedCommentEvent: DeletedCommentEvent) {
+        val commentCount = commentCountRepository.findByGoalId(deletedCommentEvent.goalId)
+            ?: CommentCount(count = 0, goalId = deletedCommentEvent.goalId)
+
+        commentCountRepository.save(commentCount.minusCount())
     }
 }

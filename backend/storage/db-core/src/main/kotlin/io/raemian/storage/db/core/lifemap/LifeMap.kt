@@ -1,6 +1,6 @@
 package io.raemian.storage.db.core.lifemap
 
-import io.raemian.storage.db.core.BaseEntity
+import io.raemian.storage.db.core.common.BaseEntity
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.user.User
 import jakarta.persistence.CascadeType

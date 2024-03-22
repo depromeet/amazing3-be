@@ -1,6 +1,6 @@
 package io.raemian.storage.db.core.user
 
-import io.raemian.storage.db.core.BaseEntity
+import io.raemian.storage.db.core.common.BaseEntity
 import io.raemian.storage.db.core.user.enums.OAuthProvider
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

@@ -78,7 +78,13 @@ class WebSecurityConfig(
                     log.info("x-token access ${tokenDTO.accessToken}")
                     // TODO edit redirect url
                     val redirectUrl =
-                        if (profile == "live") "https://bandiboodi.com/oauth2/token" else "http://localhost:3000/oauth2/token"
+                        if (profile == "live") {
+                            "https://bandiboodi.com/oauth2/token"
+                        } else if (profile == "dev") {
+                            "https://dev-bandiboodi.vercel.app/oauth/token"
+                        } else {
+                            "http://localhost:3000/oauth2/token"
+                        }
                     response.sendRedirect("$redirectUrl?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
                 }
                 it.failureHandler { request, response, exception ->

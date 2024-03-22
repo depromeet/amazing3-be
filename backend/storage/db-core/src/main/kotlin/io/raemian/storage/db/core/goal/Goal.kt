@@ -1,6 +1,6 @@
 package io.raemian.storage.db.core.goal
 
-import io.raemian.storage.db.core.BaseEntity
+import io.raemian.storage.db.core.common.BaseEntity
 import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.sticker.Sticker
 import io.raemian.storage.db.core.tag.Tag

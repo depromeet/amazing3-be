@@ -24,13 +24,13 @@ import java.time.LocalDateTime
 
 @Service
 class GoalService(
-    private val stickerService: StickerService,
-    private val tagService: TagService,
     private val userRepository: UserRepository,
     private val goalRepository: GoalRepository,
     private val lifeMapRepository: LifeMapRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
     private val emojiService: EmojiService,
+    private val stickerService: StickerService,
+    private val tagService: TagService,
 ) {
 
     @Transactional(readOnly = true)
