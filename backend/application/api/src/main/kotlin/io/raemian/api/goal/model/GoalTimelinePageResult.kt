@@ -6,23 +6,23 @@ import io.raemian.storage.db.core.goal.model.GoalQueryResult
 
 data class GoalTimelinePageResult(
     val goal: GoalQueryResult,
-    val count: GoalTimelineCountSubset?,
+    val counts: GoalTimelineCountSubset?,
     val emojis: List<EmojiCountSubset>,
 ) {
     companion object {
-        fun from(goal: GoalQueryResult, count: GoalTimelineCountSubset?, reactedEmojisResult: ReactedEmojisResult?): GoalTimelinePageResult {
+        fun from(goal: GoalQueryResult, counts: GoalTimelineCountSubset?, reactedEmojisResult: ReactedEmojisResult?): GoalTimelinePageResult {
             if (reactedEmojisResult == null) {
                 return GoalTimelinePageResult(
-                    goal,
-                    count,
-                    listOf(),
+                    goal = goal,
+                    counts = counts,
+                    emojis = emptyList(),
                 )
             }
 
             return GoalTimelinePageResult(
-                goal,
-                count,
-                reactedEmojisResult.reactedEmojis.map {
+                goal = goal,
+                counts = counts,
+                emojis = reactedEmojisResult.reactedEmojis.map {
                     EmojiCountSubset(
                         id = it.id ?: -1,
                         name = it.name,

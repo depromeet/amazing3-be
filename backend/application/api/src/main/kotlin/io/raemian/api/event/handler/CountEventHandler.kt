@@ -72,10 +72,9 @@ class CountEventHandler(
     fun minusEmojiCount(removeEmojiEvent: RemovedEmojiEvent) {
         exclusiveRunner.call("emoji:${removeEmojiEvent.goalId}:${removeEmojiEvent.emojiId}", Duration.ofSeconds(10)) {
             val emojiCount = emojiCountRepository.findByGoalIdAndEmojiId(removeEmojiEvent.goalId, removeEmojiEvent.emojiId)
+                ?: EmojiCount(count = 0, goalId = removeEmojiEvent.goalId, emoji = emojiRepository.getReferenceById(removeEmojiEvent.emojiId))
 
-            if (emojiCount != null && 0 < emojiCount.count) {
-                emojiCountRepository.save(emojiCount.minusCount())
-            }
+            emojiCountRepository.save(emojiCount.minusCount())
         }
     }
 
@@ -94,9 +93,8 @@ class CountEventHandler(
     @EventListener
     fun minusCommentCount(deletedCommentEvent: DeletedCommentEvent) {
         val commentCount = commentCountRepository.findByGoalId(deletedCommentEvent.goalId)
+            ?: CommentCount(count = 0, goalId = deletedCommentEvent.goalId)
 
-        if (commentCount != null && 0 < commentCount.count) {
-            commentCountRepository.save(commentCount.minusCount())
-        }
+        commentCountRepository.save(commentCount.minusCount())
     }
 }

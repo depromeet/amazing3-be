@@ -12,7 +12,5 @@ data class GoalQueryResult(
     val tag: String,
     val createdAt: LocalDateTime,
 ) : CursorExtractable {
-    override fun getCursorId(): Long {
-        return goalId
-    }
+    override fun getCursorId(): Long = goalId
 }

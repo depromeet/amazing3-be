@@ -28,7 +28,9 @@ class CommentCount(
     }
 
     fun minusCount(): CommentCount {
-        this.count -= 1
+        if (0 < this.count) {
+            this.count -= 1
+        }
         return this
     }
 }

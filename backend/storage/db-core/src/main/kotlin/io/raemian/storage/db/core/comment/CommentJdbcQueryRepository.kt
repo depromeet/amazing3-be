@@ -28,7 +28,7 @@ class CommentJdbcQueryRepository(
                 rs, rowNum ->
             GoalCommentCountQueryResult(
                 goalId = rs.getLong("GOAL_ID"),
-                commentCount = rs.getInt("COMMENT_COUNT"),
+                commentCounts = rs.getInt("COMMENT_COUNT"),
             )
         }
     }

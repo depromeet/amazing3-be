@@ -11,10 +11,10 @@ data class PaginationResult<T>(
     companion object {
         fun <T> from(total: Long, result: CursorPaginationResult<T>): PaginationResult<T> {
             return PaginationResult(
-                total,
-                result.contents,
-                result.isLast,
-                result.nextCursor,
+                total = total,
+                contents = result.contents,
+                isLast = result.isLast,
+                nextCursor = result.nextCursor,
             )
         }
     }

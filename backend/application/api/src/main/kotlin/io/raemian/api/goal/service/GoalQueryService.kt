@@ -48,13 +48,13 @@ class GoalQueryService(
     }
 
     private fun findGoalTimelineCountMap(goalIds: List<Long>): Map<Long, GoalTimelineCountSubset> {
-        val commentCountMap = commentService.findGoalCommentCountMap(goalIds)
-        val taskCountMap = taskService.findGoalTaskCountMap(goalIds)
+        val commentCountMap = commentService.findGoalCommentCounts(goalIds).associate { it.goalId to it.commentCounts }
+        val taskCountMap = taskService.findGoalTaskCounts(goalIds).associate { it.goalId to it.taskCounts }
 
         return goalIds.associate {
             it to GoalTimelineCountSubset.of(
-                commentCountMap.get(1L) ?: 0,
-                taskCountMap.get(1L) ?: 0,
+                commentCountMap[it] ?: 0,
+                taskCountMap[it] ?: 0,
             )
         }
     }

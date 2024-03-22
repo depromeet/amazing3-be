@@ -34,7 +34,9 @@ class EmojiCount(
     }
 
     fun minusCount(): EmojiCount {
-        this.count -= 1
+        if (0 < this.count) {
+            this.count -= 1
+        }
         return this
     }
 }

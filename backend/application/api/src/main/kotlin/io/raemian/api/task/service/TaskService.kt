@@ -10,6 +10,7 @@ import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.task.Task
 import io.raemian.storage.db.core.task.TaskJdbcQueryRepository
 import io.raemian.storage.db.core.task.TaskRepository
+import io.raemian.storage.db.core.task.model.GoalTaskCountQueryResult
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -63,10 +64,8 @@ class TaskService(
     }
 
     @Transactional(readOnly = true)
-    fun findGoalTaskCountMap(goalIds: List<Long>): Map<Long, Int> {
-        val goalTaskCounts = taskJdbcQueryRepository.findAllGoalTaskCountByGoalIdIn(goalIds)
-        return goalTaskCounts.associate { it.goalId to it.taskCount }
-    }
+    fun findGoalTaskCounts(goalIds: List<Long>): List<GoalTaskCountQueryResult> =
+        taskJdbcQueryRepository.findAllGoalTaskCountByGoalIdIn(goalIds)
 
     private fun validateCurrentUserIsGoalOwner(currentUserId: Long, goal: Goal) {
         if (currentUserId != goal.lifeMap.user.id) {

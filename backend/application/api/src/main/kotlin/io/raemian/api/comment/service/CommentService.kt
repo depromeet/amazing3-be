@@ -10,6 +10,7 @@ import io.raemian.api.support.exception.ErrorInfo
 import io.raemian.storage.db.core.comment.Comment
 import io.raemian.storage.db.core.comment.CommentJdbcQueryRepository
 import io.raemian.storage.db.core.comment.CommentRepository
+import io.raemian.storage.db.core.comment.model.GoalCommentCountQueryResult
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.user.User
@@ -76,10 +77,8 @@ class CommentService(
     }
 
     @Transactional(readOnly = true)
-    fun findGoalCommentCountMap(goalIds: List<Long>): Map<Long, Int> {
-        val goalCommentCounts = commentJdbcQueryRepository.findAllGoalCommentCountByGoalIdIn(goalIds)
-        return goalCommentCounts.associate { it.goalId to it.commentCount }
-    }
+    fun findGoalCommentCounts(goalIds: List<Long>): List<GoalCommentCountQueryResult> =
+        commentJdbcQueryRepository.findAllGoalCommentCountByGoalIdIn(goalIds)
 
     private fun createComment(goal: Goal, currentUser: User, content: String): Comment {
         return try {
