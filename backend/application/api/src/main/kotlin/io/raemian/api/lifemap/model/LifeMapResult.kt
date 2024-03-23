@@ -9,7 +9,7 @@ data class LifeMapResult(
     val isPublic: Boolean,
     val goals: List<GoalDto>,
     val goalsCount: Int,
-    val user: UserSubset? = null,
+    val user: UserSubset,
 ) {
 
     constructor(lifeMap: LifeMap) : this(

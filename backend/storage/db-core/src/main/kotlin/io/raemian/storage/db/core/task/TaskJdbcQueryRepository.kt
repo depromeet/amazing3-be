@@ -28,7 +28,7 @@ class TaskJdbcQueryRepository(
                 rs, rowNum ->
             GoalTaskCountQueryResult(
                 goalId = rs.getLong("GOAL_ID"),
-                taskCounts = rs.getInt("TASK_COUNT"),
+                taskCount = rs.getInt("TASK_COUNT"),
             )
         }
     }

@@ -2,6 +2,7 @@ package io.raemian.api.cheer.service
 
 import io.raemian.api.cheer.controller.request.CheeringRequest
 import io.raemian.api.cheer.controller.request.CheeringSquadPageRequest
+import io.raemian.api.cheer.model.CheererResult
 import io.raemian.api.cheer.model.CheeringCountResult
 import io.raemian.api.event.model.CheeredEvent
 import io.raemian.api.support.exception.CoreApiException
@@ -45,13 +46,15 @@ class CheeringService(
     }
 
     @Transactional(readOnly = true)
-    fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPageRequest): PaginationResult<CheererQueryResult> {
+    fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPageRequest): PaginationResult<CheererResult> {
         val cheering = cheeringRepository.findByLifeMapId(lifeMapId)
             ?: Cheering(0, lifeMapId)
 
         val cheeringSquad = findCheeringSquadWithCursor(lifeMapId, request)
 
-        return PaginationResult.from(cheering.count, cheeringSquad)
+        val filteredCheeringSquad = cheeringSquad.transform(CheererResult::from)
+
+        return PaginationResult.from(cheering.count, filteredCheeringSquad)
     }
 
     @Transactional(readOnly = true)
