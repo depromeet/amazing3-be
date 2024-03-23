@@ -19,7 +19,7 @@ data class CheererResult(
                 userName = queryResult.userName,
                 userNickName = queryResult.userNickName,
                 userImageUrl = queryResult.userImageUrl,
-                cheeringAt = queryResult.cheeringAt
+                cheeringAt = queryResult.cheeringAt,
             )
         }
     }

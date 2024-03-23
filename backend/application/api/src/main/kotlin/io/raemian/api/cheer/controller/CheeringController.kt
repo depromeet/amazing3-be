@@ -7,7 +7,6 @@ import io.raemian.api.cheer.model.CheeringCountResult
 import io.raemian.api.cheer.service.CheeringService
 import io.raemian.api.support.response.ApiResponse
 import io.raemian.api.support.response.PaginationResult
-import io.raemian.storage.db.core.cheer.model.CheererQueryResult
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

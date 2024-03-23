@@ -2,16 +2,12 @@ package io.raemian.api.goal.controller
 
 import io.raemian.api.auth.model.CurrentUser
 import io.raemian.api.goal.controller.request.CreateGoalRequest
-import io.raemian.api.goal.controller.request.TimelinePageRequest
 import io.raemian.api.goal.controller.request.UpdateGoalRequest
 import io.raemian.api.goal.model.CreateGoalResult
 import io.raemian.api.goal.model.GoalExplorePageResult
 import io.raemian.api.goal.model.GoalResult
-import io.raemian.api.goal.model.GoalTimelinePageResult
-import io.raemian.api.goal.service.GoalQueryService
 import io.raemian.api.goal.service.GoalService
 import io.raemian.api.support.response.ApiResponse
-import io.raemian.api.support.response.PaginationResult
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
