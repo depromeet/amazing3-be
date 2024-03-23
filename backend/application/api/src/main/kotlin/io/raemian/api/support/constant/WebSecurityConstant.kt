@@ -3,6 +3,7 @@ package io.raemian.api.support.constant
 object WebSecurityConstant {
     val PUBLIC_URIS = arrayOf(
         "/auth/**",
+        "/cherring/**",
         "/oauth2/**",
         "/login/**",
         "/one-baily-actuator/**",

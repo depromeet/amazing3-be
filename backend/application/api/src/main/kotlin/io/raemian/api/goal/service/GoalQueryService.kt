@@ -24,10 +24,10 @@ class GoalQueryService(
     private val commentService: CommentService,
 ) {
     @Transactional(readOnly = true)
-    fun getTimeline(userId: Long, request: TimelinePageRequest): PaginationResult<GoalTimelinePageResult> {
+    fun findAllByUserIdWithCursor(userId: Long, request: TimelinePageRequest): PaginationResult<GoalTimelinePageResult> {
         val lifeMap = lifeMapService.findFirstByUserId(userId)
 
-        val goals = findAllGoalWithCursor(lifeMap.lifeMapId, request)
+        val goals = findAllByLifeMapIdWithCursor(lifeMap.lifeMapId, request)
 
         val goalIds = goals.contents.map { it.goalId }
 
@@ -47,9 +47,32 @@ class GoalQueryService(
         )
     }
 
+    @Transactional(readOnly = true)
+    fun findAllByUsernameWithCursor(username: String, request: TimelinePageRequest): PaginationResult<GoalTimelinePageResult> {
+        val lifeMap = lifeMapService.findFirstByUserName(username)
+        val goals = findAllByLifeMapIdWithCursor(lifeMap.lifeMapId, request)
+
+        val goalIds = goals.contents.map { it.goalId }
+
+        val goalTimelineCountMap = findGoalTimelineCountMap(goalIds)
+        val reactedEmojiMap = emojiService.findAllByGoalIds(goalIds, lifeMap.user.id)
+
+        return PaginationResult.from(
+            lifeMap.goals.size.toLong(),
+            goals.transform() {
+                    goal ->
+                GoalTimelinePageResult.from(
+                    goal,
+                    goalTimelineCountMap[goal.goalId],
+                    reactedEmojiMap[goal.goalId],
+                )
+            },
+        )
+    }
+
     private fun findGoalTimelineCountMap(goalIds: List<Long>): Map<Long, GoalTimelineCountSubset> {
-        val commentCountMap = commentService.findGoalCommentCounts(goalIds).associate { it.goalId to it.commentCounts }
-        val taskCountMap = taskService.findGoalTaskCounts(goalIds).associate { it.goalId to it.taskCounts }
+        val commentCountMap = commentService.findGoalCommentCounts(goalIds).associate { it.goalId to it.commentCount }
+        val taskCountMap = taskService.findGoalTaskCounts(goalIds).associate { it.goalId to it.taskCount }
 
         return goalIds.associate {
             it to GoalTimelineCountSubset.of(
@@ -59,7 +82,7 @@ class GoalQueryService(
         }
     }
 
-    private fun findAllGoalWithCursor(lifeMapId: Long, request: TimelinePageRequest): CursorPaginationResult<GoalQueryResult> {
+    private fun findAllByLifeMapIdWithCursor(lifeMapId: Long, request: TimelinePageRequest): CursorPaginationResult<GoalQueryResult> {
         return CursorPaginationTemplate.execute(lifeMapId, request.cursor ?: Long.MAX_VALUE, request.size) {
                 id, cursor, size ->
             goalJdbcQueryRepository.findAllByLifeMapWithCursor(id, cursor, size)

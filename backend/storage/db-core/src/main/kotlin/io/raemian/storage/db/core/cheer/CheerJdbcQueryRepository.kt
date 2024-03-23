@@ -1,6 +1,7 @@
 package io.raemian.storage.db.core.cheer
 
 import io.raemian.storage.db.core.cheer.model.CheererQueryResult
+import io.raemian.storage.db.core.common.extension.getLongOrNull
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
@@ -38,7 +39,7 @@ class CheerJdbcQueryRepository(
                 rs, rowNum ->
             CheererQueryResult(
                 cheererId = rs.getLong("CHEERER_ID"),
-                userId = rs.getLong("USER_ID"),
+                userId = rs.getLongOrNull("USER_ID"),
                 userName = rs.getString("USERNAME"),
                 userNickName = rs.getString("NICKNAME"),
                 userImageUrl = rs.getString("IMAGE_URL"),

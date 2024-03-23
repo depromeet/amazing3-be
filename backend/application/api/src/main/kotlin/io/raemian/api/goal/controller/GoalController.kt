@@ -32,7 +32,6 @@ fun String.toUri(): URI = URI.create(this)
 @RequestMapping("/goal")
 class GoalController(
     private val goalService: GoalService,
-    private val goalQueryService: GoalQueryService,
 ) {
 
     @Operation(summary = "목표 단건 조회 API")
@@ -89,15 +88,5 @@ class GoalController(
 
         return ResponseEntity.ok()
             .body(ApiResponse.success(GoalExplorePageResult(explore)))
-    }
-
-    @Operation(summary = "목표 타임라인 조회 API")
-    @GetMapping("/timeline")
-    fun getTimeline(
-        @AuthenticationPrincipal currentUser: CurrentUser,
-        request: TimelinePageRequest,
-    ): ResponseEntity<ApiResponse<PaginationResult<GoalTimelinePageResult>>> {
-        val goalTimeline = goalQueryService.getTimeline(currentUser.id, request)
-        return ResponseEntity.ok(ApiResponse.success(goalTimeline))
     }
 }

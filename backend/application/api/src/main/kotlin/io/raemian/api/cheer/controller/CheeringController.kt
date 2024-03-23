@@ -2,6 +2,7 @@ package io.raemian.api.cheer.controller
 
 import io.raemian.api.cheer.controller.request.CheeringRequest
 import io.raemian.api.cheer.controller.request.CheeringSquadPageRequest
+import io.raemian.api.cheer.model.CheererResult
 import io.raemian.api.cheer.model.CheeringCountResult
 import io.raemian.api.cheer.service.CheeringService
 import io.raemian.api.support.response.ApiResponse
@@ -25,7 +26,7 @@ class CheeringController(
     fun findCheeringSquad(
         @PathVariable("lifeMapId") lifeMapId: Long,
         request: CheeringSquadPageRequest,
-    ): ResponseEntity<ApiResponse<PaginationResult<CheererQueryResult>>> =
+    ): ResponseEntity<ApiResponse<PaginationResult<CheererResult>>> =
         ResponseEntity.ok().body(ApiResponse.success(cheeringService.findCheeringSquad(lifeMapId, request)))
 
     @GetMapping("/count/{userName}")
