@@ -52,7 +52,7 @@ class CheeringService(
 
         val cheeringSquad = findCheeringSquadWithCursor(lifeMapId, request)
 
-        val filteredCheeringSquad = cheeringSquad.transform(CheererResult::from)
+        val filteredCheeringSquad = cheeringSquad.transform { CheererResult.from(it) }
 
         return PaginationResult.from(cheering.count, filteredCheeringSquad)
     }

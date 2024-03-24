@@ -35,7 +35,7 @@ class GoalQueryService(
 
         return PaginationResult.from(
             lifeMap.goals.size.toLong(),
-            goals.transform() {
+            goals.transform {
                     goal ->
                 GoalTimelinePageResult.from(
                     goal,
