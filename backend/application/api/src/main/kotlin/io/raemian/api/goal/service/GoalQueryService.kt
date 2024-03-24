@@ -49,8 +49,8 @@ class GoalQueryService(
         val commentCountMap = commentService.findGoalCommentCounts(goalIds).associate { it.goalId to it.commentCount }
         val taskCountMap = taskService.findGoalTaskCounts(goalIds).associate { it.goalId to it.taskCount }
 
-        return goalIds.associate {
-            it to GoalTimelineCountSubset.of(
+        return goalIds.associateWith {
+            GoalTimelineCountSubset.of(
                 commentCountMap[it] ?: 0,
                 taskCountMap[it] ?: 0,
             )
