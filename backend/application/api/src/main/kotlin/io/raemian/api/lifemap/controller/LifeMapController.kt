@@ -40,16 +40,6 @@ class LifeMapController(
             .ok(ApiResponse.success(LifeMapResponse(lifeMap, count, cheeringCount)))
     }
 
-    @Operation(summary = "로그인한 유저의 인생 지도 타임 라인 조회 API")
-    @GetMapping("/timeline")
-    fun getTimeline(
-        @AuthenticationPrincipal currentUser: CurrentUser,
-        request: TimelinePageRequest,
-    ): ResponseEntity<ApiResponse<PaginationResult<GoalTimelinePageResult>>> {
-        val goalTimeline = goalQueryService.findAllByUserIdWithCursor(currentUser.id, request)
-        return ResponseEntity.ok(ApiResponse.success(goalTimeline))
-    }
-
     @Operation(summary = "인생 지도 공개 여부를 수정하는 API")
     @PatchMapping("/publication")
     fun updatePublic(

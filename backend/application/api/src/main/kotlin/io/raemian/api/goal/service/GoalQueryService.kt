@@ -24,30 +24,6 @@ class GoalQueryService(
     private val commentService: CommentService,
 ) {
     @Transactional(readOnly = true)
-    fun findAllByUserIdWithCursor(userId: Long, request: TimelinePageRequest): PaginationResult<GoalTimelinePageResult> {
-        val lifeMap = lifeMapService.findFirstByUserId(userId)
-
-        val goals = findAllByLifeMapIdWithCursor(lifeMap.lifeMapId, request)
-
-        val goalIds = goals.contents.map { it.goalId }
-
-        val goalTimelineCountMap = findGoalTimelineCountMap(goalIds)
-        val reactedEmojiMap = emojiService.findAllByGoalIds(goalIds, userId)
-
-        return PaginationResult.from(
-            lifeMap.goals.size.toLong(),
-            goals.transform() {
-                    goal ->
-                GoalTimelinePageResult.from(
-                    goal,
-                    goalTimelineCountMap[goal.goalId],
-                    reactedEmojiMap[goal.goalId],
-                )
-            },
-        )
-    }
-
-    @Transactional(readOnly = true)
     fun findAllByUsernameWithCursor(username: String, request: TimelinePageRequest): PaginationResult<GoalTimelinePageResult> {
         val lifeMap = lifeMapService.findFirstByUserName(username)
         val goals = findAllByLifeMapIdWithCursor(lifeMap.lifeMapId, request)
