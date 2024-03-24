@@ -30,7 +30,7 @@ class GoalQueryService(
 
         val goalIds = goals.contents.map { it.goalId }
 
-        val goalTimelineCountMap = findGoalTimelineCountMap(goalIds)
+        val goalCountMap = findGoalCountMap(goalIds)
         val reactedEmojiMap = emojiService.findAllByGoalIds(goalIds, lifeMap.user.id)
 
         return PaginationResult.from(
@@ -38,14 +38,14 @@ class GoalQueryService(
             goals.transform {
                 GoalTimelinePageResult.from(
                     goal = it,
-                    counts = goalTimelineCountMap[it.goalId],
+                    counts = goalCountMap[it.goalId],
                     reactedEmojisResult = reactedEmojiMap[it.goalId],
                 )
             },
         )
     }
 
-    private fun findGoalTimelineCountMap(goalIds: List<Long>): Map<Long, GoalTimelineCountSubset> {
+    private fun findGoalCountMap(goalIds: List<Long>): Map<Long, GoalTimelineCountSubset> {
         val commentCountMap = commentService.findGoalCommentCounts(goalIds).associate { it.goalId to it.commentCount }
         val taskCountMap = taskService.findGoalTaskCounts(goalIds).associate { it.goalId to it.taskCount }
 
