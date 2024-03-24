@@ -36,11 +36,10 @@ class GoalQueryService(
         return PaginationResult.from(
             lifeMap.goals.size,
             goals.transform {
-                    goal ->
                 GoalTimelinePageResult.from(
-                    goal,
-                    goalTimelineCountMap[goal.goalId],
-                    reactedEmojiMap[goal.goalId],
+                    goal = it,
+                    counts = goalTimelineCountMap[it.goalId],
+                    reactedEmojisResult = reactedEmojiMap[it.goalId],
                 )
             },
         )
