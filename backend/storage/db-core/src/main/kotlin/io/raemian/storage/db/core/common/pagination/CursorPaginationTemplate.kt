@@ -9,7 +9,7 @@ object CursorPaginationTemplate {
         size: Int,
         query: TriFunction<Long, Long, Int, List<T>>,
     ): CursorPaginationResult<T> {
-        val data = query.apply(id, cursorId ?: 0, size + 1)
+        val data = query.apply(id, cursorId, size + 1)
         val isLast = data.size != size + 1
         val nextCursor = if (isLast) null else data[size].getCursorId()
 

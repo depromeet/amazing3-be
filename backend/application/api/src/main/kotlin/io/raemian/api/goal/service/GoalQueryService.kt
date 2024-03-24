@@ -25,7 +25,7 @@ class GoalQueryService(
 ) {
     @Transactional(readOnly = true)
     fun findAllByUsernameWithCursor(username: String, request: TimelinePageRequest): PaginationResult<GoalTimelinePageResult> {
-        val lifeMap = lifeMapService.findFirstByUserName(username)
+        val lifeMap = lifeMapService.getFirstByUserName(username)
         val goals = findAllByLifeMapIdWithCursor(lifeMap.lifeMapId, request)
 
         val goalIds = goals.contents.map { it.goalId }
@@ -34,7 +34,7 @@ class GoalQueryService(
         val reactedEmojiMap = emojiService.findAllByGoalIds(goalIds, lifeMap.user.id)
 
         return PaginationResult.from(
-            lifeMap.goals.size.toLong(),
+            lifeMap.goals.size,
             goals.transform {
                     goal ->
                 GoalTimelinePageResult.from(

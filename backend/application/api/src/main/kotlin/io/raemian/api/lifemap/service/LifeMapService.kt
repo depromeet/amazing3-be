@@ -23,7 +23,7 @@ class LifeMapService(
     private val lifeMapHistoryRepository: LifeMapHistoryRepository,
 ) {
     @Transactional(readOnly = true)
-    fun findFirstByUserId(userId: Long): LifeMapResult {
+    fun getFirstByUserId(userId: Long): LifeMapResult {
         val lifeMap = lifeMapRepository.findFirstByUserId(userId)
             ?: throw NoSuchElementException("존재하지 않는 유저입니다. $userId")
 
@@ -34,7 +34,7 @@ class LifeMapService(
     }
 
     @Transactional(readOnly = true)
-    fun findFirstByUserName(username: String): LifeMapResult {
+    fun getFirstByUserName(username: String): LifeMapResult {
         val lifeMap = lifeMapRepository.findFirstByUserUsername(username)
             ?: throw NoSuchElementException("존재하지 않는 유저입니다. $username")
 

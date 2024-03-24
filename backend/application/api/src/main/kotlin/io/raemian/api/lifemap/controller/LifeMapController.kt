@@ -2,14 +2,11 @@ package io.raemian.api.lifemap.controller
 
 import io.raemian.api.auth.model.CurrentUser
 import io.raemian.api.cheer.service.CheeringService
-import io.raemian.api.goal.controller.request.TimelinePageRequest
-import io.raemian.api.goal.model.GoalTimelinePageResult
 import io.raemian.api.goal.service.GoalQueryService
 import io.raemian.api.lifemap.controller.request.UpdatePublicRequest
 import io.raemian.api.lifemap.model.LifeMapResponse
 import io.raemian.api.lifemap.service.LifeMapService
 import io.raemian.api.support.response.ApiResponse
-import io.raemian.api.support.response.PaginationResult
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -32,7 +29,7 @@ class LifeMapController(
     fun findAllByCurrentUser(
         @AuthenticationPrincipal currentUser: CurrentUser,
     ): ResponseEntity<ApiResponse<LifeMapResponse>> {
-        val lifeMap = lifeMapService.findFirstByUserId(currentUser.id)
+        val lifeMap = lifeMapService.getFirstByUserId(currentUser.id)
         val count = lifeMapService.getLifeMapCount(lifeMap.lifeMapId)
         val cheeringCount = cheeringService.getCheeringCount(currentUser.id)
 
