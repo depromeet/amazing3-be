@@ -81,7 +81,7 @@ class WebSecurityConfig(
                         if (profile == "live") {
                             "https://bandiboodi.com/oauth2/token"
                         } else if (profile == "dev") {
-                            "https://dev-bandiboodi.vercel.app/oauth/token"
+                            "https://dev-bandiboodi.vercel.app/oauth2/token"
                         } else {
                             "http://localhost:3000/oauth2/token"
                         }
