@@ -24,58 +24,33 @@ class GoalQueryService(
     private val commentService: CommentService,
 ) {
     @Transactional(readOnly = true)
-    fun findAllByUserIdWithCursor(userId: Long, request: TimelinePageRequest): PaginationResult<GoalTimelinePageResult> {
-        val lifeMap = lifeMapService.findFirstByUserId(userId)
-
-        val goals = findAllByLifeMapIdWithCursor(lifeMap.lifeMapId, request)
-
-        val goalIds = goals.contents.map { it.goalId }
-
-        val goalTimelineCountMap = findGoalTimelineCountMap(goalIds)
-        val reactedEmojiMap = emojiService.findAllByGoalIds(goalIds, userId)
-
-        return PaginationResult.from(
-            lifeMap.goals.size.toLong(),
-            goals.transform() {
-                    goal ->
-                GoalTimelinePageResult.from(
-                    goal,
-                    goalTimelineCountMap[goal.goalId],
-                    reactedEmojiMap[goal.goalId],
-                )
-            },
-        )
-    }
-
-    @Transactional(readOnly = true)
     fun findAllByUsernameWithCursor(username: String, request: TimelinePageRequest): PaginationResult<GoalTimelinePageResult> {
-        val lifeMap = lifeMapService.findFirstByUserName(username)
+        val lifeMap = lifeMapService.getFirstByUserName(username)
         val goals = findAllByLifeMapIdWithCursor(lifeMap.lifeMapId, request)
 
         val goalIds = goals.contents.map { it.goalId }
 
-        val goalTimelineCountMap = findGoalTimelineCountMap(goalIds)
+        val goalCountMap = findGoalCountMap(goalIds)
         val reactedEmojiMap = emojiService.findAllByGoalIds(goalIds, lifeMap.user.id)
 
         return PaginationResult.from(
-            lifeMap.goals.size.toLong(),
-            goals.transform() {
-                    goal ->
+            lifeMap.goals.size,
+            goals.transform {
                 GoalTimelinePageResult.from(
-                    goal,
-                    goalTimelineCountMap[goal.goalId],
-                    reactedEmojiMap[goal.goalId],
+                    goal = it,
+                    counts = goalCountMap[it.goalId],
+                    reactedEmojisResult = reactedEmojiMap[it.goalId],
                 )
             },
         )
     }
 
-    private fun findGoalTimelineCountMap(goalIds: List<Long>): Map<Long, GoalTimelineCountSubset> {
+    private fun findGoalCountMap(goalIds: List<Long>): Map<Long, GoalTimelineCountSubset> {
         val commentCountMap = commentService.findGoalCommentCounts(goalIds).associate { it.goalId to it.commentCount }
         val taskCountMap = taskService.findGoalTaskCounts(goalIds).associate { it.goalId to it.taskCount }
 
-        return goalIds.associate {
-            it to GoalTimelineCountSubset.of(
+        return goalIds.associateWith {
+            GoalTimelineCountSubset.of(
                 commentCountMap[it] ?: 0,
                 taskCountMap[it] ?: 0,
             )

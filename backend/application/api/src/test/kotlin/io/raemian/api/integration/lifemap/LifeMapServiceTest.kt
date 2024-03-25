@@ -92,7 +92,7 @@ class LifeMapServiceTest {
         lifeMap.addGoal(goal2)
 
         // when
-        val savedLifeMap = lifeMapService.findFirstByUserId(USER_FIXTURE.id!!)
+        val savedLifeMap = lifeMapService.getFirstByUserId(USER_FIXTURE.id!!)
 
         // then
         assertAll(
@@ -134,7 +134,7 @@ class LifeMapServiceTest {
         lifeMap.addGoal(goal2)
 
         // when
-        val savedLifeMap = lifeMapService.findFirstByUserId(USER_FIXTURE.id!!)
+        val savedLifeMap = lifeMapService.getFirstByUserId(USER_FIXTURE.id!!)
 
         // then
         assertAll(
@@ -157,7 +157,7 @@ class LifeMapServiceTest {
         // when
         // then
         assertThatThrownBy {
-            lifeMapService.findFirstByUserName(USER_FIXTURE.username!!)
+            lifeMapService.getFirstByUserName(USER_FIXTURE.username!!)
         }.isInstanceOf(RuntimeException::class.java)
     }
 
@@ -192,7 +192,7 @@ class LifeMapServiceTest {
         lifeMap.addGoal(goal2)
 
         // when
-        val savedLifeMap = lifeMapService.findFirstByUserId(USER_FIXTURE.id!!)
+        val savedLifeMap = lifeMapService.getFirstByUserId(USER_FIXTURE.id!!)
 
         // then
         var month = (now.monthValue).toString()

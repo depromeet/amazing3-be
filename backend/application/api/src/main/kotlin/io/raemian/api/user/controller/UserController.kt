@@ -27,7 +27,7 @@ class UserController(
     @GetMapping("/my")
     fun my(@AuthenticationPrincipal currentUser: CurrentUser): ResponseEntity<ApiResponse<UserTokenDecryptResult>> {
         val user = userService.getUserById(currentUser.id)
-        val lifeMap = lifeMapService.findFirstByUserId(currentUser.id)
+        val lifeMap = lifeMapService.getFirstByUserId(currentUser.id)
         val response = UserTokenDecryptResult.of(user, lifeMap)
         return ResponseEntity.ok(ApiResponse.success(response))
     }

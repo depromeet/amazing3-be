@@ -31,7 +31,7 @@ class OpenLifeMapController(
         @AuthenticationPrincipal currentUser: CurrentUser?,
         @PathVariable("username") username: String,
     ): ResponseEntity<ApiResponse<LifeMapResponse>> {
-        val lifeMap = lifeMapService.findFirstByUserName(username)
+        val lifeMap = lifeMapService.getFirstByUserName(username)
         val count = lifeMapService.addViewCount(lifeMap.lifeMapId)
         val cheeringCount = cheeringService.getCheeringCount(username)
 

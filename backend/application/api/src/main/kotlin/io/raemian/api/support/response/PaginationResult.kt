@@ -17,5 +17,14 @@ data class PaginationResult<T>(
                 nextCursor = result.nextCursor,
             )
         }
+
+        fun <T> from(total: Int, result: CursorPaginationResult<T>): PaginationResult<T> {
+            return PaginationResult(
+                total = total.toLong(),
+                contents = result.contents,
+                isLast = result.isLast,
+                nextCursor = result.nextCursor,
+            )
+        }
     }
 }
