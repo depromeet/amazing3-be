@@ -80,7 +80,7 @@ class WebSecurityConfig(
                     val redirectUrl =
                         if (profile == "live") {
                             "https://bandiboodi.com/oauth2/token"
-                        } else if (profile == "dev") {
+                        } else if (profile == "dev" && request.getHeader("referer").contains("dev-bandiboodi.vercel.app")) {
                             "https://dev-bandiboodi.vercel.app/oauth2/token"
                         } else {
                             "http://localhost:3000/oauth2/token"
