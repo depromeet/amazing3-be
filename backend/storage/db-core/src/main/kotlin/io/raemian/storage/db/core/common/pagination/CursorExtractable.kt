@@ -1,5 +1,5 @@
 package io.raemian.storage.db.core.common.pagination
 
-interface CursorExtractable {
-    fun cursorId(): Any
+interface CursorExtractable<CursorType> {
+    fun cursorId(): CursorType
 }

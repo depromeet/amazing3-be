@@ -46,7 +46,7 @@ class CheeringService(
     }
 
     @Transactional(readOnly = true)
-    fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPageRequest): PaginationResult<CheererResult> {
+    fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPageRequest): PaginationResult<Long, CheererResult> {
         val cheering = cheeringRepository.findByLifeMapId(lifeMapId)
             ?: Cheering(0, lifeMapId)
 
@@ -89,7 +89,7 @@ class CheeringService(
         )
     }
 
-    private fun findCheeringSquadWithCursor(lifeMapId: Long, request: CheeringSquadPageRequest): CursorPaginationResult<CheererQueryResult> {
+    private fun findCheeringSquadWithCursor(lifeMapId: Long, request: CheeringSquadPageRequest): CursorPaginationResult<Long, CheererQueryResult> {
         return CursorPaginationTemplate.execute(lifeMapId, request.cursor ?: Long.MAX_VALUE, request.size) {
                 id, cursor, size ->
             cheererJdbcQueryRepository.findAllByLifeMapWithCursor(id, cursor, size)

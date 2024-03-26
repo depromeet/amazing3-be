@@ -2,14 +2,14 @@ package io.raemian.api.support.response
 
 import io.raemian.storage.db.core.common.pagination.CursorPaginationResult
 
-data class PaginationResult<T>(
+data class PaginationResult<CursorType, T>(
     val total: Long,
     val contents: List<T>,
     val isLast: Boolean,
-    val nextCursor: Any?,
+    val nextCursor: CursorType?,
 ) {
     companion object {
-        fun <T> from(total: Long, result: CursorPaginationResult<T>): PaginationResult<T> {
+        fun <CursorType, T> from(total: Long, result: CursorPaginationResult<CursorType, T>): PaginationResult<CursorType, T> {
             return PaginationResult(
                 total = total,
                 contents = result.contents,
@@ -18,7 +18,7 @@ data class PaginationResult<T>(
             )
         }
 
-        fun <T> from(total: Int, result: CursorPaginationResult<T>): PaginationResult<T> {
+        fun <CursorType, T> from(total: Int, result: CursorPaginationResult<CursorType, T>): PaginationResult<CursorType, T> {
             return PaginationResult(
                 total = total.toLong(),
                 contents = result.contents,

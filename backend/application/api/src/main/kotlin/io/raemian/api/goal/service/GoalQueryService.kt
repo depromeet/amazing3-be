@@ -15,6 +15,7 @@ import io.raemian.storage.db.core.goal.GoalJdbcQueryRepository
 import io.raemian.storage.db.core.goal.model.GoalQueryResult
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class GoalQueryService(
@@ -25,7 +26,7 @@ class GoalQueryService(
     private val commentService: CommentService,
 ) {
     @Transactional(readOnly = true)
-    fun findAllByUsernameWithCursor(username: String, request: TimelinePageRequest): PaginationResult<GoalTimelinePageResult> {
+    fun findAllByUsernameWithCursor(username: String, request: TimelinePageRequest): PaginationResult<LocalDateTime, GoalTimelinePageResult> {
         val lifeMap = lifeMapService.getFirstByUserName(username)
         val goals = findAllByLifeMapIdWithCursor(lifeMap.lifeMapId, request)
 
@@ -58,7 +59,7 @@ class GoalQueryService(
         }
     }
 
-    private fun findAllByLifeMapIdWithCursor(lifeMapId: Long, request: TimelinePageRequest): CursorPaginationResult<GoalQueryResult> {
+    private fun findAllByLifeMapIdWithCursor(lifeMapId: Long, request: TimelinePageRequest): CursorPaginationResult<LocalDateTime, GoalQueryResult> {
         return CursorPaginationTemplate.execute(lifeMapId, request.cursor ?: LocalDateTimeConstant.MAX, request.size) {
                 id, cursor, size ->
             goalJdbcQueryRepository.findAllByLifeMapWithCursor(id, cursor, size)
