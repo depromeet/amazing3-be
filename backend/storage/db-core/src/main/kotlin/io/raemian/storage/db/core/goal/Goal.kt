@@ -22,7 +22,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "GOALS", indexes = [Index(name = "IDX_DEADLINE", columnList = "deadline")])
+@Table(name = "GOALS", indexes = [Index(name = "IDX_LIFE_MAP_ID_AND_DEADLINE", columnList = "life_map_id, deadline desc")])
 class Goal(
     @ManyToOne
     @JoinColumn(name = "life_map_id", nullable = false)
