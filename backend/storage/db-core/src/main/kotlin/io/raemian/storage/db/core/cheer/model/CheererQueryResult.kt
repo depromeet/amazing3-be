@@ -10,6 +10,6 @@ data class CheererQueryResult(
     val userNickName: String?,
     val userImageUrl: String?,
     val cheeringAt: LocalDateTime,
-) : CursorExtractable {
-    override fun getCursorId(): Long = cheererId
+) : CursorExtractable<Long> {
+    override fun cursorId(): Long = cheererId
 }

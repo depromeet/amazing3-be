@@ -52,17 +52,13 @@ class WebSecurityConfig(
                 it.authenticationEntryPoint { request, response, authException ->
                     // 유효한 자격증명을 제공하지 않고 접근하려 할때 401
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
+                }.accessDeniedHandler { request, response, accessDeniedException ->
+                    // 필요한 권한이 없이 접근하려 할때 403
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN)
                 }
-                    .accessDeniedHandler { request, response, accessDeniedException ->
-                        // 필요한 권한이 없이 접근하려 할때 403
-                        response.sendError(HttpServletResponse.SC_FORBIDDEN)
-                    }
             }
             .authorizeHttpRequests {
-                it.requestMatchers(*WebSecurityConstant.PUBLIC_URIS)
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated()
+                it.requestMatchers(*WebSecurityConstant.PUBLIC_URIS).permitAll().anyRequest().authenticated()
             }
             .oauth2Login {
                 it.tokenEndpoint { it.accessTokenResponseClient(accessTokenResponseClient()) }
@@ -85,6 +81,7 @@ class WebSecurityConfig(
                         } else {
                             "http://localhost:3000/oauth2/token"
                         }
+
                     response.sendRedirect("$redirectUrl?token=${tokenDTO.accessToken}&refresh=${tokenDTO.refreshToken}")
                 }
                 it.failureHandler { request, response, exception ->

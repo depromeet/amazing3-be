@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/open/life-map")
@@ -50,7 +51,7 @@ class OpenLifeMapController(
     fun getTimeline(
         @PathVariable("username") username: String,
         request: TimelinePageRequest,
-    ): ResponseEntity<ApiResponse<PaginationResult<GoalTimelinePageResult>>> {
+    ): ResponseEntity<ApiResponse<PaginationResult<LocalDateTime, GoalTimelinePageResult>>> {
         val goalTimeline = goalQueryService.findAllByUsernameWithCursor(username, request)
         return ResponseEntity.ok(ApiResponse.success(goalTimeline))
     }

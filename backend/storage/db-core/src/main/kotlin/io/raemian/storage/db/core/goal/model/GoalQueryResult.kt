@@ -11,6 +11,6 @@ data class GoalQueryResult(
     val stickerUrl: String,
     val tag: String,
     val createdAt: LocalDateTime,
-) : CursorExtractable {
-    override fun getCursorId(): Long = goalId
+) : CursorExtractable<LocalDateTime> {
+    override fun cursorId(): LocalDateTime = deadline
 }

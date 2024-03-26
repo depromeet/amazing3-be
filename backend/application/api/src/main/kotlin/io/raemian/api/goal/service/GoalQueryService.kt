@@ -6,6 +6,7 @@ import io.raemian.api.goal.controller.request.TimelinePageRequest
 import io.raemian.api.goal.model.GoalTimelineCountSubset
 import io.raemian.api.goal.model.GoalTimelinePageResult
 import io.raemian.api.lifemap.service.LifeMapService
+import io.raemian.api.support.constant.LocalDateTimeConstant
 import io.raemian.api.support.response.PaginationResult
 import io.raemian.api.task.service.TaskService
 import io.raemian.storage.db.core.common.pagination.CursorPaginationResult
@@ -14,6 +15,7 @@ import io.raemian.storage.db.core.goal.GoalJdbcQueryRepository
 import io.raemian.storage.db.core.goal.model.GoalQueryResult
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class GoalQueryService(
@@ -24,7 +26,7 @@ class GoalQueryService(
     private val commentService: CommentService,
 ) {
     @Transactional(readOnly = true)
-    fun findAllByUsernameWithCursor(username: String, request: TimelinePageRequest): PaginationResult<GoalTimelinePageResult> {
+    fun findAllByUsernameWithCursor(username: String, request: TimelinePageRequest): PaginationResult<LocalDateTime, GoalTimelinePageResult> {
         val lifeMap = lifeMapService.getFirstByUserName(username)
         val goals = findAllByLifeMapIdWithCursor(lifeMap.lifeMapId, request)
 
@@ -57,8 +59,8 @@ class GoalQueryService(
         }
     }
 
-    private fun findAllByLifeMapIdWithCursor(lifeMapId: Long, request: TimelinePageRequest): CursorPaginationResult<GoalQueryResult> {
-        return CursorPaginationTemplate.execute(lifeMapId, request.cursor ?: Long.MAX_VALUE, request.size) {
+    private fun findAllByLifeMapIdWithCursor(lifeMapId: Long, request: TimelinePageRequest): CursorPaginationResult<LocalDateTime, GoalQueryResult> {
+        return CursorPaginationTemplate.execute(lifeMapId, request.cursor ?: LocalDateTimeConstant.MAX, request.size) {
                 id, cursor, size ->
             goalJdbcQueryRepository.findAllByLifeMapWithCursor(id, cursor, size)
         }
