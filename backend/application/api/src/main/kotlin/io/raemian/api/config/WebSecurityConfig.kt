@@ -76,11 +76,13 @@ class WebSecurityConfig(
                     val tokenDTO = tokenProvider.generateTokenDto(user)
                     response.setHeader("x-token", tokenDTO.accessToken)
                     log.info("x-token access ${tokenDTO.accessToken}")
+
                     // TODO edit redirect url
+                    val referer = request.getHeader("referer")
                     val redirectUrl =
                         if (profile == "live") {
                             "https://bandiboodi.com/oauth2/token"
-                        } else if (profile == "dev" && request.getHeader("referer").contains("dev-bandiboodi.vercel.app")) {
+                        } else if (profile == "dev" && (referer.contains("dev-bandiboodi") || referer.contains("accounts.google"))) {
                             "https://dev-bandiboodi.vercel.app/oauth2/token"
                         } else {
                             "http://localhost:3000/oauth2/token"
