@@ -15,7 +15,6 @@ import io.raemian.storage.db.core.goal.GoalJdbcQueryRepository
 import io.raemian.storage.db.core.goal.model.GoalQueryResult
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 @Service
 class GoalQueryService(
