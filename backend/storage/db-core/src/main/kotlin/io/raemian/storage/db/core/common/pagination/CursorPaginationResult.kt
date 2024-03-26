@@ -4,7 +4,7 @@ import java.util.function.Function
 
 data class CursorPaginationResult<T> internal constructor(
     val contents: List<T>,
-    val nextCursor: Long?,
+    val nextCursor: Any?,
     val isLast: Boolean,
 ) {
     fun <R> transform(transformer: Function<T, R>): CursorPaginationResult<R> {

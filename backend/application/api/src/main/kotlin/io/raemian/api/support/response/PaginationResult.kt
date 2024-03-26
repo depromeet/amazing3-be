@@ -6,7 +6,7 @@ data class PaginationResult<T>(
     val total: Long,
     val contents: List<T>,
     val isLast: Boolean,
-    val nextCursor: Long?,
+    val nextCursor: Any?,
 ) {
     companion object {
         fun <T> from(total: Long, result: CursorPaginationResult<T>): PaginationResult<T> {
