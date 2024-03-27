@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 
 @Component
 class StateOAuth2AuthorizationRequestRepository(
-    @Value("\${spring.profiles.active}")
+    @Value("\${spring.profiles.active:local}")
     private val profile: String,
     val loginRequestRefererStorage: LoginRequestRefererStorage,
 ) : AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
