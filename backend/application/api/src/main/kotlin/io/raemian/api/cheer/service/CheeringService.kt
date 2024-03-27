@@ -8,15 +8,15 @@ import io.raemian.api.event.model.CheeredEvent
 import io.raemian.api.support.exception.CoreApiException
 import io.raemian.api.support.exception.ErrorInfo
 import io.raemian.api.support.limiter.CheeringLimiter
-import io.raemian.api.support.response.PaginationResult
+import io.raemian.api.support.response.CursorPaginationResult
 import io.raemian.storage.db.core.cheer.CheerJdbcQueryRepository
 import io.raemian.storage.db.core.cheer.Cheerer
 import io.raemian.storage.db.core.cheer.CheererRepository
 import io.raemian.storage.db.core.cheer.Cheering
 import io.raemian.storage.db.core.cheer.CheeringRepository
 import io.raemian.storage.db.core.cheer.model.CheererQueryResult
-import io.raemian.storage.db.core.common.pagination.CursorPaginationResult
 import io.raemian.storage.db.core.common.pagination.CursorPaginationTemplate
+import io.raemian.storage.db.core.common.pagination.PaginationResult
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
 import io.raemian.storage.db.core.user.UserRepository
 import org.springframework.context.ApplicationEventPublisher
@@ -46,7 +46,7 @@ class CheeringService(
     }
 
     @Transactional(readOnly = true)
-    fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPageRequest): PaginationResult<CheererResult> {
+    fun findCheeringSquad(lifeMapId: Long, request: CheeringSquadPageRequest): CursorPaginationResult<CheererResult> {
         val cheering = cheeringRepository.findByLifeMapId(lifeMapId)
             ?: Cheering(0, lifeMapId)
 
@@ -54,7 +54,7 @@ class CheeringService(
 
         val filteredCheeringSquad = cheeringSquad.transform { CheererResult.from(it) }
 
-        return PaginationResult.from(cheering.count, filteredCheeringSquad)
+        return CursorPaginationResult.from(cheering.count, filteredCheeringSquad)
     }
 
     @Transactional(readOnly = true)
@@ -89,7 +89,7 @@ class CheeringService(
         )
     }
 
-    private fun findCheeringSquadWithCursor(lifeMapId: Long, request: CheeringSquadPageRequest): CursorPaginationResult<CheererQueryResult> {
+    private fun findCheeringSquadWithCursor(lifeMapId: Long, request: CheeringSquadPageRequest): PaginationResult<CheererQueryResult> {
         return CursorPaginationTemplate.execute(lifeMapId, request.cursor ?: Long.MAX_VALUE, request.size) {
                 id, cursor, size ->
             cheererJdbcQueryRepository.findAllByLifeMapWithCursor(id, cursor, size)

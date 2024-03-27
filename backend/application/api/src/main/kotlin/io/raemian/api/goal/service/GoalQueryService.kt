@@ -6,7 +6,7 @@ import io.raemian.api.goal.controller.request.TimelinePageRequest
 import io.raemian.api.goal.model.GoalTimelineCountSubset
 import io.raemian.api.goal.model.GoalTimelinePageResult
 import io.raemian.api.lifemap.service.LifeMapService
-import io.raemian.api.support.response.NewPaginationResult
+import io.raemian.api.support.response.OffsetPaginationResult
 import io.raemian.api.task.service.TaskService
 import io.raemian.storage.db.core.goal.GoalJdbcQueryRepository
 import io.raemian.storage.db.core.goal.GoalRepository
@@ -23,7 +23,7 @@ class GoalQueryService(
     private val commentService: CommentService,
 ) {
     @Transactional(readOnly = true)
-    fun findAllByUsernameWithOffset(username: String, request: TimelinePageRequest): NewPaginationResult<GoalTimelinePageResult> {
+    fun findAllByUsernameWithOffset(username: String, request: TimelinePageRequest): OffsetPaginationResult<GoalTimelinePageResult> {
         val lifeMap = lifeMapService.getFirstByUserName(username)
         val goals = goalJdbcQueryRepository.findAllByLifeMapWithOffset(lifeMap.lifeMapId, request.page, request.size)
         val total = goalRepository.countByLifeMapId(lifeMap.lifeMapId)
@@ -41,7 +41,7 @@ class GoalQueryService(
             )
         }
 
-        return NewPaginationResult.of(
+        return OffsetPaginationResult.of(
             request.page,
             request.size,
             total,

@@ -8,7 +8,7 @@ import io.raemian.api.goal.service.GoalQueryService
 import io.raemian.api.lifemap.model.LifeMapResponse
 import io.raemian.api.lifemap.service.LifeMapService
 import io.raemian.api.support.response.ApiResponse
-import io.raemian.api.support.response.NewPaginationResult
+import io.raemian.api.support.response.OffsetPaginationResult
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -50,7 +50,7 @@ class OpenLifeMapController(
     fun getTimeline(
         @PathVariable("username") username: String,
         request: TimelinePageRequest,
-    ): ResponseEntity<ApiResponse<NewPaginationResult<GoalTimelinePageResult>>> {
+    ): ResponseEntity<ApiResponse<OffsetPaginationResult<GoalTimelinePageResult>>> {
         val goalTimeline = goalQueryService.findAllByUsernameWithOffset(username, request)
         return ResponseEntity.ok(ApiResponse.success(goalTimeline))
     }
