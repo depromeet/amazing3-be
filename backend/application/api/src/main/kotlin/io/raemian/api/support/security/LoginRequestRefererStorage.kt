@@ -12,7 +12,7 @@ class LoginRequestRefererStorage {
 
     fun put(state: String, referer: String?) {
         if (referer.isNullOrBlank()) {
-            return;
+            return
         }
 
         timedStorage.put(state, referer)

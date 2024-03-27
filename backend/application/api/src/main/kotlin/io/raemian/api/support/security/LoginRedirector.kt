@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
-class LoginRedirector (
+class LoginRedirector(
     @Value("\${spring.profiles.active:local}")
     private val profile: String,
-    val loginRequestRefererStorage: LoginRequestRefererStorage
+    val loginRequestRefererStorage: LoginRequestRefererStorage,
 ) {
     fun getUrl(state: String, token: Token): String {
         if (profile == "live") {

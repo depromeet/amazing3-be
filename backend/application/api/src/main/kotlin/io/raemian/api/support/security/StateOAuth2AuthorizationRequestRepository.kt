@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 class StateOAuth2AuthorizationRequestRepository(
     @Value("\${spring.profiles.active}")
     private val profile: String,
-    val loginRequestRefererStorage: LoginRequestRefererStorage
+    val loginRequestRefererStorage: LoginRequestRefererStorage,
 ) : AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
     private val oauthRequestStorage: Cache<String, OAuth2AuthorizationRequest> = Caffeine.newBuilder()
         .expireAfterWrite(60L, TimeUnit.SECONDS)
