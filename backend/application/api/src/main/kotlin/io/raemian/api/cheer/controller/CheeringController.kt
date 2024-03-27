@@ -25,7 +25,7 @@ class CheeringController(
     fun findCheeringSquad(
         @PathVariable("lifeMapId") lifeMapId: Long,
         request: CheeringSquadPageRequest,
-    ): ResponseEntity<ApiResponse<PaginationResult<Long, CheererResult>>> =
+    ): ResponseEntity<ApiResponse<PaginationResult<CheererResult>>> =
         ResponseEntity.ok().body(ApiResponse.success(cheeringService.findCheeringSquad(lifeMapId, request)))
 
     @GetMapping("/count/{userName}")
