@@ -33,14 +33,6 @@ class GoalQueryService(
         val goalCountMap = findGoalCountMap(goalIds)
         val reactedEmojiMap = emojiService.findAllByGoalIds(goalIds, lifeMap.user.id)
 
-        goals.map {
-            GoalTimelinePageResult.from(
-                goal = it,
-                counts = goalCountMap[it.goalId],
-                reactedEmojisResult = reactedEmojiMap[it.goalId],
-            )
-        }
-
         return OffsetPaginationResult.of(
             request.page,
             request.size,
