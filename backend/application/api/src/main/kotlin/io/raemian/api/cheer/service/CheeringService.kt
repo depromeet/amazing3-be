@@ -7,7 +7,6 @@ import io.raemian.api.cheer.model.CheeringCountResult
 import io.raemian.api.event.model.CheeredEvent
 import io.raemian.api.support.exception.CoreApiException
 import io.raemian.api.support.exception.ErrorInfo
-import io.raemian.api.support.limiter.CheeringLimiter
 import io.raemian.api.support.response.CursorPaginationResult
 import io.raemian.storage.db.core.cheer.CheerJdbcQueryRepository
 import io.raemian.storage.db.core.cheer.Cheerer

@@ -10,7 +10,10 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
 
 @Component
-class StateOAuth2AuthorizationRequestRepository() : AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
+class StateOAuth2AuthorizationRequestRepository(
+    val profilePlaceHolder: ProfileHolder,
+    val loginRequestRefererStorage: LoginRequestRefererStorage,
+) : AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
     private val oauthRequestStorage: Cache<String, OAuth2AuthorizationRequest> = Caffeine.newBuilder()
         .expireAfterWrite(60L, TimeUnit.SECONDS)
         .build()
@@ -25,6 +28,11 @@ class StateOAuth2AuthorizationRequestRepository() : AuthorizationRequestReposito
         response: HttpServletResponse,
     ) {
         if (authorizationRequest != null) {
+            /*** for frontend dev test ***/
+            if (profilePlaceHolder.isDev()) {
+                loginRequestRefererStorage.put(authorizationRequest.state, request.getParameter("referer"))
+            }
+
             oauthRequestStorage.put(authorizationRequest.state, authorizationRequest)
         }
     }
