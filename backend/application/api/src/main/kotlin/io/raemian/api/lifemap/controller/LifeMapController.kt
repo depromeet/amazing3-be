@@ -2,7 +2,6 @@ package io.raemian.api.lifemap.controller
 
 import io.raemian.api.auth.model.CurrentUser
 import io.raemian.api.cheer.service.CheeringService
-import io.raemian.api.goal.service.GoalQueryService
 import io.raemian.api.lifemap.controller.request.UpdatePublicRequest
 import io.raemian.api.lifemap.model.LifeMapResponse
 import io.raemian.api.lifemap.service.LifeMapService
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController
 class LifeMapController(
     private val lifeMapService: LifeMapService,
     private val cheeringService: CheeringService,
-    private val goalQueryService: GoalQueryService,
 ) {
 
     @Operation(summary = "로그인한 유저의 인생 지도 조회 API")

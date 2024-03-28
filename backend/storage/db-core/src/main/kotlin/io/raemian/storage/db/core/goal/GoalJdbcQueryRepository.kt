@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 class GoalJdbcQueryRepository(
     private val jdbcTemplate: NamedParameterJdbcTemplate,
 ) {
-    fun findAllByLifeMapWithCursor(lifeMapId: Long, cursor: LocalDateTime, size: Int): List<GoalQueryResult> {
+    fun findAllByLifeMapWithOffset(lifeMapId: Long, page: Int, size: Int): List<GoalQueryResult> {
         val sql =
             """
            SELECT
@@ -26,14 +26,14 @@ class GoalJdbcQueryRepository(
            LEFT OUTER JOIN stickers s ON g.STICKER_ID = s.ID
            WHERE 1 = 1
                AND g.LIFE_MAP_ID = :lifeMapId
-               AND g.DEADLINE <= :cursor
            ORDER BY g.DEADLINE DESC
            LIMIT :size
+           OFFSET :page
             """.trimIndent()
 
         val namedParameter = MapSqlParameterSource()
             .addValue("lifeMapId", lifeMapId)
-            .addValue("cursor", cursor)
+            .addValue("page", page)
             .addValue("size", size)
 
         return jdbcTemplate.query(sql, namedParameter) {

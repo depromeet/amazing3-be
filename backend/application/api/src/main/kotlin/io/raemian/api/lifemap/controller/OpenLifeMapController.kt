@@ -8,7 +8,7 @@ import io.raemian.api.goal.service.GoalQueryService
 import io.raemian.api.lifemap.model.LifeMapResponse
 import io.raemian.api.lifemap.service.LifeMapService
 import io.raemian.api.support.response.ApiResponse
-import io.raemian.api.support.response.PaginationResult
+import io.raemian.api.support.response.OffsetPaginationResult
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/open/life-map")
@@ -51,8 +50,8 @@ class OpenLifeMapController(
     fun getTimeline(
         @PathVariable("username") username: String,
         request: TimelinePageRequest,
-    ): ResponseEntity<ApiResponse<PaginationResult<LocalDateTime, GoalTimelinePageResult>>> {
-        val goalTimeline = goalQueryService.findAllByUsernameWithCursor(username, request)
+    ): ResponseEntity<ApiResponse<OffsetPaginationResult<GoalTimelinePageResult>>> {
+        val goalTimeline = goalQueryService.findAllByUsernameWithOffset(username, request)
         return ResponseEntity.ok(ApiResponse.success(goalTimeline))
     }
 }

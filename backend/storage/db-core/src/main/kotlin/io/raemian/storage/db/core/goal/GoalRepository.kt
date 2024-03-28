@@ -8,6 +8,9 @@ import org.springframework.data.repository.query.Param
 import java.time.LocalDateTime
 
 interface GoalRepository : JpaRepository<Goal, Long> {
+
+    fun countByLifeMapId(lifeMapId: Long): Long
+
     fun findUserByCreatedAtGreaterThanEqual(createdAt: LocalDateTime): List<Goal>
 
     override fun getById(id: Long): Goal =

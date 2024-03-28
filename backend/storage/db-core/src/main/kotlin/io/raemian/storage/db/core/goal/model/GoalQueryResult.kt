@@ -1,6 +1,5 @@
 package io.raemian.storage.db.core.goal.model
 
-import io.raemian.storage.db.core.common.pagination.CursorExtractable
 import java.time.LocalDateTime
 
 data class GoalQueryResult(
@@ -11,6 +10,4 @@ data class GoalQueryResult(
     val stickerUrl: String,
     val tag: String,
     val createdAt: LocalDateTime,
-) : CursorExtractable<LocalDateTime> {
-    override fun cursorId(): LocalDateTime = deadline
-}
+)
