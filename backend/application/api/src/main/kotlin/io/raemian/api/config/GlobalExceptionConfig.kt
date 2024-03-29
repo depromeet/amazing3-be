@@ -24,7 +24,7 @@ class GlobalExceptionConfig(
     }
 
     @ExceptionHandler(NoSuchElementException::class, EntityNotFoundException::class)
-    fun handleResourceNotFoundException(e: CoreApiException): ResponseEntity<ApiResponse<Any>> {
+    fun handleResourceNotFoundException(e: Exception): ResponseEntity<ApiResponse<Any>> {
         log.error("Exception : {}", e.message, e)
         return ResponseEntity(
             ApiResponse.error(ErrorInfo.RESOURCE_NOT_FOUND),
