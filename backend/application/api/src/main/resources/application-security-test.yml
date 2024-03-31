@@ -13,6 +13,11 @@ apple-login:
   team-id: EMPTY-VALUE
   key-id: EMPTY-VALUE
 
+redirect-url:
+  live: EMPTY-VALUE
+  dev: EMPTY-VALUE
+  local: EMPTY-VALUE
+
 spring:
   security:
     oauth2:
@@ -62,7 +67,7 @@ spring:
             redirect-uri: EMPTY-VALUE
             authorizationGrantType: authorization_code
             clientAuthenticationMethod: POST
-            clientName: pple
+            clientName: apple
             scope:
               - email
               - name

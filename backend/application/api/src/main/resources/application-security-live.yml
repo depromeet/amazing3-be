@@ -12,6 +12,11 @@ apple-login:
   team-id: ENC(jzk4UvjfcLerYSo05oJ8vNGGxgt4SLuS)
   key-id: ENC(T/yX80PVdBkgQcFkOs/H2dFgAuBKDeNR)
 
+redirect-url:
+  live: ENC(n7sXFCoABK2wVGKkMdhVLJEtvfHXtds+NwvpxWntSnYArf3DGN2cFbKlCR9hIACj)
+  dev: ENC(ZOWsz9hwBfF4yJrxHevHshhkGZqYuS9XyoFFLQQea473KOSJoKg2zMgHOGXkoGGz8jZ3Zc4rnQE=)
+  local: ENC(LxpM8W1yvAXRpin++amkeEhqGXro90Y2E3tQgD4EzOJnOZfBVKST3TF/0T3CqvZZ)
+
 spring:
   security:
     oauth2:

@@ -1,4 +1,4 @@
-package io.raemian.api.support.limiter
+package io.raemian.api.cheer.service
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import org.springframework.stereotype.Component
