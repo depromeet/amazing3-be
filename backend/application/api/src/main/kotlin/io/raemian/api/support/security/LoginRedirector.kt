@@ -18,7 +18,6 @@ class LoginRedirector(
         }
 
         val referer = loginRequestRefererStorage.get(state)
-        log.info("get referer: {}", referer)
 
         if (profilePlaceHolder.isDev() && referer.contains("dev-bandiboodi")) {
             return "${redirectUrlHolder.dev}?token=${token.accessToken}&refresh=${token.refreshToken}"

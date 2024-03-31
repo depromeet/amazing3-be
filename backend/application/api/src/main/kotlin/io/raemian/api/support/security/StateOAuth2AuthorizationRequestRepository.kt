@@ -22,7 +22,7 @@ class StateOAuth2AuthorizationRequestRepository(
         .build()
 
     override fun loadAuthorizationRequest(request: HttpServletRequest): OAuth2AuthorizationRequest? {
-        return oauthRequestStorage.getIfPresent(getStateParameter(request))
+        return oauthRequestStorage.getIfPresent(getState(request))
     }
 
     override fun saveAuthorizationRequest(
@@ -33,8 +33,7 @@ class StateOAuth2AuthorizationRequestRepository(
         if (authorizationRequest != null) {
             /*** for frontend dev test ***/
             if (profilePlaceHolder.isDev()) {
-                log.info("save referer: {}", request.getParameter("referer"))
-                loginRequestRefererStorage.put(authorizationRequest.state, request.getParameter("referer"))
+                loginRequestRefererStorage.put(authorizationRequest.state, getReferer(request))
             }
 
             oauthRequestStorage.put(authorizationRequest.state, authorizationRequest)
@@ -48,5 +47,7 @@ class StateOAuth2AuthorizationRequestRepository(
         return loadAuthorizationRequest(request)
     }
 
-    private fun getStateParameter(request: HttpServletRequest): String = request.getParameter("state")
+    private fun getState(request: HttpServletRequest): String = request.getParameter("state")
+
+    private fun getReferer(request: HttpServletRequest): String = request.getHeader("referer")
 }
