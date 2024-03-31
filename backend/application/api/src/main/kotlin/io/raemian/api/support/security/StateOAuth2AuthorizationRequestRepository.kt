@@ -49,5 +49,5 @@ class StateOAuth2AuthorizationRequestRepository(
 
     private fun getState(request: HttpServletRequest): String = request.getParameter("state")
 
-    private fun getReferer(request: HttpServletRequest): String = request.getHeader("referer")
+    private fun getReferer(request: HttpServletRequest): String = request.getHeader("referer") ?: ""
 }
