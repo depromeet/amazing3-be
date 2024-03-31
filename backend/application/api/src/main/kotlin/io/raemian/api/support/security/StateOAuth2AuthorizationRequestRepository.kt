@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.LoggerFactory
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest
 import org.springframework.stereotype.Component
@@ -14,6 +15,8 @@ class StateOAuth2AuthorizationRequestRepository(
     val profilePlaceHolder: ProfileHolder,
     val loginRequestRefererStorage: LoginRequestRefererStorage,
 ) : AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
+    private val log = LoggerFactory.getLogger(javaClass)
+
     private val oauthRequestStorage: Cache<String, OAuth2AuthorizationRequest> = Caffeine.newBuilder()
         .expireAfterWrite(60L, TimeUnit.SECONDS)
         .build()
@@ -30,6 +33,7 @@ class StateOAuth2AuthorizationRequestRepository(
         if (authorizationRequest != null) {
             /*** for frontend dev test ***/
             if (profilePlaceHolder.isDev()) {
+                log.info("save referer: {}", request.getParameter("referer"))
                 loginRequestRefererStorage.put(authorizationRequest.state, request.getParameter("referer"))
             }
 
