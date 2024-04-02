@@ -45,7 +45,7 @@ class OpenLifeMapController(
             .ok(ApiResponse.success(LifeMapResponse(lifeMap, count, cheeringCount)))
     }
 
-    @Operation(summary = "로그인한 유저의 인생 지도 타임 라인 조회 API")
+    @Operation(summary = "UserName으로 인생 지도 타임 라인 조회 API")
     @GetMapping("/timeline/{username}")
     fun getTimeline(
         @PathVariable("username") username: String,

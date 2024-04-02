@@ -51,6 +51,35 @@ class GoalQueryService(
         )
     }
 
+    @Transactional(readOnly = true)
+    fun findAllByUserIdWithOffset(userId: Long, request: TimelinePageRequest): OffsetPaginationResult<GoalTimelinePageResult> {
+        val lifeMap = lifeMapService.getFirstByUserId(userId)
+        val goals = goalJdbcQueryRepository.findAllByLifeMapWithOffset(lifeMap.lifeMapId, request.page, request.size)
+        if (goals.isEmpty()) {
+            return OffsetPaginationResult.empty(request.page, request.size)
+        }
+
+        val total = goalRepository.countByLifeMapId(lifeMap.lifeMapId)
+
+        val goalIds = goals.map { it.goalId }
+
+        val goalCountMap = findGoalCountMap(goalIds)
+        val reactedEmojiMap = emojiService.findAllByGoalIds(goalIds, lifeMap.user.id)
+
+        return OffsetPaginationResult.of(
+            request.page,
+            request.size,
+            total,
+            goals.map {
+                GoalTimelinePageResult.from(
+                    goal = it,
+                    counts = goalCountMap[it.goalId],
+                    reactedEmojisResult = reactedEmojiMap[it.goalId],
+                )
+            },
+        )
+    }
+
     private fun findGoalCountMap(goalIds: List<Long>): Map<Long, GoalTimelineCountSubset> {
         val commentCountMap = commentService.findGoalCommentCounts(goalIds).associate { it.goalId to it.commentCount }
         val taskCountMap = taskService.findGoalTaskCounts(goalIds).associate { it.goalId to it.taskCount }
