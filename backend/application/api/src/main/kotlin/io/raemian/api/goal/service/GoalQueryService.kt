@@ -26,6 +26,10 @@ class GoalQueryService(
     fun findAllByUsernameWithOffset(username: String, request: TimelinePageRequest): OffsetPaginationResult<GoalTimelinePageResult> {
         val lifeMap = lifeMapService.getFirstByUserName(username)
         val goals = goalJdbcQueryRepository.findAllByLifeMapWithOffset(lifeMap.lifeMapId, request.page, request.size)
+        if (goals.isEmpty()) {
+            return OffsetPaginationResult.empty(request.page, request.size)
+        }
+
         val total = goalRepository.countByLifeMapId(lifeMap.lifeMapId)
 
         val goalIds = goals.map { it.goalId }
