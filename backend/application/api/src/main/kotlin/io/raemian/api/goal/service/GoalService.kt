@@ -2,6 +2,7 @@ package io.raemian.api.goal.service
 
 import io.raemian.api.emoji.service.EmojiService
 import io.raemian.api.event.model.CreatedGoalEvent
+import io.raemian.api.event.model.DeletedGoalEvent
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.UpdateGoalRequest
 import io.raemian.api.goal.model.CreateGoalResult
@@ -53,7 +54,7 @@ class GoalService(
 
         // goal 생성시 count event 발행
         applicationEventPublisher.publishEvent(
-            CreatedGoalEvent(goalId = goal.id!!, lifeMapId = lifeMap.id!!),
+            CreatedGoalEvent(lifeMap.id!!),
         )
 
         return CreateGoalResult(goal)
@@ -83,6 +84,10 @@ class GoalService(
         val goal = goalRepository.getById(goalId)
         validateGoalIsUsers(userId, goal)
         goalRepository.delete(goal)
+
+        applicationEventPublisher.publishEvent(
+            DeletedGoalEvent(goal.lifeMap.id!!)
+        )
     }
 
     @Transactional(readOnly = true)

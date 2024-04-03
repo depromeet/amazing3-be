@@ -10,9 +10,9 @@ import jakarta.persistence.Table
 @Table(name = "LIFE_MAP_COUNT")
 class LifeMapCount(
     val lifeMapId: Long,
-    val viewCount: Long,
-    val historyCount: Long,
-    val goalCount: Long,
+    var viewCount: Long,
+    var historyCount: Long,
+    var goalCount: Long,
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
@@ -28,32 +28,24 @@ class LifeMapCount(
         }
     }
     fun addViewCount(): LifeMapCount {
-        return LifeMapCount(
-            lifeMapId = lifeMapId,
-            viewCount = viewCount + 1,
-            historyCount = historyCount,
-            goalCount = goalCount,
-            id = id,
-        )
+        this.viewCount += 1
+        return this
     }
 
     fun addHistoryCount(): LifeMapCount {
-        return LifeMapCount(
-            lifeMapId = lifeMapId,
-            viewCount = viewCount,
-            historyCount = historyCount + 1,
-            goalCount = goalCount,
-            id = id,
-        )
+        this.historyCount += 1
+        return this
     }
 
     fun addGoalCount(): LifeMapCount {
-        return LifeMapCount(
-            lifeMapId = lifeMapId,
-            viewCount = viewCount,
-            historyCount = historyCount,
-            goalCount = goalCount + 1,
-            id = id,
-        )
+        this.goalCount += 1
+        return this
+    }
+
+    fun minusGoalCount(): LifeMapCount {
+        if (0 < this.goalCount) {
+            this.goalCount -= 1
+        }
+        return this
     }
 }
