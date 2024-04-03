@@ -5,6 +5,7 @@ import io.raemian.api.emoji.service.EmojiService
 import io.raemian.api.goal.controller.request.TimelinePageRequest
 import io.raemian.api.goal.model.GoalTimelineCountSubset
 import io.raemian.api.goal.model.GoalTimelinePageResult
+import io.raemian.api.lifemap.service.LifeMapCountQueryService
 import io.raemian.api.lifemap.service.LifeMapService
 import io.raemian.api.support.response.OffsetPaginationResult
 import io.raemian.api.task.service.TaskService
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 class GoalQueryService(
     private val lifeMapService: LifeMapService,
     private val goalJdbcQueryRepository: GoalJdbcQueryRepository,
+    private val lifeMapCountQueryService: LifeMapCountQueryService,
     private val goalRepository: GoalRepository,
     private val emojiService: EmojiService,
     private val taskService: TaskService,
@@ -26,11 +28,12 @@ class GoalQueryService(
     fun findAllByUsernameWithOffset(username: String, request: TimelinePageRequest): OffsetPaginationResult<GoalTimelinePageResult> {
         val lifeMap = lifeMapService.getFirstByUserName(username)
         val goals = goalJdbcQueryRepository.findAllByLifeMapWithOffset(lifeMap.lifeMapId, request.page, request.size)
+
         if (goals.isEmpty()) {
             return OffsetPaginationResult.empty(request.page, request.size)
         }
 
-        val total = goalRepository.countByLifeMapId(lifeMap.lifeMapId)
+        val total = lifeMapCountQueryService.findGoalCount(lifeMap.lifeMapId)
 
         val goalIds = goals.map { it.goalId }
 
@@ -59,7 +62,7 @@ class GoalQueryService(
             return OffsetPaginationResult.empty(request.page, request.size)
         }
 
-        val total = goalRepository.countByLifeMapId(lifeMap.lifeMapId)
+        val total = lifeMapCountQueryService.findGoalCount(lifeMap.lifeMapId)
 
         val goalIds = goals.map { it.goalId }
 

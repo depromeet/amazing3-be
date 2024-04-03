@@ -86,7 +86,7 @@ class GoalService(
         goalRepository.delete(goal)
 
         applicationEventPublisher.publishEvent(
-            DeletedGoalEvent(goal.lifeMap.id!!)
+            DeletedGoalEvent(goal.lifeMap.id!!),
         )
     }
 
