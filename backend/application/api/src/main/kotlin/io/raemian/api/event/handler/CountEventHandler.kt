@@ -4,6 +4,7 @@ import io.raemian.api.event.model.CheeredEvent
 import io.raemian.api.event.model.CreatedCommentEvent
 import io.raemian.api.event.model.CreatedGoalEvent
 import io.raemian.api.event.model.DeletedCommentEvent
+import io.raemian.api.event.model.DeletedGoalEvent
 import io.raemian.api.event.model.ReactedEmojiEvent
 import io.raemian.api.event.model.RemovedEmojiEvent
 import io.raemian.api.support.lock.ExclusiveRunner
@@ -32,10 +33,10 @@ class CountEventHandler(
 ) {
     @Transactional
     @EventListener
-    fun addCheeringCount(cheeringEvent: CheeredEvent) {
-        exclusiveRunner.call("cheering:${cheeringEvent.lifeMapId}", Duration.ofSeconds(10)) {
-            val cheering = cheeringRepository.findByLifeMapId(cheeringEvent.lifeMapId)
-                ?: Cheering(0, cheeringEvent.lifeMapId)
+    fun addCheeringCount(event: CheeredEvent) {
+        exclusiveRunner.call("cheering:${event.lifeMapId}", Duration.ofSeconds(10)) {
+            val cheering = cheeringRepository.findByLifeMapId(event.lifeMapId)
+                ?: Cheering(0, event.lifeMapId)
 
             cheeringRepository.save(cheering.addCount())
         }
@@ -43,11 +44,11 @@ class CountEventHandler(
 
     @Transactional
     @EventListener
-    fun addGoalCount(createGoalEvent: CreatedGoalEvent) {
+    fun addGoalCount(event: CreatedGoalEvent) {
         // TODO goal 테이블에서 life map 기준으로 전체 count 한 값으로 업데이트
-        exclusiveRunner.call("goal:${createGoalEvent.lifeMapId}:${createGoalEvent.goalId}", Duration.ofSeconds(10)) {
-            val mapCount = lifeMapCountRepository.findByLifeMapId(createGoalEvent.lifeMapId)
-                ?: LifeMapCount.of(createGoalEvent.lifeMapId)
+        exclusiveRunner.call("goal:${event.lifeMapId}", Duration.ofSeconds(10)) {
+            val mapCount = lifeMapCountRepository.findByLifeMapId(event.lifeMapId)
+                ?: LifeMapCount.of(event.lifeMapId)
 
             val added = mapCount.addGoalCount()
 
@@ -57,11 +58,22 @@ class CountEventHandler(
 
     @Transactional
     @EventListener
-    fun addEmojiCount(reactEmojiEvent: ReactedEmojiEvent) {
-        exclusiveRunner.call("emoji:${reactEmojiEvent.goalId}:${reactEmojiEvent.emojiId}", Duration.ofSeconds(10)) {
-            val emoji = emojiRepository.getReferenceById(reactEmojiEvent.emojiId)
-            val emojiCount = emojiCountRepository.findByGoalIdAndEmojiId(reactEmojiEvent.goalId, reactEmojiEvent.emojiId)
-                ?: EmojiCount(0, emoji, reactEmojiEvent.goalId)
+    fun minusGoalCount(event: DeletedGoalEvent) {
+        exclusiveRunner.call("goal:${event.lifeMapId}", Duration.ofSeconds(10)) {
+            val mapCount = lifeMapCountRepository.findByLifeMapId(event.lifeMapId)
+                ?: LifeMapCount.of(event.lifeMapId)
+
+            lifeMapCountRepository.save(mapCount.minusGoalCount())
+        }
+    }
+
+    @Transactional
+    @EventListener
+    fun addEmojiCount(event: ReactedEmojiEvent) {
+        exclusiveRunner.call("emoji:${event.goalId}:${event.emojiId}", Duration.ofSeconds(10)) {
+            val emoji = emojiRepository.getReferenceById(event.emojiId)
+            val emojiCount = emojiCountRepository.findByGoalIdAndEmojiId(event.goalId, event.emojiId)
+                ?: EmojiCount(0, emoji, event.goalId)
 
             emojiCountRepository.save(emojiCount.addCount())
         }
@@ -69,10 +81,10 @@ class CountEventHandler(
 
     @Transactional
     @EventListener
-    fun minusEmojiCount(removeEmojiEvent: RemovedEmojiEvent) {
-        exclusiveRunner.call("emoji:${removeEmojiEvent.goalId}:${removeEmojiEvent.emojiId}", Duration.ofSeconds(10)) {
-            val emojiCount = emojiCountRepository.findByGoalIdAndEmojiId(removeEmojiEvent.goalId, removeEmojiEvent.emojiId)
-                ?: EmojiCount(count = 0, goalId = removeEmojiEvent.goalId, emoji = emojiRepository.getReferenceById(removeEmojiEvent.emojiId))
+    fun minusEmojiCount(event: RemovedEmojiEvent) {
+        exclusiveRunner.call("emoji:${event.goalId}:${event.emojiId}", Duration.ofSeconds(10)) {
+            val emojiCount = emojiCountRepository.findByGoalIdAndEmojiId(event.goalId, event.emojiId)
+                ?: EmojiCount(count = 0, goalId = event.goalId, emoji = emojiRepository.getReferenceById(event.emojiId))
 
             emojiCountRepository.save(emojiCount.minusCount())
         }
@@ -80,10 +92,10 @@ class CountEventHandler(
 
     @Transactional
     @EventListener
-    fun addCommentCount(createdCommentEvent: CreatedCommentEvent) {
-        exclusiveRunner.call("comment:${createdCommentEvent.goalId}", Duration.ofSeconds(10)) {
-            val commentCount = commentCountRepository.findByGoalId(createdCommentEvent.goalId)
-                ?: CommentCount(0, createdCommentEvent.goalId)
+    fun addCommentCount(event: CreatedCommentEvent) {
+        exclusiveRunner.call("comment:${event.goalId}", Duration.ofSeconds(10)) {
+            val commentCount = commentCountRepository.findByGoalId(event.goalId)
+                ?: CommentCount(0, event.goalId)
 
             commentCountRepository.save(commentCount.addCount())
         }
@@ -91,9 +103,9 @@ class CountEventHandler(
 
     @Transactional
     @EventListener
-    fun minusCommentCount(deletedCommentEvent: DeletedCommentEvent) {
-        val commentCount = commentCountRepository.findByGoalId(deletedCommentEvent.goalId)
-            ?: CommentCount(count = 0, goalId = deletedCommentEvent.goalId)
+    fun minusCommentCount(event: DeletedCommentEvent) {
+        val commentCount = commentCountRepository.findByGoalId(event.goalId)
+            ?: CommentCount(count = 0, goalId = event.goalId)
 
         commentCountRepository.save(commentCount.minusCount())
     }
