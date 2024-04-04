@@ -14,7 +14,6 @@ import io.raemian.api.support.exception.MaxGoalCountExceededException
 import io.raemian.api.support.exception.PrivateLifeMapException
 import io.raemian.api.support.utils.DeadlineCreator
 import io.raemian.api.tag.service.TagService
-import io.raemian.storage.db.core.comment.CommentCountRepository
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.lifemap.LifeMap
@@ -34,7 +33,7 @@ class GoalService(
     private val emojiService: EmojiService,
     private val stickerService: StickerService,
     private val tagService: TagService,
-    private val commentService: CommentService
+    private val commentService: CommentService,
 ) {
 
     @Transactional(readOnly = true)
@@ -101,10 +100,12 @@ class GoalService(
         val reactedEmojiMap = emojiService.findAllByGoalIds(goalIds, userId)
 
         return explore
-            .map { GoalExploreResult.from(
-                explore = it,
-                reactedEmojisResponse = reactedEmojiMap[it.goalId],
-            ) }
+            .map {
+                GoalExploreResult.from(
+                    explore = it,
+                    reactedEmojisResponse = reactedEmojiMap[it.goalId],
+                )
+            }
     }
 
     private fun createFirstLifeMap(userId: Long): LifeMap {
