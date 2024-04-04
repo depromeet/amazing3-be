@@ -10,7 +10,7 @@ data class GoalExploreCountSubset(
 ) {
     constructor(result: GoalExploreQueryResult) : this(
         reaction = 0,
-        comment = 0,
+        comment = result.commentCount,
         task = 0,
         goal = result.goalCount,
     )
