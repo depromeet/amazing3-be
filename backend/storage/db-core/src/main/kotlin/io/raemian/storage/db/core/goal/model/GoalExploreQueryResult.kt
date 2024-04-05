@@ -15,6 +15,7 @@ data class GoalExploreQueryResult(
     val goalCount: Long,
     val historyCount: Long,
     val viewCount: Long,
+    val commentCount: Long,
     val userId: Long,
     val nickname: String,
     val username: String,

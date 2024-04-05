@@ -28,9 +28,10 @@ interface GoalRepository : JpaRepository<Goal, Long> {
                 goal.tag.content,
                 goal.createdAt,
                 map.id,
-                count.goalCount,
-                count.historyCount,
-                count.viewCount,
+                lifeMapCount.goalCount,
+                lifeMapCount.historyCount,
+                lifeMapCount.viewCount,
+                commentCount.count,
                 user.id,
                 user.nickname,
                 user.username,
@@ -40,11 +41,13 @@ interface GoalRepository : JpaRepository<Goal, Long> {
             Goal as goal,
             LifeMap as map,
             USERS  as user,
-            LifeMapCount as count
+            LifeMapCount as lifeMapCount,
+            CommentCount as commentCount
         WHERE 1 = 1
             AND goal.lifeMap.id = map.id
             AND map.user.id = user.id
-            AND map.id = count.lifeMapId
+            AND map.id = lifeMapCount.lifeMapId
+            AND goal.id = commentCount.goalId
             AND map.isPublic = true
             AND goal.id < :cursor
         ORDER BY 
