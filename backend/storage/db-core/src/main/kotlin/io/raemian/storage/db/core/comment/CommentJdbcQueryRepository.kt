@@ -14,11 +14,10 @@ class CommentJdbcQueryRepository(
             """
            SELECT
                c.GOAL_ID AS GOAL_ID,
-               COUNT(GOAL_ID) AS COMMENT_COUNT
+               c.COUNT AS COMMENT_COUNT
            FROM comment_counts c
            WHERE 1 = 1
                AND c.GOAL_ID IN (:goalIds)
-           GROUP BY c.GOAL_ID
             """.trimIndent()
 
         val namedParameter = MapSqlParameterSource()
