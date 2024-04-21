@@ -24,7 +24,6 @@ class EmojiService(
     @Transactional(readOnly = true)
     fun findAll(): List<EmojiResult> =
         emojiRepository.findAll()
-            .sortedBy { it.id }
             .map(EmojiResult::from)
 
     @Transactional(readOnly = true)
