@@ -51,7 +51,10 @@ class CommentService(
     @Transactional
     fun isNewComment(goalId: Long): Boolean {
         val goal = goalRepository.getById(goalId)
-        return commentRepository.existsByGoalIdAndCreatedAtGreaterThan(goal.id!!, goal.lastCommentReadAt)
+        return commentRepository.existsByGoalIdAndCreatedAtGreaterThan(
+            goalId = goal.id!!,
+            createdAt = goal.lastCommentReadAt,
+        )
     }
 
     @Transactional
@@ -67,12 +70,12 @@ class CommentService(
     @Transactional
     fun delete(commentId: Long, currentUserId: Long) {
         val comment = commentRepository.getById(commentId)
-        if (currentUserId != comment.commenter.id) {
+
+        if (isNotMyComment(comment, currentUserId) && isNotMyGoal(comment.goal, currentUserId)) {
             throw CoreApiException(ErrorInfo.RESOURCE_DELETE_FORBIDDEN)
         }
 
         commentRepository.delete(comment)
-
         applicationEventPublisher.publishEvent(DeletedCommentEvent(comment.goal.id!!))
     }
 
@@ -88,6 +91,11 @@ class CommentService(
         }
     }
 
+    private fun isNotMyComment(
+        comment: Comment,
+        currentUserId: Long,
+    ) = currentUserId != comment.commenter.id
+
     private fun isMyGoal(goalId: Long, userId: Long): Boolean {
         val goal = goalRepository.getById(goalId)
         return isMyGoal(goal, userId)
@@ -95,6 +103,8 @@ class CommentService(
 
     private fun isMyGoal(goal: Goal, userId: Long): Boolean =
         userId == goal.lifeMap.user.id
+
+    private fun isNotMyGoal(goal: Goal, userId: Long): Boolean = !isMyGoal(goal, userId)
 
     private fun publishUpdateCommentReadAtEvent(goalId: Long) {
         val event = CommentReadEvent(goalId, LocalDateTime.now())

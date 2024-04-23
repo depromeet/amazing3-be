@@ -34,6 +34,7 @@ data class ReactedEmojisResult(
                 .groupBy { it.emoji.id }
                 .mapValues { entry -> ReactedEmojiAndReactUsers.of(entry.value, userId) }
                 .values
+                .sortedBy { it.id }
                 .toList()
 
         private fun countTotalReactUser(reactedEmojiAndReactUsers: List<ReactedEmojiAndReactUsers>) =
