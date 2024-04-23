@@ -62,7 +62,7 @@ class GoalService(
 
         // goal 생성시 comment count 이벤트 발행
         applicationEventPublisher.publishEvent(
-            CreatedCommentEvent(goal.id!!)
+            CreatedCommentEvent(goal.id!!),
         )
 
         return CreateGoalResult(goal)
