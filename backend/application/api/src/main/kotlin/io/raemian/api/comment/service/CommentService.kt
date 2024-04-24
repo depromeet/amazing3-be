@@ -88,8 +88,7 @@ class CommentService(
 
     @Transactional
     fun addDefaultCount(goalId: Long) {
-        val comment = CommentCount(0, goalId)
-        commentCountRepository.save(comment)
+        commentCountRepository.save(CommentCount(0, goalId))
     }
 
     private fun createComment(goal: Goal, currentUser: User, content: String): Comment {
