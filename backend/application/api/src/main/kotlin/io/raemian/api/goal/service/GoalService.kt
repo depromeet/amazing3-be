@@ -60,10 +60,8 @@ class GoalService(
             CreatedGoalEvent(lifeMap.id!!),
         )
 
-        // goal 생성시 comment count 이벤트 발행
-        applicationEventPublisher.publishEvent(
-            CreatedCommentEvent(goal.id!!),
-        )
+        // goal 생성시 기본 comment count 생성
+         commentService.addDefaultCount(goal.id!!)
 
         return CreateGoalResult(goal)
     }
