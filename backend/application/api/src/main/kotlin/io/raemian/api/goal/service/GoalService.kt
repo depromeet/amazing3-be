@@ -2,7 +2,6 @@ package io.raemian.api.goal.service
 
 import io.raemian.api.comment.service.CommentService
 import io.raemian.api.emoji.service.EmojiService
-import io.raemian.api.event.model.CreatedCommentEvent
 import io.raemian.api.event.model.CreatedGoalEvent
 import io.raemian.api.event.model.DeletedGoalEvent
 import io.raemian.api.goal.controller.request.CreateGoalRequest
@@ -60,10 +59,8 @@ class GoalService(
             CreatedGoalEvent(lifeMap.id!!),
         )
 
-        // goal 생성시 comment count 이벤트 발행
-        applicationEventPublisher.publishEvent(
-            CreatedCommentEvent(goal.id!!),
-        )
+        // goal 생성시 기본 comment count 생성
+        commentService.addDefaultCount(goal.id!!)
 
         return CreateGoalResult(goal)
     }

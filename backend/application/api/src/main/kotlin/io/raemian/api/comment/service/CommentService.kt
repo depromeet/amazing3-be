@@ -8,6 +8,8 @@ import io.raemian.api.event.model.DeletedCommentEvent
 import io.raemian.api.support.exception.CoreApiException
 import io.raemian.api.support.exception.ErrorInfo
 import io.raemian.storage.db.core.comment.Comment
+import io.raemian.storage.db.core.comment.CommentCount
+import io.raemian.storage.db.core.comment.CommentCountRepository
 import io.raemian.storage.db.core.comment.CommentJdbcQueryRepository
 import io.raemian.storage.db.core.comment.CommentRepository
 import io.raemian.storage.db.core.comment.model.GoalCommentCountQueryResult
@@ -24,6 +26,7 @@ import java.time.LocalDateTime
 class CommentService(
     private val commentRepository: CommentRepository,
     private val commentJdbcQueryRepository: CommentJdbcQueryRepository,
+    private val commentCountRepository: CommentCountRepository,
     private val goalRepository: GoalRepository,
     private val userRepository: UserRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
@@ -82,6 +85,11 @@ class CommentService(
     @Transactional(readOnly = true)
     fun findGoalCommentCounts(goalIds: List<Long>): List<GoalCommentCountQueryResult> =
         commentJdbcQueryRepository.findAllGoalCommentCountByGoalIdIn(goalIds)
+
+    @Transactional
+    fun addDefaultCount(goalId: Long) {
+        commentCountRepository.save(CommentCount(0, goalId))
+    }
 
     private fun createComment(goal: Goal, currentUser: User, content: String): Comment {
         return try {
