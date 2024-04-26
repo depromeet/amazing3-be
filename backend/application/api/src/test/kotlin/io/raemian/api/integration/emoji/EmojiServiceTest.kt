@@ -1,6 +1,6 @@
 package io.raemian.api.integration.emoji
 
-import io.raemian.api.emoji.EmojiService
+import io.raemian.api.emoji.service.EmojiService
 import io.raemian.storage.db.core.emoji.Emoji
 import io.raemian.storage.db.core.emoji.EmojiRepository
 import io.raemian.storage.db.core.emoji.ReactedEmoji
@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @SpringBootTest
 @Transactional
@@ -58,6 +59,7 @@ class EmojiServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "내용",
+            lastCommentReadAt = LocalDateTime.now(),
         )
     }
 
@@ -100,7 +102,7 @@ class EmojiServiceTest {
     }
 
     @Test
-    @DisplayName("Goal에 달린 이모지들을 조회할 수 있다.")
+    @DisplayName("Goal에 반응한 이모지들을 조회할 수 있다.")
     fun findGoalReactedEmojisTest() {
         // given
         val emoji = Emoji("이모지", "url")
@@ -113,11 +115,37 @@ class EmojiServiceTest {
         reactedEmojiRepository.saveAll(listOf(reactedEmoji, reactedEmoji2, reactedEmoji3))
 
         // when
-        val reactedEmojis = emojiService.findAllReactedEmojisByGoalId(GOAL_FIXTURE.id!!, USER_FIXTURE.username!!)
+        val reactedEmojis = emojiService.findAllReactedEmojisByGoalId(GOAL_FIXTURE.id!!, USER_FIXTURE.id!!)
 
         // then
         assertThat(reactedEmojis.totalReactedEmojisCount).isEqualTo(3)
         println(reactedEmojis)
+    }
+
+    @Test
+    @DisplayName("내가 반응한 이모지를 확인할 수 있다.")
+    fun isMyReactionTest() {
+        // given
+        val emoji = Emoji("이모지", "url")
+        val emoji2 = Emoji("이모지", "url")
+        val emoji3 = Emoji("이모지", "url")
+        emojiRepository.saveAll(listOf(emoji, emoji2, emoji3))
+
+        val reactedEmoji = ReactedEmoji(GOAL_FIXTURE, emoji, USER_FIXTURE)
+        val reactedEmoji2 = ReactedEmoji(GOAL_FIXTURE, emoji, USER_FIXTURE2)
+        val reactedEmoji3 = ReactedEmoji(GOAL_FIXTURE, emoji2, USER_FIXTURE2)
+        val reactedEmoji4 = ReactedEmoji(GOAL_FIXTURE, emoji3, USER_FIXTURE2)
+        reactedEmojiRepository.saveAll(listOf(reactedEmoji, reactedEmoji2, reactedEmoji3, reactedEmoji4))
+
+        // when
+        val response = emojiService.findAllReactedEmojisByGoalId(GOAL_FIXTURE.id!!, USER_FIXTURE.id!!)
+
+        // then
+        val reactedEmojis = response.reactedEmojis
+        println(reactedEmojis)
+        assertThat(reactedEmojis[0].isMyReaction).isEqualTo(true)
+        assertThat(reactedEmojis[1].isMyReaction).isEqualTo(false)
+        assertThat(reactedEmojis[2].isMyReaction).isEqualTo(false)
     }
 
     @Test
@@ -223,5 +251,38 @@ class EmojiServiceTest {
         }
         val reactedEmojis = reactedEmojiRepository.findAllByGoal(GOAL_FIXTURE)
         assertThat(reactedEmojis.size).isEqualTo(0)
+    }
+
+    @Test
+    @DisplayName("Goal에 반응한 사람 수를 확인할 수 있다.")
+    fun totalReactUserCountTest() {
+        // given
+        val userFixture3 = User(
+            email = "dfghcvb2",
+            username = "binary",
+            nickname = "binary",
+            birth = LocalDate.MIN,
+            image = "",
+            provider = OAuthProvider.NAVER,
+            authority = Authority.ROLE_USER,
+        )
+        entityManager.merge(userFixture3)
+
+        val emoji = Emoji("이모지", "url")
+        val emoji2 = Emoji("이모지", "url")
+        emojiRepository.saveAll(listOf(emoji, emoji2))
+
+        val reactedEmoji = ReactedEmoji(GOAL_FIXTURE, emoji, USER_FIXTURE)
+        val reactedEmoji2 = ReactedEmoji(GOAL_FIXTURE, emoji, USER_FIXTURE2)
+        val reactedEmoji3 = ReactedEmoji(GOAL_FIXTURE, emoji2, USER_FIXTURE)
+        val reactedEmoji4 = ReactedEmoji(GOAL_FIXTURE, emoji2, USER_FIXTURE2)
+        val reactedEmoji5 = ReactedEmoji(GOAL_FIXTURE, emoji2, userFixture3)
+        reactedEmojiRepository.saveAll(listOf(reactedEmoji, reactedEmoji2, reactedEmoji3, reactedEmoji4, reactedEmoji5))
+
+        // when
+        val reactedEmojis = emojiService.findAllReactedEmojisByGoalId(GOAL_FIXTURE.id!!, USER_FIXTURE.id!!)
+
+        // then
+        assertThat(reactedEmojis.totalReactUserCount).isEqualTo(3)
     }
 }

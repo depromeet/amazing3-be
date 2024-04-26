@@ -1,6 +1,6 @@
 package io.raemian.storage.db.core.goal
 
-import io.raemian.storage.db.core.BaseEntity
+import io.raemian.storage.db.core.common.BaseEntity
 import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.sticker.Sticker
 import io.raemian.storage.db.core.tag.Tag
@@ -12,15 +12,17 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.Index
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import org.hibernate.annotations.Nationalized
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Entity
-@Table(name = "GOALS")
+@Table(name = "GOALS", indexes = [Index(name = "IDX_LIFE_MAP_ID_AND_DEADLINE", columnList = "life_map_id, deadline desc")])
 class Goal(
     @ManyToOne
     @JoinColumn(name = "life_map_id", nullable = false)
@@ -43,6 +45,9 @@ class Goal(
 
     @Nationalized
     var description: String = "",
+
+    @Column(name = "lastCommentReadAt", nullable = false)
+    val lastCommentReadAt: LocalDateTime,
 
     @OneToMany(
         mappedBy = "goal",
@@ -69,13 +74,14 @@ class Goal(
         title: String,
         deadline: LocalDate,
         description: String,
-    ): Goal = Goal(lifeMap, title, deadline, sticker, tag, description, tasks, id)
+    ): Goal =
+        Goal(lifeMap, title, deadline, sticker, tag, description, lastCommentReadAt, tasks, id)
 
     fun updateSticker(sticker: Sticker): Goal =
-        Goal(lifeMap, title, deadline, sticker, tag, description, tasks, id)
+        Goal(lifeMap, title, deadline, sticker, tag, description, lastCommentReadAt, tasks, id)
 
     fun updateTag(tag: Tag): Goal =
-        Goal(lifeMap, title, deadline, sticker, tag, description, tasks, id)
+        Goal(lifeMap, title, deadline, sticker, tag, description, lastCommentReadAt, tasks, id)
 
     private fun validateMaxTaskCount() =
         require(tasks.size < MAX_TASK_COUNT)

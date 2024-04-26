@@ -2,12 +2,12 @@ package io.raemian.api.user.controller
 
 import io.raemian.api.auth.controller.request.UpdateUserInfoRequest
 import io.raemian.api.auth.controller.request.UpdateUserRequest
-import io.raemian.api.auth.domain.CurrentUser
-import io.raemian.api.auth.domain.UserDTO
-import io.raemian.api.lifemap.LifeMapService
-import io.raemian.api.support.error.ErrorInfo
+import io.raemian.api.auth.model.CurrentUser
+import io.raemian.api.lifemap.service.LifeMapService
+import io.raemian.api.support.exception.ErrorInfo
 import io.raemian.api.support.response.ApiResponse
-import io.raemian.api.user.controller.response.UserResponse
+import io.raemian.api.user.model.UserResult
+import io.raemian.api.user.model.UserTokenDecryptResult
 import io.raemian.api.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -25,10 +25,10 @@ class UserController(
 ) {
     @Operation(summary = "토큰 유저 정보 조회 API")
     @GetMapping("/my")
-    fun my(@AuthenticationPrincipal currentUser: CurrentUser): ResponseEntity<ApiResponse<UserResponse>> {
+    fun my(@AuthenticationPrincipal currentUser: CurrentUser): ResponseEntity<ApiResponse<UserTokenDecryptResult>> {
         val user = userService.getUserById(currentUser.id)
-        val lifeMap = lifeMapService.findFirstByUserId(currentUser.id)
-        val response = UserResponse.of(user, lifeMap)
+        val lifeMap = lifeMapService.getFirstByUserId(currentUser.id)
+        val response = UserTokenDecryptResult.of(user, lifeMap)
         return ResponseEntity.ok(ApiResponse.success(response))
     }
 
@@ -37,7 +37,7 @@ class UserController(
     fun updateBaseInfo(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @RequestBody updateUserRequest: UpdateUserRequest,
-    ): ResponseEntity<ApiResponse<UserDTO>> {
+    ): ResponseEntity<ApiResponse<UserResult>> {
         val updated = userService.updateNicknameAndBirth(
             id = currentUser.id,
             nickname = updateUserRequest.nickname,
@@ -52,7 +52,7 @@ class UserController(
     fun updateFromMy(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @RequestBody updateUserInfoRequest: UpdateUserInfoRequest,
-    ): ResponseEntity<ApiResponse<UserDTO>> {
+    ): ResponseEntity<ApiResponse<UserResult>> {
         val user = userService.getUserById(currentUser.id)
         if (user.username == updateUserInfoRequest.username) {
             val updated = userService.updateBaseInfo(

@@ -1,12 +1,12 @@
 package io.raemian.api.cheer.controller
 
-import io.raemian.api.cheer.CheeringService
 import io.raemian.api.cheer.controller.request.CheeringRequest
-import io.raemian.api.cheer.controller.request.CheeringSquadPagingRequest
-import io.raemian.api.cheer.controller.response.CheererResponse
-import io.raemian.api.cheer.controller.response.CheeringCountResponse
+import io.raemian.api.cheer.controller.request.CheeringSquadPageRequest
+import io.raemian.api.cheer.model.CheererResult
+import io.raemian.api.cheer.model.CheeringCountResult
+import io.raemian.api.cheer.service.CheeringService
 import io.raemian.api.support.response.ApiResponse
-import io.raemian.api.support.response.PageResult
+import io.raemian.api.support.response.CursorPaginationResult
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -22,14 +22,14 @@ class CheeringController(
 ) {
 
     @GetMapping("/squad/{lifeMapId}")
-    fun findCheeringSquad(@PathVariable("lifeMapId") lifeMapId: Long, request: CheeringSquadPagingRequest): ResponseEntity<ApiResponse<PageResult<CheererResponse>>> {
-        val response = cheeringService.findCheeringSquad(lifeMapId, request)
-
-        return ResponseEntity.ok().body(ApiResponse.success(response))
-    }
+    fun findCheeringSquad(
+        @PathVariable("lifeMapId") lifeMapId: Long,
+        request: CheeringSquadPageRequest,
+    ): ResponseEntity<ApiResponse<CursorPaginationResult<CheererResult>>> =
+        ResponseEntity.ok().body(ApiResponse.success(cheeringService.findCheeringSquad(lifeMapId, request)))
 
     @GetMapping("/count/{userName}")
-    fun getCheeringCount(@PathVariable("userName") userName: String): ResponseEntity<ApiResponse<CheeringCountResponse>> =
+    fun getCheeringCount(@PathVariable("userName") userName: String): ResponseEntity<ApiResponse<CheeringCountResult>> =
         ResponseEntity.ok().body(ApiResponse.success(cheeringService.getCheeringCount(userName)))
 
     @PostMapping

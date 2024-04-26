@@ -1,10 +1,10 @@
 package io.raemian.api.integration.task
 
-import io.raemian.api.support.error.MaxTaskCountExceededException
-import io.raemian.api.task.TaskService
+import io.raemian.api.support.exception.MaxTaskCountExceededException
 import io.raemian.api.task.controller.request.CreateTaskRequest
 import io.raemian.api.task.controller.request.RewriteTaskRequest
 import io.raemian.api.task.controller.request.UpdateTaskCompletionRequest
+import io.raemian.api.task.service.TaskService
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.goal.GoalRepository
 import io.raemian.storage.db.core.lifemap.LifeMap
@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @SpringBootTest
 @Transactional
@@ -51,6 +52,7 @@ class TaskServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "description",
+            lastCommentReadAt = LocalDateTime.now(),
         )
     }
 

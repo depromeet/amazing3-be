@@ -10,8 +10,6 @@ interface UserRepository : JpaRepository<User, Long> {
 
     fun findByEmail(email: String): User?
 
-    fun existsByEmail(email: String): Boolean
-
     fun findUserByCreatedAtGreaterThanEqual(createdAt: LocalDateTime): List<User>
 
     fun findByUsername(username: String): User?

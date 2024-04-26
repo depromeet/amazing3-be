@@ -3,6 +3,7 @@ package io.raemian.api.auth.converter
 import com.nimbusds.jose.util.IOUtils
 import com.nimbusds.jose.util.StandardCharset
 import io.jsonwebtoken.Jwts
+import io.raemian.api.auth.converter.props.AppleLoginProps
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo
 import org.bouncycastle.openssl.PEMParser
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter

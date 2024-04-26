@@ -1,7 +1,7 @@
 package io.raemian.api.integration.lifemap
 
-import io.raemian.api.lifemap.LifeMapService
-import io.raemian.api.lifemap.domain.UpdatePublicRequest
+import io.raemian.api.lifemap.controller.request.UpdatePublicRequest
+import io.raemian.api.lifemap.service.LifeMapService
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.lifemap.LifeMap
 import io.raemian.storage.db.core.lifemap.LifeMapRepository
@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @SpringBootTest
 class LifeMapServiceTest {
@@ -72,6 +73,7 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
+            lastCommentReadAt = LocalDateTime.now(),
         )
 
         val goal2 = Goal(
@@ -81,6 +83,7 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
+            lastCommentReadAt = LocalDateTime.now(),
         )
         val lifeMap = lifeMapRepository.findFirstByUserId(USER_FIXTURE.id!!)
             ?: fail()
@@ -89,7 +92,7 @@ class LifeMapServiceTest {
         lifeMap.addGoal(goal2)
 
         // when
-        val savedLifeMap = lifeMapService.findFirstByUserId(USER_FIXTURE.id!!)
+        val savedLifeMap = lifeMapService.getFirstByUserId(USER_FIXTURE.id!!)
 
         // then
         assertAll(
@@ -113,6 +116,7 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
+            lastCommentReadAt = LocalDateTime.now(),
         )
 
         val goal2 = Goal(
@@ -122,6 +126,7 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
+            lastCommentReadAt = LocalDateTime.now(),
         )
         val lifeMap = lifeMapRepository.findFirstByUserId(USER_FIXTURE.id!!)
             ?: fail()
@@ -129,7 +134,7 @@ class LifeMapServiceTest {
         lifeMap.addGoal(goal2)
 
         // when
-        val savedLifeMap = lifeMapService.findFirstByUserId(USER_FIXTURE.id!!)
+        val savedLifeMap = lifeMapService.getFirstByUserId(USER_FIXTURE.id!!)
 
         // then
         assertAll(
@@ -152,7 +157,7 @@ class LifeMapServiceTest {
         // when
         // then
         assertThatThrownBy {
-            lifeMapService.findFirstByUserName(USER_FIXTURE.username!!)
+            lifeMapService.getFirstByUserName(USER_FIXTURE.username!!)
         }.isInstanceOf(RuntimeException::class.java)
     }
 
@@ -169,6 +174,7 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
+            lastCommentReadAt = LocalDateTime.now(),
         )
 
         val goal2 = Goal(
@@ -178,6 +184,7 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
+            lastCommentReadAt = LocalDateTime.now(),
         )
         val lifeMap = lifeMapRepository.findFirstByUserId(USER_FIXTURE.id!!)
             ?: fail()
@@ -185,7 +192,7 @@ class LifeMapServiceTest {
         lifeMap.addGoal(goal2)
 
         // when
-        val savedLifeMap = lifeMapService.findFirstByUserId(USER_FIXTURE.id!!)
+        val savedLifeMap = lifeMapService.getFirstByUserId(USER_FIXTURE.id!!)
 
         // then
         var month = (now.monthValue).toString()
@@ -215,6 +222,7 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
+            lastCommentReadAt = LocalDateTime.now(),
         )
 
         val deadline이_내일이고_가장_나중에_만들어진_객체 = Goal(
@@ -225,6 +233,7 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
+            lastCommentReadAt = LocalDateTime.now(),
         )
 
         val deadline이_오늘인_객체 = Goal(
@@ -234,6 +243,7 @@ class LifeMapServiceTest {
             sticker = STICKER_FIXTURE,
             tag = TAG_FIXTURE,
             description = "",
+            lastCommentReadAt = LocalDateTime.now(),
         )
 
         // when

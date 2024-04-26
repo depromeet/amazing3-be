@@ -1,12 +1,12 @@
 package io.raemian.api.goal.controller
 
-import io.raemian.api.auth.domain.CurrentUser
-import io.raemian.api.goal.GoalService
+import io.raemian.api.auth.model.CurrentUser
 import io.raemian.api.goal.controller.request.CreateGoalRequest
 import io.raemian.api.goal.controller.request.UpdateGoalRequest
-import io.raemian.api.goal.controller.response.CreateGoalResponse
-import io.raemian.api.goal.controller.response.GoalExploreResponse
-import io.raemian.api.goal.controller.response.GoalResponse
+import io.raemian.api.goal.model.CreateGoalResult
+import io.raemian.api.goal.model.GoalExplorePageResult
+import io.raemian.api.goal.model.GoalResult
+import io.raemian.api.goal.service.GoalService
 import io.raemian.api.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -35,7 +35,7 @@ class GoalController(
     fun getById(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @PathVariable("goalId") goalId: Long,
-    ): ResponseEntity<ApiResponse<GoalResponse>> =
+    ): ResponseEntity<ApiResponse<GoalResult>> =
         ResponseEntity.ok(
             ApiResponse.success(goalService.getById(goalId, currentUser.id)),
         )
@@ -45,7 +45,7 @@ class GoalController(
     fun create(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @RequestBody createGoalRequest: CreateGoalRequest,
-    ): ResponseEntity<ApiResponse<CreateGoalResponse>> {
+    ): ResponseEntity<ApiResponse<CreateGoalResult>> {
         val response = goalService.create(currentUser.id, createGoalRequest)
         return ResponseEntity
             .created("/goal/${response.id}".toUri())
@@ -58,7 +58,7 @@ class GoalController(
         @AuthenticationPrincipal currentUser: CurrentUser,
         @PathVariable("goalId") goalId: Long,
         @RequestBody updateGoalRequest: UpdateGoalRequest,
-    ): ResponseEntity<ApiResponse<GoalResponse>> {
+    ): ResponseEntity<ApiResponse<GoalResult>> {
         val goalResponse = goalService.update(currentUser.id, goalId, updateGoalRequest)
         return ResponseEntity
             .ok(ApiResponse.success(goalResponse))
@@ -77,12 +77,12 @@ class GoalController(
     @Operation(summary = "explore goal")
     @GetMapping("/explore")
     fun exploreGoals(
-        @AuthenticationPrincipal currentUser: CurrentUser,
+        @AuthenticationPrincipal currentUser: CurrentUser?,
         @RequestParam(required = false, defaultValue = Long.MAX_VALUE.toString()) cursor: Long,
-    ): ResponseEntity<ApiResponse<GoalExploreResponse>> {
-        val goals = goalService.explore(goalId = cursor)
+    ): ResponseEntity<ApiResponse<GoalExplorePageResult>> {
+        val explore = goalService.explore(goalId = cursor, userId = currentUser?.id)
 
         return ResponseEntity.ok()
-            .body(ApiResponse.success(GoalExploreResponse(goals)))
+            .body(ApiResponse.success(GoalExplorePageResult(explore)))
     }
 }

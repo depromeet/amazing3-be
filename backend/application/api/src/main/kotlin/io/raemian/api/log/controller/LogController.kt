@@ -1,7 +1,7 @@
 package io.raemian.api.log.controller
 
-import io.raemian.api.log.LogService
 import io.raemian.api.log.controller.request.CreateSlackErrorLogRequest
+import io.raemian.api.log.service.LogService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

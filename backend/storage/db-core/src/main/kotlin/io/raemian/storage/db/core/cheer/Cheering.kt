@@ -1,6 +1,6 @@
 package io.raemian.storage.db.core.cheer
 
-import io.raemian.storage.db.core.BaseEntity
+import io.raemian.storage.db.core.common.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -22,7 +22,7 @@ class Cheering(
     val id: Long? = null,
 ) : BaseEntity() {
     fun addCount(): Cheering {
-        this.count = this.count + 1
+        this.count += 1
         return this
     }
 }

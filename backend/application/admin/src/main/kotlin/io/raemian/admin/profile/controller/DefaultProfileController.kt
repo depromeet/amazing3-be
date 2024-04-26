@@ -1,9 +1,9 @@
 package io.raemian.admin.profile.controller
 
-import io.raemian.admin.profile.DefaultProfileService
 import io.raemian.admin.profile.controller.request.CreateDefaultProfileRequest
 import io.raemian.admin.profile.controller.request.UpdateDefaultProfileRequest
-import io.raemian.admin.profile.controller.response.DefaultProfileResponse
+import io.raemian.admin.profile.model.DefaultProfileResult
+import io.raemian.admin.profile.service.DefaultProfileService
 import io.raemian.admin.sticker.controller.toUri
 import io.raemian.admin.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -30,7 +30,7 @@ class DefaultProfileController(
     @PostMapping(consumes = arrayOf(MediaType.MULTIPART_FORM_DATA_VALUE), produces = arrayOf(MediaType.APPLICATION_JSON_VALUE))
     fun create(
         @ModelAttribute createDefaultProfileRequest: CreateDefaultProfileRequest,
-    ): ResponseEntity<ApiResponse<DefaultProfileResponse>> {
+    ): ResponseEntity<ApiResponse<DefaultProfileResult>> {
         val response = defaultProfileService.create(createDefaultProfileRequest)
 
         return ResponseEntity
@@ -40,12 +40,12 @@ class DefaultProfileController(
 
     @Operation(summary = "기본 프로필 전체 조회 API")
     @GetMapping
-    fun findAll(): ResponseEntity<ApiResponse<List<DefaultProfileResponse>>> =
+    fun findAll(): ResponseEntity<ApiResponse<List<DefaultProfileResult>>> =
         ResponseEntity.ok(ApiResponse.success(defaultProfileService.findAll()))
 
     @Operation(summary = "기본 프로필 단건 조회 API")
     @GetMapping("/{defaultProflieId}")
-    fun find(@PathVariable defaultProflieId: Long): ResponseEntity<ApiResponse<DefaultProfileResponse>> =
+    fun find(@PathVariable defaultProflieId: Long): ResponseEntity<ApiResponse<DefaultProfileResult>> =
         ResponseEntity.ok(ApiResponse.success(defaultProfileService.find(defaultProflieId)))
 
     @Operation(summary = "기본 프로필 수정 API")

@@ -1,16 +1,17 @@
 package io.raemian.storage.db.core.goal
 
-import io.raemian.storage.db.core.lifemap.LifeMap
-import io.raemian.storage.db.core.model.GoalExploreQueryResult
+import io.raemian.storage.db.core.cheer.GoalExploreQueryResult
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import java.time.LocalDateTime
 
 interface GoalRepository : JpaRepository<Goal, Long> {
-    fun findUserByCreatedAtGreaterThanEqual(createdAt: LocalDateTime): List<Goal>
 
-    fun countGoalByLifeMap(lifeMap: LifeMap): Int
+    fun countByLifeMapId(lifeMapId: Long): Long
+
+    fun findUserByCreatedAtGreaterThanEqual(createdAt: LocalDateTime): List<Goal>
 
     override fun getById(id: Long): Goal =
         findById(id).orElseThrow() { NoSuchElementException("목표가 없습니다 $id") }
@@ -18,7 +19,7 @@ interface GoalRepository : JpaRepository<Goal, Long> {
     @Query(
         """
         SELECT 
-            new io.raemian.storage.db.core.model.GoalExploreQueryResult(
+            new io.raemian.storage.db.core.cheer.GoalExploreQueryResult(
                 goal.id,
                 goal.title,
                 goal.description,
@@ -27,9 +28,10 @@ interface GoalRepository : JpaRepository<Goal, Long> {
                 goal.tag.content,
                 goal.createdAt,
                 map.id,
-                count.goalCount,
-                count.historyCount,
-                count.viewCount,
+                lifeMapCount.goalCount,
+                lifeMapCount.historyCount,
+                lifeMapCount.viewCount,
+                commentCount.count,
                 user.id,
                 user.nickname,
                 user.username,
@@ -39,11 +41,13 @@ interface GoalRepository : JpaRepository<Goal, Long> {
             Goal as goal,
             LifeMap as map,
             USERS  as user,
-            LifeMapCount as count
+            LifeMapCount as lifeMapCount,
+            CommentCount as commentCount
         WHERE 1 = 1
             AND goal.lifeMap.id = map.id
             AND map.user.id = user.id
-            AND map.id = count.lifeMapId
+            AND map.id = lifeMapCount.lifeMapId
+            AND goal.id = commentCount.goalId
             AND map.isPublic = true
             AND goal.id < :cursor
         ORDER BY 
@@ -52,4 +56,13 @@ interface GoalRepository : JpaRepository<Goal, Long> {
     """,
     )
     fun explore(@Param("cursor") goalId: Long): List<GoalExploreQueryResult>
+
+    @Modifying(clearAutomatically = true)
+    @Query(
+        """
+        UPDATE Goal G 
+        SET G.lastCommentReadAt = :lastCommentReadAt
+        WHERE G.id = :goalId""",
+    )
+    fun updateLastCommentReadAtByGoalId(goalId: Long, lastCommentReadAt: LocalDateTime)
 }

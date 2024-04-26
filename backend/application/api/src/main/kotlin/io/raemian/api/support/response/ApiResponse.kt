@@ -1,6 +1,6 @@
 package io.raemian.api.support.response
 
-import io.raemian.api.support.error.ErrorInfo
+import io.raemian.api.support.exception.ErrorInfo
 
 class ApiResponse<T> private constructor(
     val result: ResultType,

@@ -1,6 +1,6 @@
 package io.raemian.storage.db.core.task
 
-import io.raemian.storage.db.core.BaseEntity
+import io.raemian.storage.db.core.common.BaseEntity
 import io.raemian.storage.db.core.goal.Goal
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

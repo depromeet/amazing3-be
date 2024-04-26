@@ -1,7 +1,7 @@
 package io.raemian.api.profile.controller
 
-import io.raemian.api.profile.ProfileService
-import io.raemian.api.profile.controller.response.DefaultProfileResponse
+import io.raemian.api.profile.model.DefaultProfileResult
+import io.raemian.api.profile.service.ProfileService
 import io.raemian.api.support.response.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -17,7 +17,7 @@ class ProfileController(
 
     @Operation(summary = "기본 프로필 이미지 전체 조회 API")
     @GetMapping("/default")
-    fun findAll(): ResponseEntity<ApiResponse<List<DefaultProfileResponse>>> =
+    fun findAll(): ResponseEntity<ApiResponse<List<DefaultProfileResult>>> =
         ResponseEntity.ok(
             ApiResponse.success(profileService.findAllDefault()),
         )

@@ -1,6 +1,6 @@
 package io.raemian.storage.db.core.emoji
 
-import io.raemian.storage.db.core.BaseEntity
+import io.raemian.storage.db.core.common.BaseEntity
 import io.raemian.storage.db.core.goal.Goal
 import io.raemian.storage.db.core.user.User
 import jakarta.persistence.Entity
@@ -11,6 +11,8 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 
 @Entity
 @Table(
@@ -22,6 +24,7 @@ import jakarta.persistence.UniqueConstraint
 class ReactedEmoji(
     @ManyToOne
     @JoinColumn(name = "goal_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val goal: Goal,
 
     @ManyToOne
