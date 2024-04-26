@@ -10,7 +10,6 @@ import io.raemian.api.lifemap.service.LifeMapService
 import io.raemian.api.support.response.OffsetPaginationResult
 import io.raemian.api.task.service.TaskService
 import io.raemian.storage.db.core.goal.GoalJdbcQueryRepository
-import io.raemian.storage.db.core.goal.GoalRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -19,7 +18,6 @@ class GoalQueryService(
     private val lifeMapService: LifeMapService,
     private val goalJdbcQueryRepository: GoalJdbcQueryRepository,
     private val lifeMapCountQueryService: LifeMapCountQueryService,
-    private val goalRepository: GoalRepository,
     private val emojiService: EmojiService,
     private val taskService: TaskService,
     private val commentService: CommentService,
@@ -27,7 +25,7 @@ class GoalQueryService(
     @Transactional(readOnly = true)
     fun findAllByUsernameWithOffset(username: String, request: TimelinePageRequest): OffsetPaginationResult<GoalTimelinePageResult> {
         val lifeMap = lifeMapService.getFirstByUserName(username)
-        val goals = goalJdbcQueryRepository.findAllByLifeMapWithOffset(lifeMap.lifeMapId, request.page, request.size)
+        val goals = goalJdbcQueryRepository.findAllByLifeMapWithOffset(lifeMap.lifeMapId, request.page * request.size, request.size)
 
         if (goals.isEmpty()) {
             return OffsetPaginationResult.empty(request.page, request.size)
@@ -57,7 +55,7 @@ class GoalQueryService(
     @Transactional(readOnly = true)
     fun findAllByUserIdWithOffset(userId: Long, request: TimelinePageRequest): OffsetPaginationResult<GoalTimelinePageResult> {
         val lifeMap = lifeMapService.getFirstByUserId(userId)
-        val goals = goalJdbcQueryRepository.findAllByLifeMapWithOffset(lifeMap.lifeMapId, request.page, request.size)
+        val goals = goalJdbcQueryRepository.findAllByLifeMapWithOffset(lifeMap.lifeMapId, request.page * request.size, request.size)
         if (goals.isEmpty()) {
             return OffsetPaginationResult.empty(request.page, request.size)
         }
