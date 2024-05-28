@@ -1,3 +1,11 @@
+<img src="https://github.com/depromeet/amazing3-fe/assets/112946860/66b911fa-38a9-438c-89d4-034e44dc0b23" alt="bandiboodi" align="right" height="80" />  
+
+# 인생 계획 짜고 ONE BAILEY 가자!
+![one-bailey.jpeg](one-bailey.jpeg)
+### 인생 계획 짜고 하나씩 이뤄나가며 ONE BAILEY에 가보자 (한강 보면서 저녁 먹어보자!)
+### 그런데 인생 계획은 어디서 짜야하지..?
+<br></br>
+
 <img src="https://github.com/depromeet/amazing3-fe/assets/112946860/c0a61fb6-372b-4100-a647-843dd0dd07d8" alt="main banner" />
 
 <img src="https://github.com/depromeet/amazing3-fe/assets/112946860/66b911fa-38a9-438c-89d4-034e44dc0b23" alt="bandiboodi" align="right" height="80" />
